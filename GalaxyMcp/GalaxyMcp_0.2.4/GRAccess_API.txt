@@ -1,0 +1,1970 @@
+﻿ArchestrA.GRAccess, Version=2.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae  C:\windows\assembly\GAC_MSIL\ArchestrA.GRAccess\2.0.0.0__23106a86e706d0ae\ArchestrA.GRAccess.dll
+
+class ArchestrA.GRAccess._FILETIME
+
+class ArchestrA.GRAccess._LARGE_INTEGER
+
+class ArchestrA.GRAccess._ULARGE_INTEGER
+
+class ArchestrA.GRAccess.AttributeReference2
+
+enum ArchestrA.GRAccess.DataQuality
+  DataQualityGood, DataQualityUncertain, DataQualityInitializing, DataQualityBad, DataQualityUnknown
+
+enum ArchestrA.GRAccess.E_RESOLVE_NAME_CONFLICT_ACTION
+  eResolveNameConflictAction_Invalid, eResolveNameConflictAction_SkipObject, eResolveNameConflictAction_AbortImport, eResolveNameConflictAction_RenameObjectInDatabase, eResolveNameConflictAction_RenameImportedObject
+
+enum ArchestrA.GRAccess.E_RESOLVE_PROTECTION_CONFLICT_ACTION
+  eResolveProtectionConflictAction_OverwriteUnprotected, eResolveProtectionConflictAction_NeverOverwriteUnprotected
+
+enum ArchestrA.GRAccess.E_RESOLVE_VERSION_CONFLICT_ACTION
+  eResolveVersionConflictAction_Invalid, eResolveVersionConflictAction_SkipObject, eResolveVersionConflictAction_AbortImport, eResolveVersionConflictAction_OverwriteObjectInDatabase, eResolveVersionConflictAction_MigrateObjectsInDatabase, eResolveVersionConflictAction_Skip_Migrate, eResolveVersionConflictAction_AlwaysOverwrite_Migrate, eResolveVersionConflictAction_AlwaysOverwrite_NoMigrate, eResolveVersionConflictAction_Skip_Allow_Children_RegardlessOfVersion, eResolveVersionConflictAction_Skip_Migrate_Allow_Children_RegardlessOfVersion, eResolveVersionConflictAction_Skip_ObjectOverwrite_Replace_AssociatedFiles
+
+enum ArchestrA.GRAccess.EActionForCurrentlyDeployedObjects
+  skipDeploy, redeployOriginal, deployChanges
+
+enum ArchestrA.GRAccess.EATTRIBUTEPROPERTY
+  idxAttribPropName, idxAttribPropAttributeCategory, idxAttribPropCfgSethandler, idxAttribPropRtSethandler, idxAttribPropType, idxAttribPropUpperBoundDim1, idxAttribPropValue, idxAttribPropSecurityClassification, idxAttribPropLocked, idxAttribPropQuality, idxAttribPropBit00, idxAttribPropBit01, idxAttribPropBit02, idxAttribPropBit03, idxAttribPropBit04, idxAttribPropBit05, idxAttribPropBit06, idxAttribPropBit07, idxAttribPropBit08, idxAttribPropBit09, idxAttribPropBit10, idxAttribPropBit11, idxAttribPropBit12, idxAttribPropBit13, idxAttribPropBit14, idxAttribPropBit15, idxAttribPropBit16, idxAttribPropBit17, idxAttribPropBit18, idxAttribPropBit19, idxAttribPropBit20, idxAttribPropBit21, idxAttribPropBit22, idxAttribPropBit23, idxAttribPropBit24, idxAttribPropBit25, idxAttribPropBit26, idxAttribPropBit27, idxAttribPropBit28, idxAttribPropBit29, idxAttribPropBit30, idxAttribPropBit31, idxAttribPropValueReadOnly, idxAttribPropSecurityClassificationReadOnly, idxAttribPropLockedReadOnly, idxAttribPropTime, idxAttribPropBuffer, idxAttribPropHasBuffer, idxAttribPropEnumStrings, idxAttribPropReasonDesc, idxAttribPropEND, idxAttribPropUndefined
+
+enum ArchestrA.GRAccess.EAuthenticationMode
+  osAuthenticationMode, galaxyAuthenticationMode
+
+enum ArchestrA.GRAccess.EAUTHMODE
+  eNone, eGalaxyOnly, eOSUserBased, eOSGroupBased, eAuthenticationProvidersBased
+
+enum ArchestrA.GRAccess.EAutomaticallyUndocheckout
+  dontAutomaticallyUndocheckout, doAutomaticallyUndocheckout
+
+enum ArchestrA.GRAccess.EBASERUNTIMEOBJECT
+  idxBROPrimitiveList, idxBRODeployComplete, idxBROCreateDynamicAttributes, idxBRODumpState, idxBROSetAttributeProperties, idxBROAttributeUndefined
+
+enum ArchestrA.GRAccess.ECascade
+  dontCascade, doCascade
+
+enum ArchestrA.GRAccess.ECATEGORY
+  idxCategoryUndefined, idxCategoryPlatformEngine, idxCategoryClusterEngine, idxCategoryApplicationEngine, idxCategoryViewEngine, idxCategoryProductEngine, idxCategoryHistoryEngine, idxCategoryPrintEngine, idxCategoryOutpost, idxCategoryQueryEngine, idxCategoryApplicationObject, idxCategoryIONetwork, idxCategoryIODevice, idxCategoryArea, idxCategoryUserProfile, idxCategoryDisplay, idxCategorySymbol, idxCategoryViewApp, idxCategoryProductionObject, idxCategoryReport, idxCategorySharedProcedure, idxCategoryInsertablePrimitive, idxCategoryIDEMacro, idxCategoryGalaxy, idxCategoryPostIO, idxCategoryCustom, idxCategoryInTouchViewApp, idxCategoryVisualElement, idxCategoryWidget, idxCategoryCloudWinPlatform, idxCategoryWebViewEngine
+
+enum ArchestrA.GRAccess.ECheckoutStatus
+  notCheckedOut, checkedOutToMe, checkedOutToSomeoneElse
+
+enum ArchestrA.GRAccess.ECOMMONATTRIBUTES
+  idxComAttExternalName, idxComAttInternalName, idxComAttUnknown
+
+enum ArchestrA.GRAccess.ECOMMONPRIMITIVE
+  idxCommonExternalName, idxCommonInternalName, idxCommonTagname, idxCommonShortDescription, idxCommonCategoryIDEnum, idxCommonAttributes, idxCommonCmdScanState, idxCommonScanState, idxCommonSecurityGroup, idxCommonError, idxCommonRelativeOrderEnum, idxCommonArea, idxCommonContainer, idxCommonHost, idxCommonAlarmModeEnum, idxCommonAlarmMode, idxCommonAlarmModeCmd, idxCommonAlarmInhibit, idxCommonInAlarm, idxCommonBasedOn, idxCommonIsTemplate, idxCommonCodeBase, idxCommonUDAs, idxCommon_InheritedUDAs, idxCommonExtensions, idxCommon_InheritedExtensions, idxCommon_Category, idxCommon_ConfigVersion, idxCommon_Warnings, idxCommonContainedName, idxCommonExecutionRelatedObject, idxCommonExecutionRelativeOrder, idxCommonHierachicalName, idxCommonMinorVersion, idxCommon_CmdAdd, idxCommon_CmdRemove, idxCommonCmdData, idxCommon_InheritedCmdData, idxCommon_AdviseOnlyActiveEnabled, idxCommonAlarmMostUrgentSeverity, idxCommonAlarmMostUrgentMode, idxCommonAlarmMostUrgentAcked, idxCommonAlarmCntsBySeverity, idxCommon_AlarmMostUrgentInit, idxCommon_TempMostUrgentSeverity, idxCommon_TempMostUrgentMode, idxCommon_TempMostUrgentAcked, idxCommon_TempCntsBySeverity, idxCommon_TempMostUrgentInit, idxCommon_AggAlarmUpdate, idxCommonAlarmMostUrgentInAlarm, idxCommon_TempMostUrgentInAlarm, idxCommonAlarmMostUrgentShelved, idxCommonAlarmCntsBySeverityEnableShelved, idxCommon_TempMostUrgentShelved, idxCommon_TempCntsBySeverityEnableShelved, idxCommonAliasName, idxCommonPropagatedAlarmInhibit, idxCommonContainerHierarchy, idxCommonContainedObjetlist, idxCommonderivationHierarchy, idxGrPlatformName, idxCommonUndefined
+
+enum ArchestrA.GRAccess.EConditionType
+  derivedOrInstantiatedFrom, basedOn, containedBy, hostEngineIs, belongsToArea, assignedTo, withinSecurityGroup, createdBy, lastModifiedBy, checkedOutBy, namedLike, validationStatusIs, deploymentStatusIs, checkoutStatusIs, objectCategoryIs, hierarchicalNameLike, NameEquals, NameSpaceIdIs, ShowInArchestraBrowser, objectCategoryGUIDIs, HasExtensionType, derivedOrInstantiatedFromID
+
+enum ArchestrA.GRAccess.EDActionForITVAPPObjects
+  OverrideIgnoreChangesWV, OverrideRestartWV, OverridePromptUserRestartWV, OverrideLoadChangesWV, OverridePromptUserLoadChangesWV, OverrideNothing
+
+enum ArchestrA.GRAccess.EDeploymentStatus
+  notDeployed, deployed, deployedWithPendingChanges
+
+enum ArchestrA.GRAccess.EDeployOnScan
+  dontDeployOnScan, doDeployOnScan
+
+enum ArchestrA.GRAccess.EEditStatus
+  notBeingEdited, editedByThisSession, editedByYouInOtherSession, editedByAnotherUser
+
+enum ArchestrA.GRAccess.EEXECUTIONGROUP
+  idxExeGroupCommon, idxExeGroupInput, idxExeGroupPreScript, idxExeGroupCustom, idxExeGroupCustom1, idxExeGroupCustom2, idxExeGroupCustom3, idxExeGroupCustom4, idxExeGroupCustom5, idxExeGroupCustom6, idxExeGroupCustom7, idxExeGroupCustom8, idxExeGroupCustom9, idxExeGroupCustom10, idxExeGroupExpression, idxExeGroupScript, idxExeGroupPostScript, idxExeGroupOutput, idxExeGroupHistory, idxExeGroupAlarm, idxExeGroupUnknown
+
+enum ArchestrA.GRAccess.EExecutionOrder
+  NONE, BEFORE, AFTER
+
+enum ArchestrA.GRAccess.EExportType
+  exportAsPDF, exportAsCSV
+
+enum ArchestrA.GRAccess.EFileType
+  eUndefinedFileType, eNormal, eComDLL, eComEXE, eNTService, eMergeRegistryScript, eForHTMLEditor, eDictionary, eMsiMergeModule, eNETFrameworkAssembly, eSimpleNETAssembly
+
+enum ArchestrA.GRAccess.EForceDeleteInstanceOption
+  dontForceInstanceDelete, undeployIfNotRunningOnScan, undeployIfDeployed
+
+enum ArchestrA.GRAccess.EForceDeleteTemplateOption
+  dontForceTemplateDelete, cascadeDeleteDontUndeploy, cascadeDeleteUndeployDescendentsIfRunningOffScan, cascadeDeleteUndeployDescendentsIfRunning
+
+enum ArchestrA.GRAccess.EForceOffScan
+  dontForceOffScan, doForceOffScan
+
+enum ArchestrA.GRAccess.EgObjectIsTemplateOrInstance
+  gObjectIsTemplate, gObjectIsInstance
+
+enum ArchestrA.GRAccess.EGRCommandResult
+  cmdSuccess, cmdInsufficientPermissions, cmdNoSuchGRNode, cmdNoSuchUser, cmdPasswordIncorrect, cmdLicenseUnavailable, cmdNoSuchFile, cmdCouldntCreateFile, cmdObjectIsCheckedOut, cmdObjectIsCheckedOutToSomeoneElse, cmdObjectNotCheckedOutToMe, cmdObjectCannotBeOverwritten, cmdTemplateInUse, cmdObjectIsAContainer, cmdObjectHostNotFound, cmdInstanceIsHost, cmdObjectIsRequired, cmdObjectNotAnAutomationObject, cmdObjectInBadState, cmdCustomConfigurationError, cmdObjectInReadOnlyMode, cmdObjectHostNotDeployed, cmdInstanceIsDeployed, cmdInvallidGRLoadMode, cmdOEMVersionIncompatible, cmdRetryClientSync, cmdSyncSemaphore, cmdOutOfSync, cmdInstanceProtectionDenied, cmdUnknownError
+
+enum ArchestrA.GRAccess.EImportDLLOptions
+  BlockIfDLLIsDeployed, AllowImportIfDLLIsDeployed, AllowImportIfDLLIsDeployedAndHasLowerVersionInGalaxy, BlockImportIfImportVersionNotHigherThanVersionInGalaxy
+
+enum ArchestrA.GRAccess.ELOGIN
+  eInvalidUser, eInvalidPassword, ePwdChangeInvalid, ePwdCahngeSuccess, eLoginOK, eSecurityNotEnabled
+
+enum ArchestrA.GRAccess.EMatch
+  NotMatchCondition, MatchCondition
+
+enum ArchestrA.GRAccess.EPACKAGESTATUS
+  ePackageGood, ePackageBad, ePackageWarning, ePackageUnknownStatus
+
+enum ArchestrA.GRAccess.EPACKAGETYPE
+  eNoPackage, eCheckedInPackage, eBeingEditedPackage, eDeployedPackage, eOriginalPackage
+
+enum ArchestrA.GRAccess.EPreserveRuntime
+  dontPreserveRuntime, doPreserveRuntime
+
+enum ArchestrA.GRAccess.ERESERVEDPRIMITIVEIDS
+  eBaseRuntimeObjectId, eCommonPrimitiveId, eTopLevelCustomPrimitiveId, eReservedPrimitiveIdUndefined
+
+enum ArchestrA.GRAccess.ESkipIfCurrentlyUndeployed
+  dontSkipIfCurrentlyUndeployed, doSkipIfCurrentlyUndeployed
+
+enum ArchestrA.GRAccess.ESkipObjectsWithPendingUpdates
+  dontSkipObjectsWithPendingUpdates, doSkipObjectsWithPendingUpdates
+
+enum ArchestrA.GRAccess.ESkipOtherUsersCheckedOutObjects
+  dontSkipOtherUsersCheckedOutObjects, doSkipOtherUsersCheckedOutObjects
+
+enum ArchestrA.GRAccess.ETestOnly
+  performOperation, testOnly
+
+enum ArchestrA.GRAccess.ETOKEN_TYPE
+  eUserAcessToken, eServiceAccessToken, eWebUserAccessToken
+
+enum ArchestrA.GRAccess.EUserDefault
+  defaultPlatform, defaultAppEngine, defaultHistorianNode, defaultArea, defaultSecurityGroup
+
+class ArchestrA.GRAccess.FLEXLICENSESINFORMATION
+
+enum ArchestrA.GRAccess.FolderType
+  Toolset, Visual, Script
+
+interface ArchestrA.GRAccess.GRAccess : IGRAccess, IGRAccess13, IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase
+
+interface ArchestrA.GRAccess.GRAccessApp : IGRAccess, IGRAccess13, IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase
+
+class ArchestrA.GRAccess.GRAccessAppClass : IGRAccess, IGRAccess13, IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase, GRAccessApp
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+  String[] ListCreateGalaxyTemplates(String GRNodeName)
+  Void CreateGalaxyFromTemplate(String createGalaxyTemplateName, String galaxyName, String GRNodeName)
+  IGalaxies QueryGalaxiesEx(String GRNodeName)
+  Void SetClientAttributes(Int32 clientProcessID, String APIKey)
+
+class ArchestrA.GRAccess.GRAccessClass : IGRAccess, IGRAccess13, IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase, GRAccess
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+  String[] ListCreateGalaxyTemplates(String GRNodeName)
+  Void CreateGalaxyFromTemplate(String createGalaxyTemplateName, String galaxyName, String GRNodeName)
+  IGalaxies QueryGalaxiesEx(String GRNodeName)
+  Void SetClientAttributes(Int32 clientProcessID, String APIKey)
+
+enum ArchestrA.GRAccess.GRLoadMode
+  GRLoadModeReplace, GRLoadModeUpdate, GRLoadModeIgnore, GRLoadModeTerminate
+
+interface ArchestrA.GRAccess.IAttribute : IAttribute12, IAttribute10, IAttributeBase
+  prop MxValue value get
+  prop MxAttributeCategory AttributeCategory get
+  prop Boolean CfgSethandler get
+  prop Boolean RtSethandler get
+  prop MxDataType DataType get
+  prop Int16 UpperBoundDim1 get
+  prop String Name get
+  prop MxSecurityClassification SecurityClassification get
+  prop MxPropertyLockedEnum Locked get
+  prop ICommandResult CommandResult get
+  prop Boolean HasBuffer get
+  prop String Description get set
+  prop String EngUnits get set
+  Void SetValue(MxValue NewValue)
+  Void SetSecurityClassification(MxSecurityClassification __MIDL__IAttributeBase0000)
+  Void SetLocked(MxPropertyLockedEnum __MIDL__IAttributeBase0002)
+  Void SetHasBuffer(Boolean HasBuffer)
+
+interface ArchestrA.GRAccess.IAttribute10 : IAttributeBase
+  prop MxValue value get
+  prop MxAttributeCategory AttributeCategory get
+  prop Boolean CfgSethandler get
+  prop Boolean RtSethandler get
+  prop MxDataType DataType get
+  prop Int16 UpperBoundDim1 get
+  prop String Name get
+  prop MxSecurityClassification SecurityClassification get
+  prop MxPropertyLockedEnum Locked get
+  prop ICommandResult CommandResult get
+  Void SetValue(MxValue NewValue)
+  Void SetSecurityClassification(MxSecurityClassification __MIDL__IAttributeBase0000)
+  Void SetLocked(MxPropertyLockedEnum __MIDL__IAttributeBase0002)
+
+interface ArchestrA.GRAccess.IAttribute12 : IAttribute10, IAttributeBase
+  prop MxValue value get
+  prop MxAttributeCategory AttributeCategory get
+  prop Boolean CfgSethandler get
+  prop Boolean RtSethandler get
+  prop MxDataType DataType get
+  prop Int16 UpperBoundDim1 get
+  prop String Name get
+  prop MxSecurityClassification SecurityClassification get
+  prop MxPropertyLockedEnum Locked get
+  prop ICommandResult CommandResult get
+  prop Boolean HasBuffer get
+  Void SetValue(MxValue NewValue)
+  Void SetSecurityClassification(MxSecurityClassification __MIDL__IAttributeBase0000)
+  Void SetLocked(MxPropertyLockedEnum __MIDL__IAttributeBase0002)
+  Void SetHasBuffer(Boolean HasBuffer)
+
+interface ArchestrA.GRAccess.IAttributeBase
+  prop MxValue value get
+  prop MxAttributeCategory AttributeCategory get
+  prop Boolean CfgSethandler get
+  prop Boolean RtSethandler get
+  prop MxDataType DataType get
+  prop Int16 UpperBoundDim1 get
+  prop String Name get
+  prop MxSecurityClassification SecurityClassification get
+  prop MxPropertyLockedEnum Locked get
+  Void SetValue(MxValue NewValue)
+  Void SetSecurityClassification(MxSecurityClassification __MIDL__IAttributeBase0000)
+  Void SetLocked(MxPropertyLockedEnum __MIDL__IAttributeBase0002)
+
+interface ArchestrA.GRAccess.IAttributes : IAttributesBase, IEnumerable
+  prop IAttribute Item[Object] get
+  prop Int32 count get
+  prop String SecurityGroup get set
+  prop String ShortDescription get set
+  prop String ExecutionRelatedObject get set
+  prop EExecutionOrder ExecutionOrder get set
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IAttributesBase : IEnumerable
+  prop IAttribute Item[Object] get
+  prop Int32 count get
+  prop String SecurityGroup get set
+  prop String ShortDescription get set
+  prop String ExecutionRelatedObject get set
+  prop EExecutionOrder ExecutionOrder get set
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.ICommandResult : ICommandResultBase
+  prop Boolean Successful get
+  prop EGRCommandResult ID get
+  prop String Text get
+  prop String CustomMessage get
+
+interface ArchestrA.GRAccess.ICommandResultBase
+  prop Boolean Successful get
+  prop EGRCommandResult ID get
+  prop String Text get
+  prop String CustomMessage get
+
+interface ArchestrA.GRAccess.ICommandResults : ICommandResultsBase, IEnumerable
+  prop ICommandResult Item[Int32] get
+  prop Int32 count get
+  prop Boolean CompletelySuccessful get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.ICommandResultsBase : IEnumerable
+  prop ICommandResult Item[Int32] get
+  prop Int32 count get
+  prop Boolean CompletelySuccessful get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.ICondition : IConditionBase
+  prop EConditionType Kind get
+  prop Object value get
+  prop Boolean Negation get
+
+interface ArchestrA.GRAccess.IConditionBase
+  prop EConditionType Kind get
+  prop Object value get
+  prop Boolean Negation get
+
+interface ArchestrA.GRAccess.IConditions : IConditionsBase, IEnumerable
+  prop ICondition Item[Int32] get
+  prop Int32 count get
+  prop ICommandResult CommandResult get
+  IEnumerator GetEnumerator()
+  Void Add(EConditionType Kind, Object value, Boolean Negation)
+  Void Remove(Int32 index)
+  Void Join(IConditions conditions)
+
+interface ArchestrA.GRAccess.IConditionsBase : IEnumerable
+  prop ICondition Item[Int32] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+  Void Add(EConditionType Kind, Object value, Boolean Negation)
+  Void Remove(Int32 index)
+  Void Join(IConditions conditions)
+
+interface ArchestrA.GRAccess.IFailOverSupport
+  IgObject GetFailOverPartner()
+
+interface ArchestrA.GRAccess.IGalaxies : IGalaxiesBase, IEnumerable
+  prop IGalaxy Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IGalaxiesBase : IEnumerable
+  prop IGalaxy Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IGalaxy : IGalaxy17, IGalaxy16, IGalaxy15, IGalaxy14, IGalaxy12, IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+  Object GetGalaxyConfiguration()
+  Void SynchronizeClient()
+  Void LoginEx(String UserName, String Password, Boolean bForceSynchronization)
+  Void ImportObjectsEx2(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName, E_RESOLVE_PROTECTION_CONFLICT_ACTION eProtectionConflict)
+  Void ExportTemplateToText(String[] tagnames, String CSVFileNameWithPath)
+  Void ImportTemplateFromText(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void GRDump(String[] tagnames, String csvFileNemWithPath)
+  Void LoginWithAccessMode(String UserName, String Password, Int32 bModeReadWrite)
+  Void ImportScriptLibEx(String path, EImportDLLOptions options)
+  FLEXLICENSESINFORMATION[] GetFlexLicensesInformation()
+  Void ImportArchestrAApp(String appPath)
+
+interface ArchestrA.GRAccess.IGalaxy10 : IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+
+interface ArchestrA.GRAccess.IGalaxy11 : IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+
+interface ArchestrA.GRAccess.IGalaxy12 : IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+
+interface ArchestrA.GRAccess.IGalaxy14 : IGalaxy12, IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+  Object GetGalaxyConfiguration()
+
+interface ArchestrA.GRAccess.IGalaxy15 : IGalaxy14, IGalaxy12, IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+  Object GetGalaxyConfiguration()
+  Void SynchronizeClient()
+  Void LoginEx(String UserName, String Password, Boolean bForceSynchronization)
+
+interface ArchestrA.GRAccess.IGalaxy16 : IGalaxy15, IGalaxy14, IGalaxy12, IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+  Object GetGalaxyConfiguration()
+  Void SynchronizeClient()
+  Void LoginEx(String UserName, String Password, Boolean bForceSynchronization)
+  Void ImportObjectsEx2(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName, E_RESOLVE_PROTECTION_CONFLICT_ACTION eProtectionConflict)
+
+interface ArchestrA.GRAccess.IGalaxy17 : IGalaxy16, IGalaxy15, IGalaxy14, IGalaxy12, IGalaxy11, IGalaxy10, IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  prop ICommandResult CommandResult get
+  prop ICommandResults CommandResults get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+  Void GRLoad(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void ImportObjectsEx(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName)
+  IToolsets QueryToolsetsEx(FolderType eFolderType)
+  IGalaxySecurity GetReadOnlySecurity()
+  Object GetGalaxyConfiguration()
+  Void SynchronizeClient()
+  Void LoginEx(String UserName, String Password, Boolean bForceSynchronization)
+  Void ImportObjectsEx2(String inputFile, E_RESOLVE_VERSION_CONFLICT_ACTION versionMismatchPreference, E_RESOLVE_NAME_CONFLICT_ACTION nameConflictPreference, String appendToObjectName, E_RESOLVE_PROTECTION_CONFLICT_ACTION eProtectionConflict)
+  Void ExportTemplateToText(String[] tagnames, String CSVFileNameWithPath)
+  Void ImportTemplateFromText(String CSVFileNameWithPath, GRLoadMode GRLoadMode)
+  Void GRDump(String[] tagnames, String csvFileNemWithPath)
+
+interface ArchestrA.GRAccess.IGalaxyBase
+  prop String Name get
+  prop Int32 VersionNumber get
+  prop String VersionString get
+  prop String CdiVersionString get
+  prop Boolean UpgradeRequired get
+  Void Backup(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy)
+  Void Restore(Int32 lProcessId, String backupFilename, String GRNodeName, String Galaxy, Boolean bRestoreOlderVersion)
+  Void MigrateGalaxy(String galaxyName, String GRNodeName)
+  Void Login(String UserName, String Password)
+  Void Logout()
+  IConditions CreateConditionsObject()
+  IgObjects CreategObjectCollection()
+  IgObjects QueryObjects(EgObjectIsTemplateOrInstance templateOrInstance, EConditionType Kind, Object value, EMatch MatchCondition)
+  IgObjects QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance templateOrInstance, IConditions conditions)
+  IgObjects QueryObjectsByName(EgObjectIsTemplateOrInstance templateOrInstance, String[]& tagnames)
+  Void ImportObjects(String inputFile, Boolean OverwritesAllowed)
+  IToolsets QueryToolsets()
+  IScriptLibraries QueryScriptLibraries()
+  Void ExportAll(EExportType exportType, String outputFile)
+  Void SetUserDefaults(EUserDefault userDefault, String defaultValue)
+  String GetUserDefaults(EUserDefault userDefault)
+  ISettings GetSecuritySettings()
+  ISettings GetLocaleSettings()
+  ISettings GetTimeMasterSettings()
+  Void ImportScriptLib(String path)
+
+interface ArchestrA.GRAccess.IGalaxyFx
+  prop ICommandResult CommandResult get
+  Void InternalSetObjectAttributes(Namespace namespaceId, String objectName, EPACKAGETYPE packageType, String[] attributeNames, EATTRIBUTEPROPERTY[] attributePropertyIds, MxValue[] mxValueAttributeValues, Boolean saveObjectEvenErrorOccurs)
+  Void InternalGetObjectAttributes(Namespace namespaceId, String objectName, EPACKAGETYPE packageType, String[] attributeNames, EATTRIBUTEPROPERTY[] attributePropertyIds, MxValue[]& mxValueAttributeValues)
+  Void GetObjectReferences(Namespace namespaceId, String objectName, AttributeReference2[]& references)
+  Void GetObjectCrossReferences(Namespace namespaceId, String objectName, AttributeReference2[]& crossReferences)
+
+interface ArchestrA.GRAccess.IGalaxyRole
+  prop String RoleName get
+  prop Int32 AccessLevel get
+  prop IPermissions Permissions get
+  prop IPermissions OperationalPermissions get
+
+interface ArchestrA.GRAccess.IGalaxyRoles : IEnumerable
+  prop IGalaxyRole Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IGalaxySecurity
+  prop EAUTHMODE AuthenticationMode get
+  prop ISecurityGroups SecurityGroupsAvailable get
+  prop IGalaxyRoles RolesAvailable get
+  prop IGalaxyUsers UsersAvailable get
+  prop String LoginTime get
+  prop String RoleUpdateInterval get
+
+interface ArchestrA.GRAccess.IGalaxyUser
+  prop String UserName get
+  prop String FullName get
+  prop IGalaxyRoles AssociatedRoles get
+
+interface ArchestrA.GRAccess.IGalaxyUsers : IEnumerable
+  prop IGalaxyUser Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IgObject : IgObject19, IgObject18, IgObject17, IgObject16, IgObject15, IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  prop Int32 PlatformLicenseType get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+  String[] GetChoiceGroups()
+  String[] GetChoices(String choicegroup)
+  String GetDefaultChoice(String choicegroup)
+  String[] GetOptions()
+  Boolean GetDefaultOption(String option)
+  String[] GetAssociatedAttributesofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedAttributesofOption(String option)
+  String[] GetAssociatedSymbolsofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedSymbolsofOption(String option)
+  Void SetChoiceforGroup(String strGroupName, String strChoiceName)
+  Void SetObjectWizardOption(String strOptionName, Boolean bValue)
+  Void AddLinkedSymbol(String refSymbolname, String Symbolname)
+  LINKEDGRAHICSINFO[] GetLinkedSymbolNames()
+  Void DeleteLinkedSymbols(String[] l_linkedGraphicNames)
+  String[] GetChoiceGroupsEx(Boolean bIncludeInherited)
+  String[] GetChoicesEx(String choicegroup, Boolean bIncludeInherited)
+  String[] GetOptionsEx(Boolean bIncludeInherited)
+  String[] GetAssociatedAttributesofChoiceEx(String choicegroup, String Choice, Boolean bIncludeInherited)
+  String[] GetAssociatedAttributesofOptionEx(String option, Boolean bIncludeInherited)
+  String[] GetAssociatedSymbolsofChoiceEx(String choicegroup, String Choice, Boolean bIncludeInherited)
+  String[] GetAssociatedSymbolsofOptionEx(String option, Boolean bIncludeInherited)
+
+interface ArchestrA.GRAccess.IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+
+interface ArchestrA.GRAccess.IgObject11 : IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.IgObject12 : IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+
+interface ArchestrA.GRAccess.IgObject13 : IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.IgObject14 : IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+
+interface ArchestrA.GRAccess.IgObject15 : IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+
+interface ArchestrA.GRAccess.IgObject16 : IgObject15, IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  prop Int32 PlatformLicenseType get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+
+interface ArchestrA.GRAccess.IgObject17 : IgObject16, IgObject15, IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  prop Int32 PlatformLicenseType get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+  String[] GetChoiceGroups()
+  String[] GetChoices(String choicegroup)
+  String GetDefaultChoice(String choicegroup)
+  String[] GetOptions()
+  Boolean GetDefaultOption(String option)
+  String[] GetAssociatedAttributesofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedAttributesofOption(String option)
+  String[] GetAssociatedSymbolsofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedSymbolsofOption(String option)
+  Void SetChoiceforGroup(String strGroupName, String strChoiceName)
+  Void SetObjectWizardOption(String strOptionName, Boolean bValue)
+
+interface ArchestrA.GRAccess.IgObject18 : IgObject17, IgObject16, IgObject15, IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  prop Int32 PlatformLicenseType get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+  String[] GetChoiceGroups()
+  String[] GetChoices(String choicegroup)
+  String GetDefaultChoice(String choicegroup)
+  String[] GetOptions()
+  Boolean GetDefaultOption(String option)
+  String[] GetAssociatedAttributesofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedAttributesofOption(String option)
+  String[] GetAssociatedSymbolsofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedSymbolsofOption(String option)
+  Void SetChoiceforGroup(String strGroupName, String strChoiceName)
+  Void SetObjectWizardOption(String strOptionName, Boolean bValue)
+  Void AddLinkedSymbol(String refSymbolname, String Symbolname)
+
+interface ArchestrA.GRAccess.IgObject19 : IgObject18, IgObject17, IgObject16, IgObject15, IgObject14, IgObject13, IgObject12, IgObject10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop VBGUID CategoryGUID get
+  prop String Alias get set
+  prop String SortOrder get set
+  prop Int32 PlatformLicenseType get set
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+  Object GetAssociatedFileAccess()
+  String[] GetChoiceGroups()
+  String[] GetChoices(String choicegroup)
+  String GetDefaultChoice(String choicegroup)
+  String[] GetOptions()
+  Boolean GetDefaultOption(String option)
+  String[] GetAssociatedAttributesofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedAttributesofOption(String option)
+  String[] GetAssociatedSymbolsofChoice(String choicegroup, String Choice)
+  String[] GetAssociatedSymbolsofOption(String option)
+  Void SetChoiceforGroup(String strGroupName, String strChoiceName)
+  Void SetObjectWizardOption(String strOptionName, Boolean bValue)
+  Void AddLinkedSymbol(String refSymbolname, String Symbolname)
+  LINKEDGRAHICSINFO[] GetLinkedSymbolNames()
+  Void DeleteLinkedSymbols(String[] l_linkedGraphicNames)
+
+interface ArchestrA.GRAccess.IgObjects : IgObjects12, IgObjects11, IgObjects10, IgObjectsBase, IEnumerable
+  prop IgObject Item[Object] get
+  prop Int32 count get
+  prop String Container set
+  prop String Area set
+  prop String Host set
+  prop String SecurityGroup set
+  prop ICommandResults CommandResults get
+  IEnumerator GetEnumerator()
+  Void Add(IgObject gObject)
+  Void AddFromCollection(IgObjects gObjects)
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void ExportObjects(EExportType exportType, String outputFile)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeleteAllObjects()
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+  Void ExportObjectsAsProtected(String outputFile)
+  Void DeployEx2(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch, String strCustomData, EPreserveRuntime bPreserveRuntime, EDActionForITVAPPObjects actionForITVAPPObjects)
+
+interface ArchestrA.GRAccess.IgObjects10 : IgObjectsBase, IEnumerable
+  prop IgObject Item[Object] get
+  prop Int32 count get
+  prop String Container set
+  prop String Area set
+  prop String Host set
+  prop String SecurityGroup set
+  prop ICommandResults CommandResults get
+  IEnumerator GetEnumerator()
+  Void Add(IgObject gObject)
+  Void AddFromCollection(IgObjects gObjects)
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void ExportObjects(EExportType exportType, String outputFile)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeleteAllObjects()
+
+interface ArchestrA.GRAccess.IgObjects11 : IgObjects10, IgObjectsBase, IEnumerable
+  prop IgObject Item[Object] get
+  prop Int32 count get
+  prop String Container set
+  prop String Area set
+  prop String Host set
+  prop String SecurityGroup set
+  prop ICommandResults CommandResults get
+  IEnumerator GetEnumerator()
+  Void Add(IgObject gObject)
+  Void AddFromCollection(IgObjects gObjects)
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void ExportObjects(EExportType exportType, String outputFile)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeleteAllObjects()
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+
+interface ArchestrA.GRAccess.IgObjects12 : IgObjects11, IgObjects10, IgObjectsBase, IEnumerable
+  prop IgObject Item[Object] get
+  prop Int32 count get
+  prop String Container set
+  prop String Area set
+  prop String Host set
+  prop String SecurityGroup set
+  prop ICommandResults CommandResults get
+  IEnumerator GetEnumerator()
+  Void Add(IgObject gObject)
+  Void AddFromCollection(IgObjects gObjects)
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void ExportObjects(EExportType exportType, String outputFile)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeleteAllObjects()
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+  Void ExportObjectsAsProtected(String outputFile)
+
+interface ArchestrA.GRAccess.IgObjectsBase : IEnumerable
+  prop IgObject Item[Object] get
+  prop Int32 count get
+  prop String Container set
+  prop String Area set
+  prop String Host set
+  prop String SecurityGroup set
+  IEnumerator GetEnumerator()
+  Void Add(IgObject gObject)
+  Void AddFromCollection(IgObjects gObjects)
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void ExportObjects(EExportType exportType, String outputFile)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeleteAllObjects()
+
+interface ArchestrA.GRAccess.IGRAccess : IGRAccess13, IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+  String[] ListCreateGalaxyTemplates(String GRNodeName)
+  Void CreateGalaxyFromTemplate(String createGalaxyTemplateName, String galaxyName, String GRNodeName)
+  IGalaxies QueryGalaxiesEx(String GRNodeName)
+  Void SetClientAttributes(Int32 clientProcessID, String APIKey)
+
+interface ArchestrA.GRAccess.IGRAccess10 : IGRAccessBase
+  prop ICommandResult CommandResult get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+
+interface ArchestrA.GRAccess.IGRAccess11 : IGRAccess10, IGRAccessBase
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+
+interface ArchestrA.GRAccess.IGRAccess12 : IGRAccess11, IGRAccess10, IGRAccessBase
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+  String[] ListCreateGalaxyTemplates(String GRNodeName)
+  Void CreateGalaxyFromTemplate(String createGalaxyTemplateName, String galaxyName, String GRNodeName)
+
+interface ArchestrA.GRAccess.IGRAccess13 : IGRAccess12, IGRAccess11, IGRAccess10, IGRAccessBase
+  prop ICommandResult CommandResult get
+  prop ILicense License get
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+  String[] ListCreateGalaxyTemplates(String GRNodeName)
+  Void CreateGalaxyFromTemplate(String createGalaxyTemplateName, String galaxyName, String GRNodeName)
+  IGalaxies QueryGalaxiesEx(String GRNodeName)
+
+interface ArchestrA.GRAccess.IGRAccessBase
+  IGalaxies QueryGalaxies(String GRNodeName)
+  Void CreateGalaxy(String galaxyName, String GRNodeName, Boolean enableSecurity, EAuthenticationMode AuthenticationMode, String osUserName)
+  Void DeleteGalaxy(String galaxyName, String GRNodeName)
+
+interface ArchestrA.GRAccess.IInstance : IInstance13, IInstance12, IInstance10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop Int32 DeployedVersion get
+  prop EDeploymentStatus DeploymentStatus get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteInstance(EForceDeleteInstanceOption ForceDeleteOption)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+  Void DeployEx2(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch, String strCustomData, EPreserveRuntime bPreserveRuntime, EDActionForITVAPPObjects actionForITVAPPObjects)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.IInstance10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop Int32 DeployedVersion get
+  prop EDeploymentStatus DeploymentStatus get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteInstance(EForceDeleteInstanceOption ForceDeleteOption)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+
+interface ArchestrA.GRAccess.IInstance11 : IInstance10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop Int32 DeployedVersion get
+  prop EDeploymentStatus DeploymentStatus get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteInstance(EForceDeleteInstanceOption ForceDeleteOption)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.IInstance12 : IInstance10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop Int32 DeployedVersion get
+  prop EDeploymentStatus DeploymentStatus get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteInstance(EForceDeleteInstanceOption ForceDeleteOption)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+
+interface ArchestrA.GRAccess.IInstance13 : IInstance12, IInstance10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop Int32 DeployedVersion get
+  prop EDeploymentStatus DeploymentStatus get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteInstance(EForceDeleteInstanceOption ForceDeleteOption)
+  Void Deploy(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch)
+  Void Undeploy(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure)
+  Void Upload(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates)
+  Void DeployEx(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch, String strCustomData)
+  Void UndeployEx(EForceOffScan UndeployRule, ECascade cascade, Boolean markAsUndeployedOnFailure, String strCustomData)
+  Void UploadEx(EAutomaticallyUndocheckout automaticallyUndocheckout, ESkipOtherUsersCheckedOutObjects skipOtherUsersCheckedOutObjects, ESkipObjectsWithPendingUpdates skipObjectsWithPendingUpdates, String strCustomData)
+  Void DeployEx2(EActionForCurrentlyDeployedObjects actionForDeployedObjects, ESkipIfCurrentlyUndeployed skipIfCurrentlyUndeployed, EDeployOnScan deployOnScan, EForceOffScan forceOffScan, ECascade cascade, Boolean markAsDeployedOnStatusMismatch, String strCustomData, EPreserveRuntime bPreserveRuntime, EDActionForITVAPPObjects actionForITVAPPObjects)
+
+interface ArchestrA.GRAccess.ILicense
+  prop String Text get
+  prop ILicenseEntries Entries get
+
+interface ArchestrA.GRAccess.ILicenseEntries : IEnumerable
+  prop ILicenseEntry Item[Int32] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.ILicenseEntry
+  prop String Item get
+  prop Int32 Capacity get
+
+interface ArchestrA.GRAccess.IMxReference : IPersistStream, IPersist
+  prop String FullReferenceString get set
+  prop String AutomationObjectReferenceString get set
+  prop String AttributeReferenceString get set
+  prop MxResolutionStatus AutomationObjectResolutionStatus get
+  prop MxResolutionStatus AttributeResolutionStatus get
+  prop String Context get set
+  Void GetClassID(Guid& pClassID)
+  Void IsDirty()
+  Void Load(IStream pstm)
+  Void Save(IStream pstm, Int32 fClearDirty)
+  Void GetSizeMax(_ULARGE_INTEGER& pcbSize)
+  IMxReference GenerateEnumStringsReference(MxValue pMxValue)
+
+interface ArchestrA.GRAccess.IMxValue : IPersistStream, IPersist
+  Void GetClassID(Guid& pClassID)
+  Void IsDirty()
+  Void Load(IStream pstm)
+  Void Save(IStream pstm, Int32 fClearDirty)
+  Void GetSizeMax(_ULARGE_INTEGER& pcbSize)
+  Void Clone(MxValue& ppMxValue)
+  Void Empty()
+  Void PutBoolean(Boolean newVal)
+  Void PutInteger(Int32 newVal)
+  Void PutFloat(Single newVal)
+  Void PutDouble(Double newVal)
+  Void PutString(String newVal)
+  Void PutTime(VBFILETIME& pNewVal)
+  Void PutElapsedTime(VB_LARGE_INTEGER& pNewVal)
+  Void PutMxReference(IMxReference newVal)
+  Void PutMxStatus(MxStatus& newVal)
+  Void PutMxDataType(MxDataType newVal)
+  Void PutMxSecurityClassification(MxSecurityClassification newVal)
+  Void PutMxDataQuality(Int16& newVal)
+  Void PutCustomStruct(Int32 guid, Int32 structSize, Byte& pStruct)
+  Void PutCustomEnum(String value, Int16 ordinal, Int16 primitiveId, Int16 attributeId)
+  MxDataType GetDataType()
+  Boolean GetBoolean()
+  Int32 GetInteger()
+  Single GetFloat()
+  Double GetDouble()
+  String GetString()
+  Void GetTime(VBFILETIME& pVal)
+  VB_LARGE_INTEGER GetElapsedTime()
+  IMxReference GetMxReference()
+  MxStatus GetMxStatus()
+  MxDataType GetMxDataType()
+  MxSecurityClassification GetMxSecurityClassification()
+  Int16 GetMxDataQuality()
+  Void GetCustomStruct(Int32& pGuid, Int32& pStructSize, IntPtr pStruct)
+  Void GetCustomEnum(String& pValue, Int16& pOrdinal, Int16& pPrimitiveId, Int16& pAttributeId)
+  Void GetDimensionCount(Int16& nDimensions)
+  Void PutElement(Int32 index, MxValue pMxValue)
+  Void GetElement(Int32 index1, MxValue pMxValue)
+  Void GetDimensionSize(Int32& pSize)
+  Void PutCustomStructVB(Int32 guid, Byte[]& pStruct)
+  Void GetCustomStructVB(Int32& pGuid, Byte[]& pStruct)
+  Void PutInternationalStrings(Int32 count, InternationalizedString& strings)
+  Void PutInternationalStringsVB(InternationalizedString[]& ppsa)
+  Void GetInternationalStrings(Int32& count, IntPtr locals)
+  Void GetInternationalStringsVB(InternationalizedString[]& ppsa)
+  String GetInternationalString(Int32 locale)
+  Void PutInternationalString(Int32 locale, String InternationalizedString)
+
+interface ArchestrA.GRAccess.IMxValueFactory
+  Void CreateInstance(MxValue& ppMxValue)
+  Void CreateInstanceBool(MxValue& ppMxValue, Boolean val)
+  Void CreateInstanceLong(MxValue& ppMxValue, Int32 val)
+  Void CreateInstanceFloat(MxValue& ppMxValue, Single val)
+  Void CreateInstanceDouble(MxValue& ppMxValue, Double val)
+  Void CreateInstanceString(MxValue& ppMxValue, String val)
+
+class ArchestrA.GRAccess.InternationalizedString
+
+interface ArchestrA.GRAccess.IPermission
+  prop String PermissionName get
+  prop String PermissionParentName get
+  prop Boolean IsConfigured get
+  prop Boolean HasChildren get
+  prop IPermissions ChildPermissions get
+  prop Boolean IsASecurityGroup get
+  prop ISecurityGroup SecurityGroup get
+
+interface ArchestrA.GRAccess.IPermissions : IEnumerable
+  prop IPermission Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.IPersist
+  Void GetClassID(Guid& pClassID)
+
+interface ArchestrA.GRAccess.IPersistStream : IPersist
+  Void GetClassID(Guid& pClassID)
+  Void IsDirty()
+  Void Load(IStream pstm)
+  Void Save(IStream pstm, Int32 fClearDirty)
+  Void GetSizeMax(_ULARGE_INTEGER& pcbSize)
+
+interface ArchestrA.GRAccess.IScriptLibraries : IScriptLibrariesBase, IEnumerable
+  prop IScriptLibrary Item[Object] get
+  prop Int32 count get
+  prop ICommandResult CommandResult get
+  IEnumerator GetEnumerator()
+  Void Add(String scriptLibraryPath)
+
+interface ArchestrA.GRAccess.IScriptLibrariesBase : IEnumerable
+  prop IScriptLibrary Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+  Void Add(String scriptLibraryPath)
+
+interface ArchestrA.GRAccess.IScriptLibrary : IScriptLibraryBase
+  prop String Name get
+  prop ICommandResult CommandResult get
+  Void Export(String path)
+
+interface ArchestrA.GRAccess.IScriptLibraryBase
+  prop String Name get
+  Void Export(String path)
+
+interface ArchestrA.GRAccess.ISecurityGroup
+  prop String GroupName get
+  prop IgObjects gObjects get
+
+interface ArchestrA.GRAccess.ISecurityGroups : IEnumerable
+  prop ISecurityGroup Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+
+interface ArchestrA.GRAccess.ISequentialStream
+  Void RemoteRead(Byte& pv, UInt32 cb, UInt32& pcbRead)
+  Void RemoteWrite(Byte& pv, UInt32 cb, UInt32& pcbWritten)
+
+interface ArchestrA.GRAccess.ISettings : ISettingsBase
+  prop IInstance Instance get
+  prop ICommandResult CommandResult get
+  Void Close()
+  Void Cancel()
+
+interface ArchestrA.GRAccess.ISettingsBase
+  prop IInstance Instance get
+  Void Close()
+  Void Cancel()
+
+interface ArchestrA.GRAccess.IStream : ISequentialStream
+  Void RemoteRead(Byte& pv, UInt32 cb, UInt32& pcbRead)
+  Void RemoteWrite(Byte& pv, UInt32 cb, UInt32& pcbWritten)
+  Void RemoteSeek(_LARGE_INTEGER dlibMove, UInt32 dwOrigin, _ULARGE_INTEGER& plibNewPosition)
+  Void SetSize(_ULARGE_INTEGER libNewSize)
+  Void RemoteCopyTo(IStream pstm, _ULARGE_INTEGER cb, _ULARGE_INTEGER& pcbRead, _ULARGE_INTEGER& pcbWritten)
+  Void Commit(UInt32 grfCommitFlags)
+  Void Revert()
+  Void LockRegion(_ULARGE_INTEGER libOffset, _ULARGE_INTEGER cb, UInt32 dwLockType)
+  Void UnlockRegion(_ULARGE_INTEGER libOffset, _ULARGE_INTEGER cb, UInt32 dwLockType)
+  Void Stat(tagSTATSTG& pstatstg, UInt32 grfStatFlag)
+  Void Clone(IStream& ppstm)
+
+interface ArchestrA.GRAccess.ITemplate : ITemplate12, ITemplate10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop String Toolset get set
+  prop ICommandResults CommandResults get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteTemplate(EForceDeleteTemplateOption ForceDeleteTemplateOption)
+  IInstance CreateInstance(String Name, Boolean createContainedObjects)
+  IgObjects CreateInstances(String[]& tagnames, Boolean createContainedObjects)
+  ITemplate CreateTemplate(String Name, Boolean createContainedObjects)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.ITemplate10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop String Toolset get set
+  prop ICommandResults CommandResults get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteTemplate(EForceDeleteTemplateOption ForceDeleteTemplateOption)
+  IInstance CreateInstance(String Name, Boolean createContainedObjects)
+  IgObjects CreateInstances(String[]& tagnames, Boolean createContainedObjects)
+  ITemplate CreateTemplate(String Name, Boolean createContainedObjects)
+
+interface ArchestrA.GRAccess.ITemplate11 : ITemplate10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop String Toolset get set
+  prop ICommandResults CommandResults get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteTemplate(EForceDeleteTemplateOption ForceDeleteTemplateOption)
+  IInstance CreateInstance(String Name, Boolean createContainedObjects)
+  IgObjects CreateInstances(String[]& tagnames, Boolean createContainedObjects)
+  ITemplate CreateTemplate(String Name, Boolean createContainedObjects)
+  IAttributes GetExtendedAttributes(String AttributeName, Int32 upto_level, MxAttributeCategory[] ReturnOnlyTheseCategories)
+
+interface ArchestrA.GRAccess.ITemplate12 : ITemplate10
+  prop String Tagname get set
+  prop String ContainedName get set
+  prop String HierarchicalName get
+  prop IAttributes Attributes get
+  prop IAttributes ConfigurableAttributes get
+  prop EPACKAGESTATUS ValidationStatus get
+  prop String[] Errors get
+  prop String[] Warnings get
+  prop String checkedOutBy get
+  prop ECheckoutStatus CheckoutStatus get
+  prop Int32 ConfigVersion get
+  prop ECATEGORY category get
+  prop String DerivedFrom get
+  prop String basedOn get
+  prop String Container get set
+  prop String Area get set
+  prop String Host get set
+  prop EEditStatus EditStatus get
+  prop ICommandResult CommandResult get
+  prop String Toolset get set
+  prop ICommandResults CommandResults get
+  prop VBGUID CategoryGUID get
+  String GetObjectHelpURL()
+  Void Save()
+  Void CheckIn(String CheckInComment)
+  Void CheckOut()
+  Void UndoCheckOut()
+  Void Unload()
+  Void AddExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName, Boolean IsObjectExtension)
+  Void DeleteExtensionPrimitive(String ExtensionType, String ExtensionPrimitiveName)
+  Void RenameExtensionPrimitive(String OldPrimitiveName, String NewPrimitiveName)
+  Void AddUDA(String UDAName, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteUDA(String UDAName)
+  Void RenameUDA(String OldUDAName, String NewUDAName)
+  Void UpdateUDA(String wszUDAInfo, MxDataType DataType, MxAttributeCategory category, MxSecurityClassification Security, Boolean IsArray, Object ArrayElementCount)
+  Void DeleteTemplate(EForceDeleteTemplateOption ForceDeleteTemplateOption)
+  IInstance CreateInstance(String Name, Boolean createContainedObjects)
+  IgObjects CreateInstances(String[]& tagnames, Boolean createContainedObjects)
+  ITemplate CreateTemplate(String Name, Boolean createContainedObjects)
+
+interface ArchestrA.GRAccess.IToolset : IToolsetBase
+  prop String Name get
+  prop ICommandResult CommandResult get
+  Void Rename(String newName)
+  Void MoveToToolset(String parentToolset)
+  IToolsets GetChildToolsets(Int32 depth)
+
+interface ArchestrA.GRAccess.IToolsetBase
+  prop String Name get
+  Void Rename(String newName)
+
+interface ArchestrA.GRAccess.IToolsets : IToolsets10, IToolsetsBase, IEnumerable
+  prop IToolset Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+  Void Add(String newToolst)
+  Void AddToolSet(String parentToolset, String newToolst)
+  Void DeleteToolSet(String toolsetToDelete)
+
+interface ArchestrA.GRAccess.IToolsets10 : IToolsetsBase, IEnumerable
+  prop IToolset Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+  Void Add(String newToolst)
+
+interface ArchestrA.GRAccess.IToolsetsBase : IEnumerable
+  prop IToolset Item[Object] get
+  prop Int32 count get
+  IEnumerator GetEnumerator()
+  Void Add(String newToolst)
+
+class ArchestrA.GRAccess.LINKEDGRAHICSINFO
+
+enum ArchestrA.GRAccess.MxAttributeCategory
+  MxCategoryPackageOnly, MxCategoryPackageOnly_Lockable, MxCategoryCalculated, MxCategoryCalculatedRetentive, MxCategoryWriteable_U, MxCategoryWriteable_S, MxCategoryWriteable_US, MxCategoryWriteable_UC, MxCategoryWriteable_USC, MxCategoryWriteable_UC_Lockable, MxCategoryWriteable_USC_Lockable, MxCategoryWriteable_C_Lockable, MxCategory_SystemSetsOnly, MxCategory_SystemInternal, MxCategory_SystemWriteable, MxCategory_Constant, MxCategory_SystemInternal_Browsable, MxCategory_CalculatedPackage, MxCategory_DeleteAfterStartup, MxAttributeCategoryEND, MxCategoryUndefined
+
+class ArchestrA.GRAccess.MxAttributeHandle
+
+enum ArchestrA.GRAccess.MxDataType
+  MxNoData, MxBoolean, MxInteger, MxFloat, MxDouble, MxString, MxTime, MxElapsedTime, MxReferenceType, MxStatusType, MxDataTypeEnum, MxSecurityClassificationEnum, MxDataQualityType, MxQualifiedEnum, MxQualifiedStruct, MxInternationalizedString, MxBigString, MxDataTypeEND, MxDataTypeUnknown
+
+enum ArchestrA.GRAccess.MxPropertyLockedEnum
+  MxUnLocked, MxLockedInMe, MxLockedInParent, MxUnLockedDescendants, MxPropertyLockedEnumEND, MxUndefinedLockedStatus
+
+enum ArchestrA.GRAccess.MxResolutionStatus
+  MxReferenceUnresolved, MxReferenceResolved, MxReferenceAttributeNotPresent, MxReferenceUndefined
+
+enum ArchestrA.GRAccess.MxSecurityClassification
+  MxSecurityFreeAccess, MxSecurityOperate, MxSecuritySecuredWrite, MxSecurityVerifiedWrite, MxSecurityTune, MxSecurityConfigure, MxSecurityViewOnly, MxSecurityUndefined
+
+class ArchestrA.GRAccess.MxStatus
+
+enum ArchestrA.GRAccess.MxStatusCategory
+  MxCategoryOk, MxCategoryPending, MxCategoryWarning, MxCategoryCommunicationError, MxCategoryConfigurationError, MxCategoryOperationalError, MxCategorySecurityError, MxCategorySoftwareError, MxCategoryOtherError, MxStatusCategoryUnknown
+
+enum ArchestrA.GRAccess.MxStatusDetail
+  MX_S_Success, MX_E_RequestTimedOut, MX_E_PlatformCommunicationError, MX_E_InvalidPlatformId, MX_E_InvalidEngineId, MX_E_EngineCommunicationError, MX_E_InvalidReference, MX_E_NoGalaxyRepository, MX_E_InvalidObjectId, MX_E_ObjectSignatureMismatch, MX_E_AttributeSignatureMismatch, MX_E_ResolvingAttribute, MX_E_ResolvingObject, MX_E_WrongDataType, MX_E_WrongNumberOfDimensions, MX_E_InvalidIndex, MX_E_IndexOutOfOrder, MX_E_DimensionDoesNotExist, MX_E_ConversionNotSupported, MX_E_UnableToConvertString, MX_E_Overflow, MX_E_NmxVersionMismatch, MX_E_NmxInvalidCommand, MX_E_LmxVersionMismatch, MX_E_LmxInvalidCommand, MX_E_GalaxyRepositoryBusy, MX_E_EngineOverloaded, MX_E_InvalidPrimitiveId, MX_E_InvalidAttributeId, MX_E_InvalidPropertyId, MX_E_IndexOutOfRange, MX_E_DataOutOfRange, MX_E_IncorrectDataType, MX_E_NotReadable, MX_E_NotWriteable, MX_E_WriteAccessDenied, MX_E_UnknownError, MX_E_ObjectInitializing, MX_E_EngineInitializing, MX_E_SecuredWrite, MX_E_VerifiedWrite, MX_E_NoAlarmAckPrivilege, MX_E_AlarmAckedAlready, MX_E_UserNotHavingAccessRights, MX_E_VerifierNotHavingVerifyRights, MX_E_AlarmDismissedAlready, MX_E_AutomationObjectSpecificError
+
+enum ArchestrA.GRAccess.MxStatusSource
+  MxSourceRequestingLmx, MxSourceRespondingLmx, MxSourceRequestingNmx, MxSourceRespondingNmx, MxSourceRequestingAutomationObject, MxSourceRespondingAutomationObject, MxSourceUnknown
+
+interface ArchestrA.GRAccess.MxValue : IMxValue, IPersistStream, IPersist
+
+class ArchestrA.GRAccess.MxValueClass : IMxValue, IPersistStream, IPersist, MxValue
+  Void GetClassID(Guid& pClassID)
+  Void IsDirty()
+  Void Load(IStream pstm)
+  Void Save(IStream pstm, Int32 fClearDirty)
+  Void GetSizeMax(_ULARGE_INTEGER& pcbSize)
+  Void Clone(MxValue& ppMxValue)
+  Void Empty()
+  Void PutBoolean(Boolean newVal)
+  Void PutInteger(Int32 newVal)
+  Void PutFloat(Single newVal)
+  Void PutDouble(Double newVal)
+  Void PutString(String newVal)
+  Void PutTime(VBFILETIME& pNewVal)
+  Void PutElapsedTime(VB_LARGE_INTEGER& pNewVal)
+  Void PutMxReference(IMxReference newVal)
+  Void PutMxStatus(MxStatus& newVal)
+  Void PutMxDataType(MxDataType newVal)
+  Void PutMxSecurityClassification(MxSecurityClassification newVal)
+  Void PutMxDataQuality(Int16& newVal)
+  Void PutCustomStruct(Int32 guid, Int32 structSize, Byte& pStruct)
+  Void PutCustomEnum(String value, Int16 ordinal, Int16 primitiveId, Int16 attributeId)
+  MxDataType GetDataType()
+  Boolean GetBoolean()
+  Int32 GetInteger()
+  Single GetFloat()
+  Double GetDouble()
+  String GetString()
+  Void GetTime(VBFILETIME& pVal)
+  VB_LARGE_INTEGER GetElapsedTime()
+  IMxReference GetMxReference()
+  MxStatus GetMxStatus()
+  MxDataType GetMxDataType()
+  MxSecurityClassification GetMxSecurityClassification()
+  Int16 GetMxDataQuality()
+  Void GetCustomStruct(Int32& pGuid, Int32& pStructSize, IntPtr pStruct)
+  Void GetCustomEnum(String& pValue, Int16& pOrdinal, Int16& pPrimitiveId, Int16& pAttributeId)
+  Void GetDimensionCount(Int16& nDimensions)
+  Void PutElement(Int32 index, MxValue pMxValue)
+  Void GetElement(Int32 index1, MxValue pMxValue)
+  Void GetDimensionSize(Int32& pSize)
+  Void PutCustomStructVB(Int32 guid, Byte[]& pStruct)
+  Void GetCustomStructVB(Int32& pGuid, Byte[]& pStruct)
+  Void PutInternationalStrings(Int32 count, InternationalizedString& strings)
+  Void PutInternationalStringsVB(InternationalizedString[]& ppsa)
+  Void GetInternationalStrings(Int32& count, IntPtr locals)
+  Void GetInternationalStringsVB(InternationalizedString[]& ppsa)
+  String GetInternationalString(Int32 locale)
+  Void PutInternationalString(Int32 locale, String InternationalizedString)
+
+enum ArchestrA.GRAccess.Namespace
+  Undefined, AutomationObject, BackupObject, VisualElement
+
+class ArchestrA.GRAccess.tagSTATSTG
+
+class ArchestrA.GRAccess.VB_LARGE_INTEGER
+
+class ArchestrA.GRAccess.VBFILETIME
+
+class ArchestrA.GRAccess.VBGUID

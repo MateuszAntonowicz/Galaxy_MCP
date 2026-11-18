@@ -5,7 +5,7 @@ Narzędzie: `Tools/scl_to_aveva.py` (samodzielne, bez zależności).
 ```
 .udt / .scl (TYPE)  ─┐
                      ├─scl_to_aveva.py─► Spec_<UDT>.json ─► $t_<UDT>.csv + Instances_<UDT>.csv   (Manual)
-.db (DATA_BLOCK)    ─┘                                   └─► serwer MCP GalaxyMcp → galaktyka       (Auto)
+.db (DATA_BLOCK)    ─┘                                   └─► serwer GalaxyMCP → galaktyka       (Auto)
 ```
 
 Pliki wejściowe:
@@ -47,7 +47,7 @@ python scl_to_aveva.py MA_Mixer.scl --permissions Permissions.csv --plc S7C_01 -
 
 Dla każdego wybranego typu powstaje osobny zestaw: `Spec_<UDT>.json`, `<nazwa szablonu>.csv` (`$t_<UDT>.csv`, a przy `--template-prefix ""` `$<UDT>.csv`), `Instances_<UDT>.csv`.
 Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), więc tryb Auto wykonuje po jednym
-`apply_spec` na typ – serwer GalaxyMcp nie wymaga zmian (nazwę szablonu bierze z `template.name`, więc przedrostek działa w obu trybach).
+`apply_spec` na typ – serwer GalaxyMCP nie wymaga zmian (nazwę szablonu bierze z `template.name`, więc przedrostek działa w obu trybach).
 
 ## Kierunek I/O i `Permissions.csv`
 - Trzy kierunki (nazwy jak w IDE w nawiasie):
@@ -61,7 +61,7 @@ Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), w
 - `Output` = SCADA tylko zapisuje do PLC i nie odczytuje wartości z powrotem – nie dla alarmów i stanów.
   **Wiersz Output (`WriteOnly`, sam `OutputDest`, bez `#IO.Deadband`) nie jest potwierdzony eksportem z IDE** – przy pierwszym
   użyciu porównać z eksportem atrybutu ustawionego w IDE na Write i wspomnieć o tym w „Do sprawdzenia”.
-- Tryb Auto: GalaxyMcp 0.2.2 odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
+- Tryb Auto: GalaxyMCP 0.2.2 odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
 - `Permissions.csv`: kolumny `Prefix_or_Keyword`, `Access_Mode`, `Description` (opcjonalna, generator jej nie czyta).
   **Nazw kolumn nie wolno zmieniać** – plik bez żadnej poprawnej reguły (np. nagłówek `Prefix_`) przerywa generator komunikatem,
   zamiast po cichu dać same Input.
@@ -127,7 +127,7 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer MCP GalaxyMcp (wersja 0.2.1 jako rozszerzenie .mcpb potwierdzona 2026-09-17; 0.2.2 bez limitu 32 znaków – do zbudowania)
+## Tryb Auto – serwer GalaxyMCP (wersja 0.2.1 jako rozszerzenie .mcpb potwierdzona 2026-09-17; 0.2.2 bez limitu 32 znaków – do zbudowania)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.
@@ -142,14 +142,14 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` przy zapisie), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
 - `apply_spec`: tworzy brakujący szablon i dopisuje brakujące UDA (+ `inputextension`/`inputoutputextension`); tworzy brakujące instancje; zmienia tylko różniące się `InputSource`. Niczego nie usuwa. CheckOut → Save → CheckIn, przy błędzie UndoCheckOut. Log zapisów: `GalaxyMcp.log`.
   Kierunku Output (`outputextension`, `OutputDest`) serwer 0.2.2 nie obsługuje – specyfikację z `io=Output` odrzuca w `Spec.Parse`.
-- Od GalaxyMcp 0.2.2 serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
+- Od GalaxyMCP 0.2.2 serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
   (`[A-Za-z_][A-Za-z0-9_]*`, szablon z `$`). Ewentualne ograniczenie galaktyki zgłosi GRAccess przy zapisie.
 - W sesji Cowork narzędzia serwera zarejestrowanego w Claude Desktop pojawiają się z przedrostkiem
-  `mcp__remote-devices__AVEVA_Galaxy__GalaxyMcp___` (rozszerzenie `.mcpb`) albo `mcp__remote-devices__galaxy__` (ręczny wpis).
+  `mcp__remote-devices__GalaxyMCP__` (rozszerzenie `.mcpb`) albo `mcp__remote-devices__galaxy__` (ręczny wpis).
 - Procedura agenta: spec → `apply_spec` dry_run → pokazać plan → zapis dopiero po potwierdzeniu → deploy tylko na wyraźne polecenie.
 
 ## Weryfikacja (2026-09-17, galaktyka test_mcp)
-- Tryb Auto (GalaxyMcp 0.1.5, apply_spec) utworzył szablon i 3 instancje; eksport IDE szablonu jest zgodny z `$t_<UDT>.csv`
+- Tryb Auto (GalaxyMCP 0.1.5, apply_spec) utworzył szablon i 3 instancje; eksport IDE szablonu jest zgodny z `$t_<UDT>.csv`
   generatora we wszystkich kolumnach poza wartościami domyślnymi nadawanymi przez IDE:
   MxElapsedTime → `00:00:00.0000000`, MxTime → czas utworzenia, `InputSource` → `---Auto---` (generator: puste).
   Eksport IDE zawiera też wiersze runtime `WriteStatus`/`WriteValue` – generator celowo ich nie tworzy.
@@ -166,7 +166,7 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   Test: atrybut `stan_Stan_Blokada_Przyczyna_Slownik_Bardzo_Dlugi` (48 znaków) trafia bez zmian do szablonu,
   do kolumny `…InputSource` w instancjach i do specyfikacji; kolizja `Temp-1`/`Temp[1]` nadal daje `Temp_1_1`;
   Nagłówek szablonu zgodny z `t_SampleUDT.csv`, liczba kolumn 53. Pierwszy import długiej nazwy w IDE / GRAccess – do potwierdzenia.
-- 2026-09-18 (pełne nazwy obiektów): limit 32 znaków zniesiony także dla szablonów i instancji (generator + GalaxyMcp 0.2.2).
+- 2026-09-18 (pełne nazwy obiektów): limit 32 znaków zniesiony także dla szablonów i instancji (generator + GalaxyMCP 0.2.2).
   Test: instancja `DB_Bardzo_Dluga_Nazwa_Bloku_Danych_Element_Instancji_Z_Dluga_Nazwa` (66 znaków) bez skracania
   w `Instances_<UDT>.csv` i specyfikacji. Czy galaktyka przyjmuje tagname > 32 znaków – do sprawdzenia przy pierwszym zapisie.
 - 2026-09-18 (pełne opisy): komentarz z TIA dłuższy niż 200 znaków trafia do Description w całości (szablon CSV,
@@ -220,7 +220,7 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
 - Reguły prefiksów: dopasowanie do nazwy LIŚCIA (zmiennej w SCL, bez prefiksów struktur nadrzędnych), wielkość liter ma znaczenie,
   pierwsze dopasowanie wygrywa. Brak dopasowania → Input.
 - **Nazwy szablonów i instancji też nie są skracane** (od 2026-09-18) – generator nie ma żadnego limitu długości nazw,
-  serwer GalaxyMcp od 0.2.2 również. Galaktyka przyjmuje nazwy dłuższe niż 32 znaki (potwierdzone 2026-09-23).
+  serwer GalaxyMCP od 0.2.2 również. Galaktyka przyjmuje nazwy dłuższe niż 32 znaki (potwierdzone 2026-09-23).
 - Instancje z `.db`: nazwa `<DB>_<element>` (pełna, bez skracania), adres `<DI>.<SG>.<DB>.<element>.<ścieżka w UDT>`.
   Tablica elementów w DB daje kilka instancji (`DB_Tablica_1`, `DB_Tablica_2`); UDT w STRUCT i DB typu UDT – tabela w „Pliki wejściowe”.
 - Pola CSV są cytowane zgodnie z RFC 4180 (`csv.writer`), bo opisy z TIA zawierają przecinki i cudzysłowy,

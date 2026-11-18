@@ -1,8 +1,8 @@
 # Buduje GalaxyMcp.exe i GalaxyMcp.mcpb z najnowszego folderu GalaxyMcp/GalaxyMcp_<wersja>/
 # i tworzy wydanie v<wersja> w zakładce Releases (jeśli jeszcze nie istnieje).
-# Uruchamia się po zmianie w GalaxyMcp/ na gałęzi main albo ręcznie (Actions -> Wydanie GalaxyMcp -> Run workflow).
+# Uruchamia się po zmianie w GalaxyMcp/ na gałęzi main albo ręcznie (Actions -> Wydanie GalaxyMCP -> Run workflow).
 # W pull requeście tylko sprawdza, czy exe i mcpb się budują (bez wydania).
-name: Wydanie GalaxyMcp
+name: Wydanie GalaxyMCP
 
 on:
   push:
@@ -92,7 +92,7 @@ jobs:
         run: |
           $hash = (Get-FileHash GalaxyMcp.exe -Algorithm SHA256).Hash.ToLower()
           $notes = @"
-          Wtyczka GalaxyMcp $env:VER dla Claude Desktop (serwer MCP, GRAccess). Zbudowana automatycznie z ``$((Split-Path -Leaf (Get-Location)))``.
+          Wtyczka GalaxyMCP $env:VER dla Claude Desktop (serwer MCP, GRAccess). Zbudowana automatycznie z ``$((Split-Path -Leaf (Get-Location)))``.
 
           - ``GalaxyMcp.mcpb`` – gotowa wtyczka do instalacji w Claude Desktop (Settings → Extensions → Install Extension…).
           - ``GalaxyMcp.exe`` + ``GalaxyMcp.exe.config`` – serwer (Windows, .NET Framework 4, x86), do ręcznego wpisu w konfiguracji.
@@ -100,4 +100,4 @@ jobs:
           SHA-256 GalaxyMcp.exe: ``$hash``
           "@ -replace '(?m)^          ', ''
           gh release create "v$env:VER" GalaxyMcp.mcpb GalaxyMcp.exe GalaxyMcp.exe.config `
-            --target $env:GITHUB_SHA --title "GalaxyMcp $env:VER" --notes $notes
+            --target $env:GITHUB_SHA --title "GalaxyMCP $env:VER" --notes $notes

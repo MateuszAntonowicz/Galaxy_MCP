@@ -1,4 +1,4 @@
-// GalaxyMcp - serwer MCP (stdio) dla galaktyki AVEVA System Platform przez GRAccess.
+// GalaxyMCP - serwer MCP (stdio) dla galaktyki AVEVA System Platform przez GRAccess.
 //
 // Zasady projektu:
 //  * Serwer NIE zna SCL. Przyjmuje specyfikację JSON (Spec_<UDT>.json) z scl_to_aveva.py
@@ -39,7 +39,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.3";
+        public const string Version = "0.2.4";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -62,7 +62,7 @@ namespace GalaxyMcp
                 Log.Error("NIEOBSŁUŻONY WYJĄTEK: " + e.ExceptionObject);
             Log.Info("proces " + (Environment.Is64BitProcess ? "64" : "32") + "-bit, CLR " + Environment.Version +
                      ", wątek " + System.Threading.Thread.CurrentThread.GetApartmentState());
-            Log.Info("GalaxyMcp " + Version + " start, galaktyka='" + G.Name + "', węzeł='" + G.Node + "'");
+            Log.Info("GalaxyMCP " + Version + " start, galaktyka='" + G.Name + "', węzeł='" + G.Node + "'");
 
             if (args.Length > 0 && args[0] == "--selftest")
                 return SelfTest();
@@ -103,7 +103,7 @@ namespace GalaxyMcp
         // proces i tak kończy się po 5 s - nic nie może trzymać GalaxyMcp.exe w pamięci.
         public static void Shutdown(string reason)
         {
-            Log.Info("GalaxyMcp stop: " + reason);
+            Log.Info("GalaxyMCP stop: " + reason);
             var killer = new System.Threading.Thread(() => { System.Threading.Thread.Sleep(5000); Environment.Exit(0); });
             killer.IsBackground = true;
             killer.Start();
@@ -236,7 +236,7 @@ namespace GalaxyMcp
                     System.Threading.Thread.Sleep(2000);
                     bool gone;
                     try { gone = parent.HasExited; } catch { gone = false; }
-                    if (gone) { Log.Info("GalaxyMcp stop: proces nadrzędny zakończony"); Environment.Exit(0); }
+                    if (gone) { Log.Info("GalaxyMCP stop: proces nadrzędny zakończony"); Environment.Exit(0); }
                 }
             });
             t.IsBackground = true;
@@ -363,7 +363,7 @@ namespace GalaxyMcp
         {
             var g = Program.G;
             var sb = new StringBuilder();
-            sb.AppendLine("GalaxyMcp " + Program.Version);
+            sb.AppendLine("GalaxyMCP " + Program.Version);
             sb.AppendLine("Węzeł GR: " + g.Node);
             sb.AppendLine("Galaktyka (aktywna): " + (g.Name == "" ? "(nie wybrano - użyj select_galaxy)" : g.Name));
             sb.AppendLine("Użytkownik: " + (g.User == "" ? "(brak - galaktyka bez zabezpieczeń)" : g.User));
@@ -736,7 +736,7 @@ namespace GalaxyMcp
                 AddAttributes(tpl, s.Template, attrs);
                 Com.Call(tpl, "Save");
                 Galaxy.Check(tpl, "Save(" + s.Template + ")");
-                Com.Call(tpl, "CheckIn", "GalaxyMcp: " + attrs.Count + " atrybutów ze " + s.Source);
+                Com.Call(tpl, "CheckIn", "GalaxyMCP: " + attrs.Count + " atrybutów ze " + s.Source);
                 Galaxy.Check(tpl, "CheckIn(" + s.Template + ")");
             }
             catch
@@ -813,7 +813,7 @@ namespace GalaxyMcp
                     }
                     Com.Call(inst, "Save");
                     Galaxy.Check(inst, "Save(" + si.Name + ")");
-                    Com.Call(inst, "CheckIn", "GalaxyMcp: " + (newAttrs.Count > 0 ? newAttrs.Count + " atrybutów, " : "") +
+                    Com.Call(inst, "CheckIn", "GalaxyMCP: " + (newAttrs.Count > 0 ? newAttrs.Count + " atrybutów, " : "") +
                                               "InputSource ze " + s.Source);
                     Galaxy.Check(inst, "CheckIn(" + si.Name + ")");
                 }

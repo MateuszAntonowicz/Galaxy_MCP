@@ -1,4 +1,4 @@
-# GalaxyMcp – serwer MCP dla galaktyki AVEVA System Platform (GRAccess)
+# GalaxyMCP – serwer MCP dla galaktyki AVEVA System Platform (GRAccess)
 
 Tryb **Auto** projektu *SCL → AVEVA*. Serwer wykonuje w galaktyce specyfikację `Spec_<UDT>.json`,
 którą generuje `scl_to_aveva.py`. Tworzy szablon z atrybutami i rozszerzeniami I/O, tworzy instancje,
@@ -6,10 +6,13 @@ dodaje instancjom ich własne atrybuty i ustawia `InputSource`. Ta sama specyfik
 
 ```
 SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
-                                            └──► GalaxyMcp ──GRAccess──► galaktyka (Auto)
+                                            └──► GalaxyMCP ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Status: wersja 0.2.3** (2026-09-24, do zbudowania i sprawdzenia): wszystkie typy UDA z okna IDE (Boolean, Integer, Float,
+> **Status: wersja 0.2.4** (2026-11-18): nowa nazwa wtyczki **GalaxyMCP** (dawniej „AVEVA Galaxy (GalaxyMcp)”), działa na
+> **AVEVA System Platform 2026**; kod bez zmian względem 0.2.3. Nazwy plików (`GalaxyMcp.exe`, `GalaxyMcp.mcpb`, `GalaxyMcp.log`) bez zmian.
+>
+> Wersja 0.2.3 (2026-09-24): wszystkie typy UDA z okna IDE (Boolean, Integer, Float,
 > **Double**, String, Time, ElapsedTime, **InternationalizedString**, **BigString**); atrybuty UDA dodawane do **pojedynczej instancji**
 > (`instances[].attributes`) z wartością początkową i kierunkiem I/O; kontrola wartości początkowej w specyfikacji.
 > Wersja 0.2.2 (bez limitu 32 znaków nazw, zamykanie po wyłączeniu wtyczki) zainstalowana i potwierdzona 2026-09-23.
@@ -152,7 +155,7 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 - Claude Desktop rozpakowuje rozszerzenie do własnego folderu (Ustawienia → Extensions pokazuje szczegóły).
   Tam powstaje `GalaxyMcp.log`; tam też można uruchomić `GalaxyMcp.exe --selftest`.
 - Securden widzi exe w folderze rozszerzeń, a nie w `C:\Tools\GalaxyMcp\` – reguła IT powinna dotyczyć skrótu (hash) pliku albo podpisu.
-- Zmiana ustawień: Ustawienia → Extensions → AVEVA Galaxy (GalaxyMcp). Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
+- Zmiana ustawień: Ustawienia → Extensions → GalaxyMCP. Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
   wyłącz przełącznik Enabled, zrestartuj komputer i włącz Enabled. Sprawdzenie: `galaxy_status`.
 - Nowa wersja serwera = nowy `build.bat` + `pack_mcpb.bat` + podniesienie `version` w `manifest.json`; instalacja nadpisuje poprzednią.
 - W firmowym koncie administrator może ograniczyć instalowanie własnych rozszerzeń – wtedy potrzebna jest jego zgoda.
@@ -226,7 +229,7 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 - `GalaxyMcp.exe --version` – wypisuje wersję i kończy działanie (od 0.2.1).
 - Zakończenie pracy (od 0.2.2): serwer wychodzi, gdy Claude Desktop zamknie stdin albo gdy zniknie proces, który go
   uruchomił (sprawdzenie co 2 s) – czyli po wyłączeniu wtyczki (Enabled) lub zamknięciu aplikacji. Wylogowanie z galaktyki
-  ma 5 s; potem proces kończy się bez niego. W `GalaxyMcp.log`: „nadzór rodzica: …” przy starcie i „GalaxyMcp stop: …”.
+  ma 5 s; potem proces kończy się bez niego. W `GalaxyMcp.log`: „nadzór rodzica: …” przy starcie i „GalaxyMCP stop: …”.
 - `build.bat` odmawia budowania tylko wtedy, gdy działa `GalaxyMcp.exe` z tego samego folderu. Kopia z folderu rozszerzeń
   Claude (wtyczka `.mcpb`) nie blokuje budowania w innym folderze.
 - `GalaxyMcp.exe --selftest` – ładowanie GRAccess, lista galaktyk, logowanie (kroki 1–4 w `GalaxyMcp.log`).

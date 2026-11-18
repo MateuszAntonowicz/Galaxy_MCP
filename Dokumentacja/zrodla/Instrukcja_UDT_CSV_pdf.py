@@ -22,7 +22,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
-PLUGIN_VERSION = "0.2.3"
+PLUGIN_VERSION = "0.2.4"
 
 # ------------------------------------------------------------------ czcionki
 FONT_SETS = [
@@ -212,15 +212,16 @@ def build():
     s.append(P("Projekt <b>UDT->CSV</b> zamienia dane ze sterownika na obiekty AVEVA System Platform. Z typów danych "
                "PLC (UDT) powstają <b>szablony</b>, a z bloków danych (DB) – <b>instancje</b> z gotowymi adresami do "
                "drivera OI SIDirect. Całą pracę wykonuje Claude w projekcie; użytkownik dostarcza pliki i odpowiada "
-               "na kilka pytań."))
+               "na kilka pytań. Projekt i wtyczka GalaxyMCP <b>działają na AVEVA System Platform 2026</b> "
+               "(sprawdzone na galaktykach testowych)."))
     s.append(table([
         ["Tryb", "Co dostajesz", "Kiedy wybrać"],
         ["Manual", f"Pliki CSV: szablon {c('$t_&lt;UDT&gt;.csv')} i instancje {c('Instances_&lt;UDT&gt;.csv')} – "
                    "w odpowiedzi wątku i w Library projektu. Importujesz je sam w ArchestrA IDE.",
-         "Brak serwera GalaxyMcp, galaktyka na innym komputerze, chcesz przejrzeć pliki przed importem."],
+         "Brak serwera GalaxyMCP, galaktyka na innym komputerze, chcesz przejrzeć pliki przed importem."],
         ["Auto", "Obiekty zapisane bezpośrednio w galaktyce przez serwer GalaxyMcp. Najpierw plan, zapis dopiero "
                  "po Twojej zgodzie.",
-         "Masz zainstalowane rozszerzenie „AVEVA Galaxy (GalaxyMcp)” i galaktykę z prawem zapisu."],
+         "Masz zainstalowane rozszerzenie „GalaxyMCP” i galaktykę z prawem zapisu."],
     ], [W * 0.13, W * 0.47, W * 0.40]))
     s.append(Spacer(1, 6))
     s.append(note("<b>Co się zmieniło od września 2026.</b> Projekt nie jest już folderem rozmów. To jedna "
@@ -237,8 +238,8 @@ def build():
         "a dostęp włączany jest stopniowo.",
         "Pliki projektu: zawartość archiwum <b>Context.zip</b> (foldery Tools i ITERACJE, t_SampleUDT.csv, "
         "OISIDIR_tekst.txt) i opcjonalnie OISIDIR.pdf oraz Permissions.csv.",
-        f"Tryb Auto: komputer z AVEVA System Platform (lub dostęp do węzła GR), rozszerzenie <b>AVEVA Galaxy "
-        f"(GalaxyMcp)</b> w wersji {PLUGIN_VERSION} oraz <b>uruchomiony Claude Desktop</b> na tym komputerze "
+        f"Tryb Auto: komputer z <b>AVEVA System Platform 2026</b> (lub dostęp do węzła GR), rozszerzenie "
+        f"<b>GalaxyMCP</b> w wersji {PLUGIN_VERSION} oraz <b>uruchomiony Claude Desktop</b> na tym komputerze "
         "w czasie pracy – instalacja i ustawienia w instrukcji użytkownika wtyczki "
         f"({c('GalaxyMcp_Instrukcja_uzytkownika.pdf')}) i w {c('Tools/GalaxyMcp_README.md')}.",
         "W ustawieniach rozszerzenia: galaktyka na liście „Dozwolone galaktyki” i „Galaktyki z prawem zapisu”, "
@@ -256,7 +257,7 @@ def build():
         "o przeniesienie albo archiwizację starych projektów z czatu – zrób to i wróć do tego kroku.",
         f"W oknie {ui('New project')} wypełnij: {ui('Name')} – np. <b>UDT->CSV</b>; "
         f"{ui('What do you want to work on?')} (opcjonalnie) – jedno zdanie celu, np. „Konwersja typów i bloków "
-        "danych z TIA Portal na szablony i instancje AVEVA (pliki CSV albo zapis przez GalaxyMcp)”.",
+        "danych z TIA Portal na szablony i instancje AVEVA (pliki CSV albo zapis przez GalaxyMCP)”.",
         f"W polu {ui('Context')} kliknij {ui('+')} i dodaj pliki projektu (rozdział 3.2). Repozytorium GitHub "
         "nie jest potrzebne.",
         f"Kliknij {ui('Create project')}. Otworzy się rozmowa projektu z polem wiadomości na dole.",
@@ -376,8 +377,8 @@ def build():
     ])
 
     # ---- 7
-    s.append(H1("7. Tryb Auto – zapis przez GalaxyMcp"))
-    s.append(P("Wątek pracuje w chmurze, a GalaxyMcp – na Twoim komputerze. Wątek widzi narzędzia galaktyki tylko "
+    s.append(H1("7. Tryb Auto – zapis przez GalaxyMCP"))
+    s.append(P("Wątek pracuje w chmurze, a GalaxyMCP – na Twoim komputerze. Wątek widzi narzędzia galaktyki tylko "
                "wtedy, gdy jest <b>połączony z komputerem</b>, na którym działa Claude Desktop z włączonym "
                "rozszerzeniem."))
     s += steps([
@@ -495,7 +496,7 @@ def main():
     a = ap.parse_args()
     doc = Doc(a.out, pagesize=A4, leftMargin=72, rightMargin=72, topMargin=62, bottomMargin=64,
               title="Instrukcja działania projektu UDT->CSV", author=f"{AUTHOR} {AUTHOR_NOTE}",
-              subject="TIA Portal → AVEVA System Platform (CSV / GalaxyMcp)")
+              subject="TIA Portal → AVEVA System Platform (CSV / GalaxyMCP)")
     doc.multiBuild(build(), onFirstPage=on_page, onLaterPages=on_page)
     print("Zapisano:", a.out)
 

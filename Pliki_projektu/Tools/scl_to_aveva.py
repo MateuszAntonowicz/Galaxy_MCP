@@ -3,7 +3,7 @@
 Siemens TIA Portal (SCL / UDT / DB) -> AVEVA System Platform (ArchestrA IDE).
 
 Przepływ:  pliki z TIA -> Spec_<UDT>.json (format pośredni) -> CSV (tryb Manual)
-                                                          \\-> serwer MCP GalaxyMcp (tryb Auto)
+                                                          \\-> serwer GalaxyMCP (tryb Auto)
 Wejście:
   *.udt / *.scl  - jeden lub wiele bloków TYPE "<UDT>" ... STRUCT ... END_TYPE (źródło szablonów)
   *.db           - jeden lub wiele bloków DATA_BLOCK "<DB>" ... VAR ... END_VAR (źródło instancji)
@@ -42,7 +42,7 @@ Zasady:
   * Kierunek I/O: prefiks dopasowywany do nazwy zmiennej w SCL (liścia), nie do nazwy spłaszczonej.
     Input = Read (ReadOnly), InputOutput = Read/Write (ReadWrite), Output = Write (WriteOnly: SCADA tylko
     zapisuje, adres w OutputDest zamiast InputSource; format niepotwierdzony eksportem z IDE, tryb Auto
-    - GalaxyMcp 0.2.2 - go nie obsługuje).
+    - GalaxyMCP 0.2.2 - go nie obsługuje).
   * Adres (InputSource / OutputDest) wg dokumentacji drivera OI SIDirect (adresowanie symboliczne):
     <obiekt DI>.<grupa skanowania>.<item>, item = [DB].[Tag]<[i]>.[Member]; nazwy ze spacją lub kropką
     w cudzysłowie (indeks poza nim), a cały item w attribute(...). Obiekt DI (--plc) jest wymagany,
@@ -471,7 +471,7 @@ def build_spec(udt, attrs, instances, plc, scan_group, source, warn, no_address=
         out.append(entry)
     if any(a["io"] == "Output" for a in attrs):
         warn.append("atrybuty Output (Write, #IO.Mode=WriteOnly, adres w OutputDest): format niepotwierdzony "
-                    "eksportem z IDE; tryb Auto (GalaxyMcp 0.2.2) ich nie obsługuje - użyj trybu Manual")
+                    "eksportem z IDE; tryb Auto (GalaxyMCP 0.2.2) ich nie obsługuje - użyj trybu Manual")
     tpl = fit("$" + template_prefix + udt, set(), warn, "szablon")
     return {
         "spec_version": SPEC_VERSION,

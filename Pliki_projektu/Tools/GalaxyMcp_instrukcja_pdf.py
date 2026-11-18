@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
-"AVEVA Galaxy (GalaxyMcp)" w Claude Desktop (projekt UDT->CSV).
+"GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
 Stan na 2026-11: nowe projekty Claude (zakładka Code → Projects: rozmowa projektu + wątki, Biblioteka plików,
-połączenie wątku z komputerem) i wtyczka 0.2.3.
+połączenie wątku z komputerem) i wtyczka 0.2.4.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -23,7 +23,7 @@ from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, Simpl
                                 Spacer, Table, TableStyle)
 from reportlab.platypus.tableofcontents import TableOfContents
 
-VERSION = "0.2.3"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
+VERSION = "0.2.4"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
@@ -155,7 +155,7 @@ def prompt_box(text):
 
 def flow_diagram():
     cells = ["Pliki ze sterownika<br/>.udt / .scl / .db", "Claude<br/>(projekt)",
-             "Wtyczka<br/>AVEVA Galaxy", "Galaktyka<br/>AVEVA SP"]
+             "Wtyczka<br/>GalaxyMCP", "Galaktyka<br/>AVEVA SP"]
     st = ParagraphStyle("fd", parent=S["cell"], alignment=1, textColor=colors.white, fontName="Body-Bold", fontSize=8.2)
     arrow = ParagraphStyle("ar", parent=S["cell"], alignment=1, textColor=BLUE, fontName="Body-Bold", fontSize=14)
     row = []
@@ -194,7 +194,7 @@ def on_page(c, doc):
         c.line(20 * mm, 282 * mm, 190 * mm, 282 * mm)
         c.setFont("Body", 8)
         c.setFillColor(GREY)
-        c.drawString(20 * mm, 284 * mm, "Wtyczka AVEVA Galaxy (GalaxyMcp) – instrukcja użytkownika")
+        c.drawString(20 * mm, 284 * mm, "Wtyczka GalaxyMCP – instrukcja użytkownika")
     c.setFont("Body", 8)
     c.setFillColor(GREY)
     c.drawRightString(190 * mm, 12 * mm, f"Strona {doc.page}")
@@ -235,15 +235,17 @@ def build(icon_bytes):
     if icon_bytes:
         s.append(Image(io.BytesIO(icon_bytes), width=34 * mm, height=34 * mm, hAlign="LEFT"))
         s.append(Spacer(1, 8 * mm))
-    s.append(P("Wtyczka AVEVA Galaxy", "title"))
+    s.append(P("Wtyczka GalaxyMCP", "title"))
     s.append(P("Instrukcja dla nowych użytkowników: instalacja, konfiguracja i praca<br/>"
-               "Rozszerzenie Claude Desktop „AVEVA Galaxy (GalaxyMcp)”", "subtitle"))
+               "Rozszerzenie Claude Desktop „GalaxyMCP”", "subtitle"))
     s.append(flow_diagram())
     s.append(Spacer(1, 10 * mm))
     s.append(P("W skrócie", "h2"))
     s += bullets([
         "Wtyczka pozwala Claude tworzyć w galaktyce AVEVA System Platform <b>szablony, atrybuty z I/O i instancje</b> "
         "na podstawie plików ze sterownika – bez ręcznego importu plików CSV.",
+        "<b>Działa na AVEVA System Platform 2026</b> – sprawdzone na galaktykach testowych (plan, zapis szablonów "
+        "i instancji, status wtyczki).",
         "Obsługiwane pliki: <b>.udt / .scl</b> z definicjami typów (także kilka typów w jednym pliku i typy "
         "zagnieżdżone w innych) oraz <b>.db</b> z blokami danych – z nich powstają instancje i ich adresy.",
         "Obsługuje <b>wszystkie typy danych atrybutów</b> z IDE: Boolean, Integer, Float, Double, String, Time, "
@@ -256,7 +258,7 @@ def build(icon_bytes):
         "Takie zmienne zakładasz świadomie w trybie Manual.",
         "Zawsze najpierw pokazuje <b>plan</b>. Zapis następuje dopiero po Twoim wyraźnym „tak”, tylko w galaktykach, "
         "które dopuścisz w ustawieniach. Wtyczka <b>niczego nie usuwa</b>.",
-        "Zmiana ustawień wtyczki wymaga <b>restartu komputera</b> albo ręcznego zamknięcia procesów GalaxyMcp.exe "
+        "Zmiana ustawień wtyczki wymaga <b>restartu komputera</b> albo <b>ręcznego zamknięcia procesów GalaxyMcp.exe</b> "
         "(rozdział 3).",
     ])
     s.append(PageBreak())
@@ -275,7 +277,7 @@ def build(icon_bytes):
     s.append(table([
         ["Element", "Wymaganie", "Jak sprawdzić"],
         ["System", "Windows 10 (1803+) lub 11", "Ustawienia → System → Informacje"],
-        ["AVEVA System Platform", "<b>AVEVA System Platform 2026</b> z zainstalowanym ArchestrA IDE (zawiera bibliotekę "
+        ["AVEVA System Platform", "<b>AVEVA System Platform 2026</b> (wtyczka działa na tej wersji – sprawdzone) z zainstalowanym ArchestrA IDE (zawiera bibliotekę "
          "GRAccess) i dostępem do serwera galaktyk (Galaxy Repository)", "IDE otwiera galaktykę, z którą chcesz pracować"],
         [".NET Framework", "4.x (jest w każdym Windows 10/11)", "–"],
         ["Claude Desktop", "Aktualna wersja aplikacji, zalogowana na Twoje konto i <b>uruchomiona na tym komputerze</b> "
@@ -295,20 +297,20 @@ def build(icon_bytes):
         f"Zapisz plik {code('GalaxyMcp.mcpb')} na dysku.",
         "W Claude Desktop otwórz <b>Ustawienia → Extensions → Advanced settings</b> i kliknij "
         f"<b>Install Extension…</b>, a następnie wskaż plik {code('GalaxyMcp.mcpb')}.",
-        "W oknie instalacji sprawdź nazwę <b>AVEVA Galaxy (GalaxyMcp)</b> i listę 9 narzędzi, potwierdź instalację.",
+        "W oknie instalacji sprawdź nazwę <b>GalaxyMCP</b> i listę 9 narzędzi, potwierdź instalację.",
         "Wypełnij formularz ustawień (rozdział 3) i zapisz.",
         "Upewnij się, że przełącznik <b>Enabled</b> jest włączony. Jeśli wtyczka działała już wcześniej "
         "(np. aktualizacja do nowej wersji), uruchom ją ponownie tak, jak po zmianie ustawień (rozdział 3).",
     ])
     s.append(box("<b>Aktualizacja do nowej wersji:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastąpi "
                  "poprzednią wersję, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
-                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.3.", "info"))
+                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.4.", "info"))
     s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń. Tam znajdziesz też plik "
                  f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów).", "info"))
 
     # ---- 3. Ustawienia
     s.append(H1("3. Ustawienia wtyczki"))
-    s.append(P("Ustawienia otwierasz w <b>Ustawienia → Extensions → AVEVA Galaxy (GalaxyMcp)</b>."))
+    s.append(P("Ustawienia otwierasz w <b>Ustawienia → Extensions → GalaxyMCP</b>."))
     s.append(table([
         ["Pole", "Co wpisać", "Przykład"],
         ["Węzeł GR (Galaxy Repository)", "Nazwa komputera z serwerem galaktyk. <b>Puste = ten komputer.</b> "
@@ -352,7 +354,7 @@ def build(icon_bytes):
     s.append(P("Prawidłowy wynik (przykład dla ustawień z rozdziału 3):"))
     s.append(table([
         ["Pozycja w statusie", "Oczekiwana wartość"],
-        ["Wersja", "0.2.3"],
+        ["Wersja", "0.2.4"],
         ["Galaktyka (aktywna)", "Galaktyka_Test"],
         ["Zapis w aktywnej galaktyce", "DOZWOLONY"],
         ["Dozwolone galaktyki", "Galaktyka_Test, Galaktyka_Dev, Galaktyka_Prod"],
@@ -452,7 +454,7 @@ def build(icon_bytes):
         ["Błąd przy tworzeniu obiektu lub atrybutu o długiej nazwie", "Galaktyka nie przyjęła nazwy dłuższej niż 32 znaki",
          "Zgłoś to osobie utrzymującej projekt; do tego czasu skróć nazwę w programie sterownika"],
         ["„nieobsługiwany typ 'MxDouble'” (albo InternationalizedString, BigString)",
-         "Stara wersja wtyczki (0.2.2 lub starsza)", "Zainstaluj wersję 0.2.3 (rozdział 2) i sprawdź status"],
+         "Stara wersja wtyczki (0.2.2 lub starsza)", "Zainstaluj wersję 0.2.4 (rozdział 2) i sprawdź status"],
         ["„wartość początkowa … nie pasuje do typu …”", "Initial value niezgodna z typem (np. tekst w Integer)",
          "Popraw wartość (Dodatek B) – nic nie zostało zapisane"],
         ["„io musi być Input albo InputOutput”", "Zmienne tylko do zapisu (Write) – celowo wyłączone w trybie Auto "
@@ -512,8 +514,8 @@ def main():
     ap.add_argument("--out", default="GalaxyMcp_Instrukcja_uzytkownika.pdf")
     a = ap.parse_args()
     doc = Doc(a.out, pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm, topMargin=22 * mm,
-              bottomMargin=20 * mm, title="Wtyczka AVEVA Galaxy – instrukcja użytkownika",
-              author=f"{AUTHOR} {AUTHOR_NOTE}", subject="Wtyczka AVEVA Galaxy (GalaxyMcp)")
+              bottomMargin=20 * mm, title="Wtyczka GalaxyMCP – instrukcja użytkownika",
+              author=f"{AUTHOR} {AUTHOR_NOTE}", subject="Wtyczka GalaxyMCP")
     doc.multiBuild(build(load_icon(a.icon)), onFirstPage=on_page, onLaterPages=on_page)
     print("Zapisano:", a.out)
 

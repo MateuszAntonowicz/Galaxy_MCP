@@ -304,3 +304,13 @@ i poprosić o wyniki kroków 1, 3 i 5:
   (identyczne z paczką). `build.bat`, `pack_mcpb.bat` i ikona bez zmian.
 - `GalaxyMcp.exe` i `GalaxyMcp.mcpb` nie są trzymane w repozytorium. Buduje je workflow GitHub Actions (`.github/workflows/wydanie.yml`,
   Windows, ten sam kompilator co `build.bat`) i dołącza do wydania `v<wersja>` w zakładce Releases, gdy na `main` trafi nowa wersja.
+
+## 2026-11-18 – wersja 0.2.4: nazwa GalaxyMCP
+- Decyzja użytkownika: wtyczka nazywa się **GalaxyMCP** (`display_name` w manifeście; wcześniej „AVEVA Galaxy (GalaxyMcp)”).
+  Nazwa zmieniona w README, instrukcjach, komunikatach serwera (log, status, komentarz check-in) i w trzech PDF.
+  Nazwy plików (`GalaxyMcp.exe`, `.mcpb`, `.log`, `.cs`, `GalaxyMcp_*` w Tools), `name: galaxy` w manifeście i nazwy narzędzi bez zmian.
+- Wersja 0.2.4 = 0.2.3 + nowa nazwa (kod bez zmian funkcjonalnych). Przedrostek narzędzi w wątku po reinstalacji
+  prawdopodobnie `mcp__remote-devices__GalaxyMCP__…` (z `display_name`) – szukać przez ToolSearch „galaxy_status”.
+- PDF: potwierdzenie działania na AVEVA System Platform 2026; w instrukcji użytkownika pogrubione
+  „ręcznego zamknięcia procesów GalaxyMcp.exe”. `GalaxyMcp_Jak_to_dziala.pdf` poprawiony skryptem
+  `Dokumentacja/zrodla/GalaxyMcp_Jak_to_dziala_galaxy_mcp.py` (PyMuPDF).

@@ -1,4 +1,4 @@
-# Instrukcja Agenta: TIA Portal SCL → AVEVA System Platform (CSV / GalaxyMcp)
+# Instrukcja Agenta: TIA Portal SCL → AVEVA System Platform (CSV / GalaxyMCP)
  
 ## 0. Cel i źródła
  
@@ -11,7 +11,7 @@ Dostępne są dwa tryby:
 - **Manual** – pliki CSV do importu w ArchestrA IDE:
   - **Szablon** `$t_{UDT}.csv` – zawsze, BEZ adresów PLC,
   - **Instancje** `Instances_{UDT}.csv` – opcjonalnie, z adresacją I/O.
-- **Auto** – zapis bezpośrednio do galaktyki przez lokalny serwer MCP `galaxy` (GalaxyMcp, GRAccess), sekcja 6.
+- **Auto** – zapis bezpośrednio do galaktyki przez lokalny serwer MCP `galaxy` (GalaxyMCP, GRAccess), sekcja 6.
 Oba tryby korzystają z tej samej specyfikacji `Spec_{UDT}.json` generowanej przez skrypt, więc dają ten sam wynik.
  
 Pliki w projekcie i ich priorytet (przy sprzeczności wygrywa wyższy):
@@ -34,7 +34,7 @@ Projekt działa w nowych projektach Claude (Claude Desktop, zakładka Code → P
 - **Pliki dla użytkownika** zapisz w `/mnt/project-files/Wyniki/<RRRR-MM-DD>_<UDT>/` i dołącz do odpowiedzi (lista załączników wiadomości) – trafią też do Library. Nigdy nie zapisuj wyników w `Tools/`, `ITERACJE/` ani w katalogu głównym.
 - **Pytania z opcjami** zadajesz kartą decyzji (`request_decision`: jedno pytanie, 2–4 opcje, jedna zalecana). Jeśli w sesji go nie ma, użyj `AskUserQuestion`. Użytkownik zawsze może zamiast kliknięcia odpowiedzieć słowami – traktuj to jak wybór.
 - **Lista kroków** to lista postępu wątku (`update_progress_checklist`; każde wywołanie zastępuje całą listę, kroki ✓ / ✱ / ○). Jeśli w sesji jej nie ma, użyj `TaskCreate`/`TaskUpdate`.
-- Narzędzia GalaxyMcp działają na komputerze użytkownika i są widoczne w wątku tylko wtedy, gdy wątek jest połączony z tym komputerem (sekcja 6).
+- Narzędzia GalaxyMCP działają na komputerze użytkownika i są widoczne w wątku tylko wtedy, gdy wątek jest połączony z tym komputerem (sekcja 6).
  
 ### 0.2. Lista kroków
  
@@ -64,7 +64,7 @@ Pytania zadajesz kartami decyzji (sekcja 0.1) – jedno pytanie na kartę; kolej
  
 1. **Tryb pracy** – „Jak mam oddać wynik?”
    - *Manual – pliki CSV*: dostajesz pliki w wątku (i w Library projektu) i importujesz je sam w ArchestrA IDE.
-   - *Auto – zapis do galaktyki*: tworzę obiekty przez serwer GalaxyMcp; pokazuję plan, zapis dopiero po Twojej zgodzie.
+   - *Auto – zapis do galaktyki*: tworzę obiekty przez serwer GalaxyMCP; pokazuję plan, zapis dopiero po Twojej zgodzie.
 2. **Instancje** – „Czy oprócz szablonów (definicji typów) mam utworzyć konkretne obiekty?”
    - *Nie – same szablony*: powstaną tylko definicje typów, obiekty założysz sam.
    - *Tak – szablony i obiekty*: z bloku `.db` albo z par, które podasz, powstaną instancje.
@@ -117,7 +117,7 @@ Zasady:
 - Jeden obiekt DI i jedna grupa skanowania obowiązują dla wszystkich instancji, chyba że użytkownik poda inaczej.
 - Zapis „analogicznie 02 i 03” oznacza kolejne numery DB i obiektów, a nie PLC.
 - Gdy użytkownik przyśle `.db`, nie pytaj o pary obiekt → DB. Pokaż w podsumowaniu, ile instancji wyszło z każdego bloku danych.
-- Tryb Auto proponuj tylko wtedy, gdy są dostępne narzędzia serwera GalaxyMcp (sprawdź przez ToolSearch „galaxy_status”). Jeśli ich nie ma – najpierw poproś o połączenie wątku z komputerem użytkownika (sekcja 6); gdy nadal ich nie ma, powiedz to i pracuj w trybie Manual.
+- Tryb Auto proponuj tylko wtedy, gdy są dostępne narzędzia serwera GalaxyMCP (sprawdź przez ToolSearch „galaxy_status”). Jeśli ich nie ma – najpierw poproś o połączenie wątku z komputerem użytkownika (sekcja 6); gdy nadal ich nie ma, powiedz to i pracuj w trybie Manual.
 ---
  
 ## 2. Mapowanie typów (bez względu na wielkość liter)
@@ -147,7 +147,7 @@ Typy czasowe: z sufiksem driver pozwala tylko czytać. Atrybut, który ma być z
 - Pomijaj z ostrzeżeniem: tablice poza limitami drivera (ponad 6 wymiarów albo 1600 elementów), tablice o granicach ze stałej (`[1.."MAX_N"]`), typy bez definicji w podanych plikach, `Variant`, rekurencję typów – wymień je w podsumowaniu.
 - Pomijaj: wartości początkowe (`:= ...`), atrybuty `{ ... }`, komentarze bez deklaracji.
 - Opis zmiennej = komentarz `//` z tej samej linii, **w pełnej długości – nie skracaj opisów** (ani w generatorze, ani ręcznie w CSV); tylko sklejenie do jednej linii i usunięcie otaczających cudzysłowów.
-- **Nazwy szablonów i instancji też nie są skracane** – generator i serwer GalaxyMcp (od 0.2.2) nie mają limitu długości nazw. Galaktyka przyjmuje nazwy dłuższe niż 32 znaki (potwierdzone przez użytkownika 2026-09-23) – nie zgłaszaj tego w „Do sprawdzenia”.
+- **Nazwy szablonów i instancji też nie są skracane** – generator i serwer GalaxyMCP (od 0.2.2) nie mają limitu długości nazw. Galaktyka przyjmuje nazwy dłuższe niż 32 znaki (potwierdzone przez użytkownika 2026-09-23) – nie zgłaszaj tego w „Do sprawdzenia”.
 ---
  
 ## 3. Kierunek I/O
@@ -162,7 +162,7 @@ Typy czasowe: z sufiksem driver pozwala tylko czytać. Atrybut, który ma być z
 | Input (Read) | `ReadOnly` | `Input` | `InputSource` |
 | Output (Write) | `WriteOnly` | `Output` | `OutputDest` |
  
-- Output = SCADA tylko zapisuje do PLC i nie widzi wartości ze sterownika – odradzaj go dla alarmów i stanów. Wiersz Output nie jest jeszcze potwierdzony eksportem z IDE – wspominaj o tym w „Do sprawdzenia”. Tryb Auto (GalaxyMcp 0.2.3) nie obsługuje Output – przy takich regułach pracuj w trybie Manual.
+- Output = SCADA tylko zapisuje do PLC i nie widzi wartości ze sterownika – odradzaj go dla alarmów i stanów. Wiersz Output nie jest jeszcze potwierdzony eksportem z IDE – wspominaj o tym w „Do sprawdzenia”. Tryb Auto (GalaxyMCP 0.2.3) nie obsługuje Output – przy takich regułach pracuj w trybie Manual.
 Category zawsze: `MxCategoryWriteable_USC_Lockable`.
  
 ---
@@ -246,9 +246,9 @@ Reguły składni, cudzysłowów i limity drivera: `ITERACJE/tmp_OI_SIDirect_adre
  
 ---
  
-## 6. Tryb Auto – serwer `galaxy` (GalaxyMcp)
+## 6. Tryb Auto – serwer `galaxy` (GalaxyMCP)
  
-Serwer działa na komputerze użytkownika w Claude Desktop jako rozszerzenie „AVEVA Galaxy (GalaxyMcp)” z paczki `GalaxyMcp.mcpb` (aktualna wersja 0.2.3; `Tools/GalaxyMcp_README.md` sekcja 4). Awaryjnie: ręczny wpis `C:\Tools\GalaxyMcp\GalaxyMcp.exe` w konfiguracji (gotowy fragment JSON jest w README, sekcja 3) – nigdy oba naraz. W sesji narzędzia mają nazwy `mcp__remote-devices__AVEVA_Galaxy__GalaxyMcp___*` (rozszerzenie) albo `mcp__remote-devices__galaxy__*` (ręczny wpis) – szukaj przez ToolSearch „galaxy_status”.
+Serwer działa na komputerze użytkownika w Claude Desktop jako rozszerzenie „GalaxyMCP” z paczki `GalaxyMcp.mcpb` (aktualna wersja 0.2.4; `Tools/GalaxyMcp_README.md` sekcja 4). Awaryjnie: ręczny wpis `C:\Tools\GalaxyMcp\GalaxyMcp.exe` w konfiguracji (gotowy fragment JSON jest w README, sekcja 3) – nigdy oba naraz. W sesji narzędzia mają nazwy `mcp__remote-devices__GalaxyMCP__*` (rozszerzenie) albo `mcp__remote-devices__galaxy__*` (ręczny wpis) – szukaj przez ToolSearch „galaxy_status”.
  
 Wątek pracuje w chmurze i widzi te narzędzia tylko wtedy, gdy jest **połączony z komputerem użytkownika**, na którym działa Claude Desktop z włączonym rozszerzeniem. Gdy narzędzi nie ma: poproś użytkownika o połączenie wątku z komputerem (karta połączenia urządzenia, jeśli jest dostępna – np. `connect_device`), a po połączeniu poszukaj narzędzi jeszcze raz. Claude Desktop musi być uruchomiony, a komputer nie może spać przez cały czas pracy z galaktyką.
  
@@ -282,7 +282,7 @@ Zasady bezpieczeństwa:
 - Zapisy rób najpierw na galaktyce testowej, chyba że użytkownik wyraźnie wskaże inną.
 Problemy:
  
-- „Zapis zablokowany” → galaktyka nie ma prawa zapisu. Zmianę robi użytkownik w Ustawienia → Extensions → AVEVA Galaxy (GalaxyMcp): pola „Galaktyki z prawem zapisu” i „Tylko odczyt”, potem wyłączenie przełącznika Enabled, restart komputera i ponowne włączenie Enabled.
+- „Zapis zablokowany” → galaktyka nie ma prawa zapisu. Zmianę robi użytkownik w Ustawienia → Extensions → GalaxyMCP: pola „Galaktyki z prawem zapisu” i „Tylko odczyt”, potem wyłączenie przełącznika Enabled, restart komputera i ponowne włączenie Enabled.
 - Galaktyki nie ma na liście dozwolonych → użytkownik dopisuje ją w polu „Dozwolone galaktyki” (jak wyżej).
 - Ustawienia z formularza nie działają (status pokazuje stare wartości) → wtyczka nie została ponownie uruchomiona: wyłącz Enabled, zrestartuj komputer i włącz Enabled.
 - Brak narzędzi `galaxy` → serwer nie działa. Rozszerzenie `.mcpb`: Ustawienia → Extensions – czy jest włączone i ma wypełnione ustawienia. Ręczny wpis – konfiguracja (wersja ze Sklepu MS): `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json`. Edycja przy zamkniętej aplikacji (Quit z ikony przy zegarze), potem pełny restart; w Ustawienia → Developer serwer `galaxy` ma mieć status Running.
