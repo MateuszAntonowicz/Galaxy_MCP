@@ -1,0 +1,55 @@
+TYPE "UDT_Stan"
+VERSION : 0.1
+   STRUCT
+      Stan_Aktywny : Bool;   // stan aktywny
+      Kod_Bledu : Int;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "UDT_Silnik"
+TITLE = Silnik z komendami
+VERSION : 0.1
+   STRUCT
+      Cmd_Start : Bool;   // Komenda startu
+      Cmd_Stop : Bool := TRUE;   // Komenda stopu, domyślnie TRUE
+      "Komenda HMI Aktywuj" : Bool;
+      Status_Praca : Bool;
+      Predkosc : Real := 12.5;   // Prędkość [obr/min], opis z przecinkiem, "cudzysłowem" i ; średnikiem
+      Licznik : DInt;
+      Licznik_L : LInt;
+      Bajt : Byte;
+      Slowo : Word;
+      Dslowo : DWord;
+      Znak : Char;
+      Tekst : String[20] := 'abc';
+      WTekst : WString;
+      Cfg_Czas : Time := T#5s;
+      Czas_Odczyt : Time;
+      Data_Serwisu : Date;
+      Czas_Dnia : Time_Of_Day;
+      Znacznik : DTL;
+      LCzas : LTime;
+      Temp : Array[1..3] of Real;   // temperatury
+      Neg : Array[-1..1] of Int;
+      Siatka : Array[1..2, 0..1] of Bool;
+      stan : "UDT_Stan";
+      Zawory : Array[1..2] of "UDT_Stan";
+      Grupa : Struct
+         Wewn_Bool : Bool;
+         "Temp-1" : Real;
+      END_STRUCT;
+      Dziwny : Variant;
+      Brak_Typu : "UDT_Nieznany";
+      Reset_Alarm : Bool;
+      Stala_Tab : Array[1.."MAX"] of Int;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "UDT_Pusty_Bez_Instancji"
+VERSION : 0.1
+   STRUCT
+      X : Bool;
+   END_STRUCT;
+END_TYPE

@@ -1,0 +1,6 @@
+Prefix_or_Keyword;Access_Mode;Description
+Cmd_;InputOutput;komendy
+Cfg_;Read/Write;konfig
+Reset_;Write;reset
+Status_;Read;stan
+Zle_;Cokolwiek;zły tryb
