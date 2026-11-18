@@ -1,0 +1,103 @@
+# Buduje GalaxyMcp.exe i GalaxyMcp.mcpb z najnowszego folderu GalaxyMcp/GalaxyMcp_<wersja>/
+# i tworzy wydanie v<wersja> w zakładce Releases (jeśli jeszcze nie istnieje).
+# Uruchamia się po zmianie w GalaxyMcp/ na gałęzi main albo ręcznie (Actions -> Wydanie GalaxyMcp -> Run workflow).
+# W pull requeście tylko sprawdza, czy exe i mcpb się budują (bez wydania).
+name: Wydanie GalaxyMcp
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "GalaxyMcp/**"
+      - ".github/workflows/wydanie.yml"
+  pull_request:
+    paths:
+      - "GalaxyMcp/**"
+      - ".github/workflows/wydanie.yml"
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "Folder wersji, np. GalaxyMcp/GalaxyMcp_0.2.3 (puste = najnowszy)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  wydanie:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wybór wersji
+        id: wersja
+        shell: pwsh
+        env:
+          FOLDER: ${{ github.event.inputs.folder }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ($env:FOLDER) { $dir = Get-Item $env:FOLDER }
+          else {
+            $dir = Get-ChildItem GalaxyMcp -Directory -Filter 'GalaxyMcp_*' |
+              Sort-Object { [version]($_.Name -replace '^GalaxyMcp_', '') } | Select-Object -Last 1
+          }
+          if (-not $dir) { throw 'Brak folderu GalaxyMcp/GalaxyMcp_<wersja>' }
+          $ver = (Get-Content (Join-Path $dir.FullName 'manifest.json') -Raw | ConvertFrom-Json).version
+          $srcVer = [regex]::Match((Get-Content (Join-Path $dir.FullName 'GalaxyMcp.cs') -Raw), 'Version\s*=\s*"([^"]+)"').Groups[1].Value
+          if ($ver -ne $srcVer) { throw "Wersja w manifest.json ($ver) różni się od GalaxyMcp.cs ($srcVer)" }
+          gh release view "v$ver" 2>$null
+          $exists = ($LASTEXITCODE -eq 0)
+          $global:LASTEXITCODE = 0
+          "dir=$($dir.FullName)" >> $env:GITHUB_OUTPUT
+          "ver=$ver" >> $env:GITHUB_OUTPUT
+          "exists=$exists" >> $env:GITHUB_OUTPUT
+          Write-Host "Folder: $($dir.Name), wersja: $ver, wydanie istnieje: $exists"
+
+      - name: Budowanie GalaxyMcp.exe (x86, jak build.bat)
+        if: steps.wersja.outputs.exists == 'False' || github.event_name == 'pull_request'
+        shell: pwsh
+        working-directory: ${{ steps.wersja.outputs.dir }}
+        run: |
+          $csc = "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\csc.exe"
+          & $csc /nologo /codepage:65001 /target:exe /platform:x86 /optimize+ /out:GalaxyMcp.exe `
+            /r:System.Web.Extensions.dll /r:Microsoft.CSharp.dll /r:System.Core.dll GalaxyMcp.cs
+          if ($LASTEXITCODE -ne 0) { throw 'Błąd kompilacji' }
+          @'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <startup useLegacyV2RuntimeActivationPolicy="true">
+              <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/>
+            </startup>
+          </configuration>
+          '@ -replace '(?m)^          ', '' | Set-Content -Encoding utf8 GalaxyMcp.exe.config
+
+      - name: Pakowanie GalaxyMcp.mcpb (jak pack_mcpb.bat)
+        if: steps.wersja.outputs.exists == 'False' || github.event_name == 'pull_request'
+        shell: pwsh
+        working-directory: ${{ steps.wersja.outputs.dir }}
+        run: |
+          $files = @('manifest.json', 'GalaxyMcp.exe', 'GalaxyMcp.exe.config')
+          if (Test-Path icon.png) { $files += 'icon.png' }
+          & "$env:WINDIR\System32\tar.exe" --format=zip -cf GalaxyMcp.mcpb @files
+          if ($LASTEXITCODE -ne 0) { throw 'Błąd pakowania' }
+
+      - name: Utworzenie wydania
+        if: steps.wersja.outputs.exists == 'False' && github.event_name != 'pull_request'
+        shell: pwsh
+        working-directory: ${{ steps.wersja.outputs.dir }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VER: ${{ steps.wersja.outputs.ver }}
+        run: |
+          $hash = (Get-FileHash GalaxyMcp.exe -Algorithm SHA256).Hash.ToLower()
+          $notes = @"
+          Wtyczka GalaxyMcp $env:VER dla Claude Desktop (serwer MCP, GRAccess). Zbudowana automatycznie z ``$((Split-Path -Leaf (Get-Location)))``.
+
+          - ``GalaxyMcp.mcpb`` – gotowa wtyczka do instalacji w Claude Desktop (Settings → Extensions → Install Extension…).
+          - ``GalaxyMcp.exe`` + ``GalaxyMcp.exe.config`` – serwer (Windows, .NET Framework 4, x86), do ręcznego wpisu w konfiguracji.
+
+          SHA-256 GalaxyMcp.exe: ``$hash``
+          "@ -replace '(?m)^          ', ''
+          gh release create "v$env:VER" GalaxyMcp.mcpb GalaxyMcp.exe GalaxyMcp.exe.config `
+            --target $env:GITHUB_SHA --title "GalaxyMcp $env:VER" --notes $notes

@@ -3,6 +3,9 @@
 // Zasady projektu:
 //  * Serwer NIE zna SCL. Przyjmuje specyfikację JSON (Spec_<UDT>.json) z scl_to_aveva.py
 //    i tylko ją wykonuje: szablon + atrybuty UDA + rozszerzenia I/O + instancje + InputSource.
+//  * Od 0.2.3: wszystkie typy danych UDA z IDE (Boolean, Integer, Float, Double, String, Time, ElapsedTime,
+//    InternationalizedString, BigString) oraz atrybuty UDA dodawane do pojedynczej instancji
+//    (instances[].attributes w specyfikacji) z wartością początkową i kierunkiem I/O.
 //  * Domyślnie dry_run=true (tylko plan). Zapis wymaga dry_run=false. Deploy domyślnie wyłączony.
 //  * Istniejące obiekty/atrybuty nie są usuwane ani przebudowywane (tylko dopisywane / aktualizowane InputSource).
 //  * C# 5, .NET Framework 4.x, bez NuGet. GRAccess ładowany w czasie działania (Assembly.LoadFrom),
@@ -36,7 +39,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.2";
+        public const string Version = "0.2.3";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -287,7 +290,9 @@ namespace GalaxyMcp
                 "name"));
             t.Add(Tool("apply_spec",
                 "Wykonuje specyfikację z scl_to_aveva.py: tworzy szablon z atrybutami UDA i rozszerzeniami I/O, " +
-                "tworzy instancje i ustawia InputSource. Domyślnie dry_run=true - zwraca tylko plan. " +
+                "tworzy instancje, dodaje instancjom własne atrybuty UDA (instances[].attributes) i ustawia InputSource. " +
+                "Typy UDA: MxBoolean, MxInteger, MxFloat, MxDouble, MxString, MxTime, MxElapsedTime, " +
+                "MxInternationalizedString, MxBigString. Domyślnie dry_run=true - zwraca tylko plan. " +
                 "Nie usuwa ani nie przebudowuje istniejących obiektów/atrybutów.",
                 new Dictionary<string, object> {
                     { "spec", Prop("object", "Zawartość pliku Spec_<UDT>.json") },
@@ -517,6 +522,7 @@ namespace GalaxyMcp
     {
         public string Name, Area, SecurityGroup;
         public Dictionary<string, string> InputSource = new Dictionary<string, string>();
+        public List<SpecAttr> Attrs = new List<SpecAttr>();   // 0.2.3: własne atrybuty UDA tej instancji
     }
 
     class Spec
@@ -526,8 +532,25 @@ namespace GalaxyMcp
         public List<SpecInstance> Instances = new List<SpecInstance>();
         public List<string> Warnings = new List<string>();
 
-        static readonly string[] Types = { "MxBoolean", "MxFloat", "MxInteger", "MxString", "MxElapsedTime", "MxTime" };
+        // 0.2.3: wszystkie typy danych z okna UDA w IDE (Data type).
+        public static readonly string[] Types = { "MxBoolean", "MxInteger", "MxFloat", "MxDouble", "MxString",
+                                                  "MxTime", "MxElapsedTime", "MxInternationalizedString", "MxBigString" };
         static readonly Regex AttrName = new Regex(@"^[A-Za-z_][A-Za-z0-9_]*$");
+
+        static SpecAttr ParseAttr(Dictionary<string, object> a, string owner, HashSet<string> seen, List<string> err)
+        {
+            var sa = new SpecAttr {
+                Name = J.Str(a, "name", ""), Type = J.Str(a, "type", ""), Default = J.Str(a, "default", ""),
+                Io = J.Str(a, "io", "Input"), Description = J.Str(a, "description", ""), PlcPath = J.Str(a, "plc_path", "") };
+            string p = owner == "" ? "" : owner + ": ";
+            if (!AttrName.IsMatch(sa.Name)) err.Add(p + "niepoprawna nazwa atrybutu '" + sa.Name + "'");
+            if (!seen.Add(sa.Name)) err.Add(p + "zdublowany atrybut '" + sa.Name + "'" + (owner == "" ? "" : " (jest już w szablonie albo w tej instancji)"));
+            if (!Types.Contains(sa.Type)) err.Add(p + sa.Name + ": nieobsługiwany typ '" + sa.Type + "' (dozwolone: " + string.Join(", ", Types) + ")");
+            if (sa.Io != "Input" && sa.Io != "InputOutput") err.Add(p + sa.Name + ": io musi być Input albo InputOutput");
+            if (sa.Default != "" && !Galaxy.ValueParses(sa.Type, sa.Default))
+                err.Add(p + sa.Name + ": wartość początkowa '" + sa.Default + "' nie pasuje do typu " + sa.Type);
+            return sa;
+        }
 
         public static Spec Parse(Dictionary<string, object> d)
         {
@@ -551,16 +574,8 @@ namespace GalaxyMcp
             {
                 var a = o as Dictionary<string, object>;
                 if (a == null) continue;
-                var sa = new SpecAttr {
-                    Name = J.Str(a, "name", ""), Type = J.Str(a, "type", ""), Default = J.Str(a, "default", ""),
-                    Io = J.Str(a, "io", "Input"), Description = J.Str(a, "description", ""), PlcPath = J.Str(a, "plc_path", "") };
-                if (!AttrName.IsMatch(sa.Name)) err.Add("niepoprawna nazwa atrybutu '" + sa.Name + "'");
-                if (!seen.Add(sa.Name)) err.Add("zdublowany atrybut '" + sa.Name + "'");
-                if (!Types.Contains(sa.Type)) err.Add(sa.Name + ": nieobsługiwany typ '" + sa.Type + "'");
-                if (sa.Io != "Input" && sa.Io != "InputOutput") err.Add(sa.Name + ": io musi być Input albo InputOutput");
-                s.Attrs.Add(sa);
+                s.Attrs.Add(ParseAttr(a, "", seen, err));
             }
-            if (s.Attrs.Count == 0) err.Add("szablon nie ma atrybutów");
 
             var seenInst = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var o in J.Arr(d, "instances") ?? new object[0])
@@ -572,15 +587,26 @@ namespace GalaxyMcp
                 if (si.Name == "" || si.Name.StartsWith("$") || !AttrName.IsMatch(si.Name))
                     err.Add("niepoprawna nazwa instancji '" + si.Name + "' (litery, cyfry, _)");
                 if (!seenInst.Add(si.Name)) err.Add("zdublowana instancja '" + si.Name + "'");
+                // atrybuty instancji: nazwy nie mogą powtarzać atrybutów szablonu
+                var seenHere = new HashSet<string>(seen, StringComparer.OrdinalIgnoreCase);
+                foreach (var ao in J.Arr(i, "attributes") ?? new object[0])
+                {
+                    var a = ao as Dictionary<string, object>;
+                    if (a == null) continue;
+                    si.Attrs.Add(ParseAttr(a, si.Name, seenHere, err));
+                }
                 var src = J.Obj(i, "input_source");
                 if (src != null)
                     foreach (var kv in src)
                     {
-                        if (!seen.Contains(kv.Key)) err.Add(si.Name + ": InputSource dla nieistniejącego atrybutu '" + kv.Key + "'");
+                        if (!seenHere.Contains(kv.Key)) err.Add(si.Name + ": InputSource dla nieistniejącego atrybutu '" + kv.Key + "'");
                         si.InputSource[kv.Key] = Convert.ToString(kv.Value, CultureInfo.InvariantCulture);
                     }
                 s.Instances.Add(si);
             }
+            // 0.2.3: szablon bez atrybutów jest dozwolony, gdy specyfikacja dotyczy instancji (np. instancja z własnym UDA
+            // na istniejącym szablonie).
+            if (s.Attrs.Count == 0 && s.Instances.Count == 0) err.Add("specyfikacja nie ma ani atrybutów szablonu, ani instancji");
             foreach (var w in J.Arr(d, "warnings") ?? new object[0]) s.Warnings.Add(Convert.ToString(w));
 
             if (err.Count > 0)
@@ -597,6 +623,18 @@ namespace GalaxyMcp
         readonly StringBuilder r = new StringBuilder();
 
         public SpecApplier(Galaxy galaxy, Spec spec) { g = galaxy; s = spec; }
+
+        static string AttrInfo(List<SpecAttr> list)
+        {
+            int rw = list.Count(x => x.Io == "InputOutput");
+            return list.Count + " atrybutów (" + rw + " InputOutput, " + (list.Count - rw) + " Input)";
+        }
+
+        static string AttrList(List<SpecAttr> list)
+        {
+            return string.Join(", ", list.Select(x => x.Name + " " + x.Type + " " + x.Io +
+                                                       (x.Default != "" ? " = " + x.Default : "")));
+        }
 
         public string Run(bool dryRun, string scope)
         {
@@ -617,12 +655,10 @@ namespace GalaxyMcp
                 foreach (var a in s.Attrs)
                     if (Galaxy.Attr(tpl, a.Name) == null) missing.Add(a);
 
-            int rw = missing.Count(x => x.Io == "InputOutput");
-            string attrInfo = missing.Count + " atrybutów (" + rw + " InputOutput, " + (missing.Count - rw) + " Input)";
             if (tpl == null)
-                r.AppendLine("Szablon " + s.Template + ": UTWÓRZ z " + s.Base + " + " + attrInfo);
+                r.AppendLine("Szablon " + s.Template + ": UTWÓRZ z " + s.Base + " + " + AttrInfo(missing));
             else if (missing.Count > 0)
-                r.AppendLine("Szablon " + s.Template + ": ISTNIEJE - DOPISZ " + attrInfo + ": " +
+                r.AppendLine("Szablon " + s.Template + ": ISTNIEJE - DOPISZ " + AttrInfo(missing) + ": " +
                              string.Join(", ", missing.Select(x => x.Name)));
             else
                 r.AppendLine("Szablon " + s.Template + ": ISTNIEJE - bez zmian");
@@ -663,6 +699,23 @@ namespace GalaxyMcp
             return r.ToString();
         }
 
+        // Dodaje atrybuty UDA (z rozszerzeniem I/O, wartością początkową i opisem) do pobranego (CheckOut) obiektu.
+        void AddAttributes(object obj, string objName, List<SpecAttr> attrs)
+        {
+            foreach (var a in attrs)
+            {
+                g.AddUda(obj, a.Name, a.Type);
+                g.AddIoExtension(obj, a.Name, a.Io);
+                if (a.Default != "") SoftSet(obj, a.Name, a.Type, a.Default);
+                if (a.Description != "")
+                {
+                    try { g.SetDescription(obj, a.Name, a.Description); }
+                    catch (Exception ex) { r.AppendLine("  uwaga: nie ustawiono opisu " + a.Name + " (" + ex.Message + ")"); }
+                }
+                Log.Audit(objName + ": + " + a.Name + " " + a.Type + " " + a.Io + (a.Default != "" ? " = " + a.Default : ""));
+            }
+        }
+
         object WriteTemplate(object tpl, List<SpecAttr> attrs)
         {
             if (tpl == null)
@@ -680,19 +733,7 @@ namespace GalaxyMcp
             try
             {
                 if (s.SecurityGroup != "") SoftGroup(tpl, s.SecurityGroup);
-                foreach (var a in attrs)
-                {
-                    g.AddUda(tpl, a.Name, a.Type);
-                    g.AddIoExtension(tpl, a.Name, a.Io);
-                    if (a.Default != "" && a.Type != "MxTime" && a.Type != "MxElapsedTime")
-                        SoftSet(tpl, a.Name, a.Type, a.Default);
-                    if (a.Description != "")
-                    {
-                        try { g.SetDescription(tpl, a.Name, a.Description); }
-                        catch (Exception ex) { r.AppendLine("  uwaga: nie ustawiono opisu " + a.Name + " (" + ex.Message + ")"); }
-                    }
-                    Log.Audit(s.Template + ": + " + a.Name + " " + a.Type + " " + a.Io);
-                }
+                AddAttributes(tpl, s.Template, attrs);
                 Com.Call(tpl, "Save");
                 Galaxy.Check(tpl, "Save(" + s.Template + ")");
                 Com.Call(tpl, "CheckIn", "GalaxyMcp: " + attrs.Count + " atrybutów ze " + s.Source);
@@ -710,8 +751,12 @@ namespace GalaxyMcp
         {
             object inst = g.Find(si.Name, false);
             var changes = new List<KeyValuePair<string, string>>();
+            var newAttrs = new List<SpecAttr>();
             if (inst == null)
+            {
+                newAttrs.AddRange(si.Attrs);
                 changes.AddRange(si.InputSource.Where(x => x.Value != ""));
+            }
             else
             {
                 string derived = Galaxy.Prop(inst, "DerivedFrom");
@@ -720,20 +765,25 @@ namespace GalaxyMcp
                     r.AppendLine("  " + si.Name + ": BŁĄD - istnieje, ale pochodzi z " + derived + ", nie z " + s.Template + ". Pomijam.");
                     return false;
                 }
+                foreach (var a in si.Attrs)
+                    if (Galaxy.Attr(inst, a.Name) == null) newAttrs.Add(a);
                 foreach (var kv in si.InputSource)
                 {
                     object a = Galaxy.Attr(inst, kv.Key + ".InputSource");
                     string cur = a == null ? null : Galaxy.Value(a);
+                    if (cur == null && kv.Value == "") continue;   // atrybut jeszcze nie istnieje, a adresu brak
                     if (cur != kv.Value) changes.Add(kv);
                 }
             }
 
+            string attrPart = newAttrs.Count > 0 ? ", DOPISZ " + AttrInfo(newAttrs) + ": " + AttrList(newAttrs) : "";
             if (inst == null)
                 r.AppendLine("  " + si.Name + ": UTWÓRZ, ustaw " + changes.Count + " InputSource" +
-                             (si.Area != "" ? ", obszar " + si.Area : ""));
-            else if (changes.Count > 0)
-                r.AppendLine("  " + si.Name + ": ISTNIEJE - ZMIEŃ " + changes.Count + " InputSource: " +
-                             string.Join(", ", changes.Take(5).Select(x => x.Key)) + (changes.Count > 5 ? ", ..." : ""));
+                             (si.Area != "" ? ", obszar " + si.Area : "") + attrPart);
+            else if (changes.Count > 0 || newAttrs.Count > 0)
+                r.AppendLine("  " + si.Name + ": ISTNIEJE" + attrPart +
+                             (changes.Count > 0 ? ", ZMIEŃ " + changes.Count + " InputSource: " +
+                              string.Join(", ", changes.Take(5).Select(x => x.Key)) + (changes.Count > 5 ? ", ..." : "") : ""));
             else
             {
                 r.AppendLine("  " + si.Name + ": ISTNIEJE - bez zmian");
@@ -755,6 +805,7 @@ namespace GalaxyMcp
                 {
                     if (si.Area != "") Soft(inst, "Area", si.Area);
                     if (si.SecurityGroup != "") SoftGroup(inst, si.SecurityGroup);
+                    AddAttributes(inst, si.Name, newAttrs);   // najpierw UDA, żeby istniało ich InputSource
                     foreach (var c in changes)
                     {
                         g.SetValue(inst, c.Key + ".InputSource", "MxString", c.Value);
@@ -762,7 +813,8 @@ namespace GalaxyMcp
                     }
                     Com.Call(inst, "Save");
                     Galaxy.Check(inst, "Save(" + si.Name + ")");
-                    Com.Call(inst, "CheckIn", "GalaxyMcp: InputSource ze " + s.Source);
+                    Com.Call(inst, "CheckIn", "GalaxyMcp: " + (newAttrs.Count > 0 ? newAttrs.Count + " atrybutów, " : "") +
+                                              "InputSource ze " + s.Source);
                     Galaxy.Check(inst, "CheckIn(" + si.Name + ")");
                 }
                 catch
@@ -796,7 +848,7 @@ namespace GalaxyMcp
         void SoftSet(object obj, string attr, string type, string value)
         {
             try { g.SetValue(obj, attr, type, value); }
-            catch (Exception ex) { r.AppendLine("  uwaga: nie ustawiono " + attr + " (" + ex.Message + ")"); }
+            catch (Exception ex) { r.AppendLine("  uwaga: nie ustawiono wartości " + attr + " = " + value + " (" + ex.Message + ")"); }
         }
     }
 
@@ -1218,17 +1270,34 @@ namespace GalaxyMcp
         }
 
         // ---------------------------------------------------------- zapis
+        // AddUDA działa na szablonie i na instancji (IgObject) - obiekt musi być pobrany (CheckOut).
         public void AddUda(object obj, string name, string type)
         {
             Com.Call(obj, "AddUDA", name, E("MxDataType", type), E("MxAttributeCategory", "MxCategoryWriteable_USC_Lockable"),
                      E("MxSecurityClassification", "MxSecurityOperate"), false, 0);
-            Check(obj, "AddUDA(" + name + ")");
+            Check(obj, "AddUDA(" + name + ", " + type + ")");
         }
 
         public void AddIoExtension(object obj, string name, string io)
         {
             Com.Call(obj, "AddExtensionPrimitive", io == "InputOutput" ? InputOutputExt : InputExt, name, false);
             Check(obj, "AddExtensionPrimitive(" + name + ", " + io + ")");
+        }
+
+        // Kontrola wartości początkowej ze specyfikacji (Spec.Parse) - ten sam zapis liczb co w SetValue.
+        public static bool ValueParses(string type, string value)
+        {
+            double d; int i;
+            switch (type)
+            {
+                case "MxBoolean":
+                    var b = value.Trim().ToLowerInvariant();
+                    return b == "true" || b == "false" || b == "1" || b == "0";
+                case "MxInteger": return int.TryParse(value.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out i);
+                case "MxFloat":
+                case "MxDouble": return double.TryParse(value.Trim().Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out d);
+                default: return true;   // teksty, czas - sprawdzi GRAccess przy zapisie
+            }
         }
 
         public void SetValue(object obj, string attr, string type, string value)
@@ -1242,12 +1311,19 @@ namespace GalaxyMcp
                 try { SetReference(a, attr, value); return; }
                 catch (Exception ex) { Log.Info("PutMxReference(" + attr + "): " + ex.Message + " - próbuję PutString"); }
             }
+            string num = value.Trim().Replace(',', '.');
             object mv = New("MxValueClass", "MxValue");
             switch (type)
             {
-                case "MxBoolean": Com.Call(mv, "PutBoolean", value.Trim().ToLowerInvariant() == "true"); break;
-                case "MxFloat": Com.Call(mv, "PutFloat", float.Parse(value, CultureInfo.InvariantCulture)); break;
-                case "MxInteger": Com.Call(mv, "PutInteger", int.Parse(value, CultureInfo.InvariantCulture)); break;
+                case "MxBoolean":
+                    var b = value.Trim().ToLowerInvariant();
+                    Com.Call(mv, "PutBoolean", b == "true" || b == "1");
+                    break;
+                case "MxFloat": Com.Call(mv, "PutFloat", float.Parse(num, CultureInfo.InvariantCulture)); break;
+                case "MxDouble": Com.Call(mv, "PutDouble", double.Parse(num, CultureInfo.InvariantCulture)); break;
+                case "MxInteger": Com.Call(mv, "PutInteger", int.Parse(value.Trim(), CultureInfo.InvariantCulture)); break;
+                // MxString, MxBigString, MxInternationalizedString, MxTime, MxElapsedTime: tekst - konwersję robi GRAccess
+                // (czas np. 00:00:05.0000000, data 2026-09-24 12:00:00). Błąd = ostrzeżenie w raporcie (SoftSet).
                 default: Com.Call(mv, "PutString", value); break;
             }
             Com.Call(a, "SetValue", mv);

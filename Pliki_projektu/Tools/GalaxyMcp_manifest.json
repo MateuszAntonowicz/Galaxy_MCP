@@ -2,9 +2,9 @@
   "manifest_version": "0.3",
   "name": "galaxy",
   "display_name": "AVEVA Galaxy (GalaxyMcp)",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Tworzenie szablonów i instancji w galaktyce AVEVA System Platform przez GRAccess (tryb Auto projektu SCL → AVEVA).",
-  "long_description": "Lokalny serwer MCP dla galaktyki AVEVA System Platform. Wykonuje specyfikację `Spec_<UDT>.json` generowaną przez `scl_to_aveva.py`: tworzy szablon z atrybutami UDA i rozszerzeniami I/O, tworzy instancje i ustawia `InputSource`. Domyślnie tylko plan (`dry_run`); zapis wymaga wyłączenia trybu tylko do odczytu i dotyczy wyłącznie galaktyk z listy zapisu. Serwer niczego nie usuwa. Wymaga zainstalowanego AVEVA System Platform IDE (GRAccess) i .NET Framework 4.x.",
+  "long_description": "Lokalny serwer MCP dla galaktyki AVEVA System Platform. Wykonuje specyfikację `Spec_<UDT>.json` generowaną przez `scl_to_aveva.py`: tworzy szablon z atrybutami UDA i rozszerzeniami I/O, tworzy instancje, dodaje instancjom własne atrybuty UDA i ustawia `InputSource`. Obsługuje wszystkie typy UDA z IDE (Boolean, Integer, Float, Double, String, Time, ElapsedTime, InternationalizedString, BigString). Domyślnie tylko plan (`dry_run`); zapis wymaga wyłączenia trybu tylko do odczytu i dotyczy wyłącznie galaktyk z listy zapisu. Serwer niczego nie usuwa. Wymaga zainstalowanego AVEVA System Platform IDE (GRAccess) i .NET Framework 4.x.",
   "author": {
     "name": "Projekt MA_SCL -> CSV"
   },
@@ -35,7 +35,7 @@
     { "name": "list_objects", "description": "Szablony albo instancje pasujące do wzorca nazwy." },
     { "name": "get_object", "description": "Właściwości i atrybuty obiektu." },
     { "name": "export_csv", "description": "Eksport szablonu lub instancji do CSV (tylko odczyt)." },
-    { "name": "apply_spec", "description": "Plan albo zapis specyfikacji Spec_<UDT>.json (szablon, atrybuty, instancje, InputSource)." },
+    { "name": "apply_spec", "description": "Plan albo zapis specyfikacji Spec_<UDT>.json (szablon, atrybuty, instancje z własnymi atrybutami, InputSource)." },
     { "name": "import_csv", "description": "Import plików CSV z trybu Manual (zapis do galaktyki)." },
     { "name": "deploy", "description": "Wdrożenie instancji (tylko gdy deploy jest włączony)." }
   ],
