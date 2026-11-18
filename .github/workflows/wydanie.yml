@@ -1,11 +1,16 @@
 # Buduje GalaxyMcp.exe i GalaxyMcp.mcpb z najnowszego folderu GalaxyMcp/GalaxyMcp_<wersja>/
 # i tworzy wydanie v<wersja> w zakładce Releases (jeśli jeszcze nie istnieje).
 # Uruchamia się po zmianie w GalaxyMcp/ na gałęzi main albo ręcznie (Actions -> Wydanie GalaxyMcp -> Run workflow).
+# W pull requeście tylko sprawdza, czy exe i mcpb się budują (bez wydania).
 name: Wydanie GalaxyMcp
 
 on:
   push:
     branches: [main]
+    paths:
+      - "GalaxyMcp/**"
+      - ".github/workflows/wydanie.yml"
+  pull_request:
     paths:
       - "GalaxyMcp/**"
       - ".github/workflows/wydanie.yml"
@@ -50,7 +55,7 @@ jobs:
           Write-Host "Folder: $($dir.Name), wersja: $ver, wydanie istnieje: $exists"
 
       - name: Budowanie GalaxyMcp.exe (x86, jak build.bat)
-        if: steps.wersja.outputs.exists == 'False'
+        if: steps.wersja.outputs.exists == 'False' || github.event_name == 'pull_request'
         shell: pwsh
         working-directory: ${{ steps.wersja.outputs.dir }}
         run: |
@@ -68,7 +73,7 @@ jobs:
           '@ -replace '(?m)^          ', '' | Set-Content -Encoding utf8 GalaxyMcp.exe.config
 
       - name: Pakowanie GalaxyMcp.mcpb (jak pack_mcpb.bat)
-        if: steps.wersja.outputs.exists == 'False'
+        if: steps.wersja.outputs.exists == 'False' || github.event_name == 'pull_request'
         shell: pwsh
         working-directory: ${{ steps.wersja.outputs.dir }}
         run: |
@@ -78,7 +83,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Błąd pakowania' }
 
       - name: Utworzenie wydania
-        if: steps.wersja.outputs.exists == 'False'
+        if: steps.wersja.outputs.exists == 'False' && github.event_name != 'pull_request'
         shell: pwsh
         working-directory: ${{ steps.wersja.outputs.dir }}
         env:
