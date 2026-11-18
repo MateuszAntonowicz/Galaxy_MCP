@@ -21,8 +21,9 @@ Konfiguracja_projektu/     założenie / odtworzenie projektu w Claude
   Context.zip              Pliki_projektu spakowane jako kopia zapasowa (używa go prompt.txt)
 Dokumentacja/              instrukcje PDF: projekt UDT->CSV, instrukcja użytkownika wtyczki, „Jak to działa”
   zrodla/                  skrypty generujące / poprawiające PDF
-GalaxyMcp/                 gotowa wtyczka GalaxyMcp.mcpb
-  GalaxyMcp_0.2.3/         źródła i pliki wersji 0.2.3 (bez GalaxyMcp.exe, który jest w Releases)
+GalaxyMcp/                 wersje wtyczki GalaxyMcp
+  GalaxyMcp_0.2.3/         źródła i pliki wersji 0.2.3 (gotowe GalaxyMcp.exe i GalaxyMcp.mcpb są w Releases)
+.github/workflows/         automatyczne budowanie wtyczki i tworzenie wydania
 ```
 
 Instrukcja zakładania projektu krok po kroku: `Dokumentacja/Instrukcja_UDT_CSV.pdf`, rozdział 3.
@@ -30,7 +31,9 @@ Opcjonalne pliki użytkownika (`Permissions.csv`, `OISIDIR.pdf`) dodaje się do 
 
 ## Pliki binarne
 
-Skompilowany `GalaxyMcp.exe` nie jest trzymany w repozytorium. Pobierz go z zakładki **Releases** (wydanie `v0.2.3`) razem z `GalaxyMcp.mcpb`, albo zbuduj sam skryptem `GalaxyMcp/GalaxyMcp_0.2.3/build.bat`.
+`GalaxyMcp.exe` i `GalaxyMcp.mcpb` nie są trzymane w repozytorium. Pobierz je z zakładki **Releases** (np. wydanie `v0.2.3`) albo zbuduj sam skryptami `build.bat` i `pack_mcpb.bat` z folderu wersji.
+
+Wydania tworzy workflow **Wydanie GalaxyMcp** (`.github/workflows/wydanie.yml`). Gdy na `main` trafi nowy folder `GalaxyMcp/GalaxyMcp_<wersja>/` (z `version` w `manifest.json` zgodnym z `GalaxyMcp.cs`), workflow buduje exe na Windows tym samym kompilatorem co `build.bat`, pakuje `.mcpb` i tworzy wydanie `v<wersja>`. Istniejących wydań nie nadpisuje. Można go też uruchomić ręcznie w zakładce Actions.
 
 ## Wymagania
 

@@ -297,3 +297,10 @@ i poprosić o wyniki kroków 1, 3 i 5:
   ma tylko `Tagname,Area,SecurityGroup` – generator dostosowany, wynik bajt w bajt zgodny.
 - Użytkownik potwierdził: galaktyka przyjmuje nazwy dłuższe niż 32 znaki.
 - Do zrobienia: wkleić `Tools/Instrukcja_projektu.md` do ustawień projektu (ustawienia są starsze – brak kierunku Output).
+
+## 2026-11-18 – repozytorium GitHub i synchronizacja Tools z 0.2.3
+- Projekt w prywatnym repozytorium GitHub `MateuszAntonowicz/Galaxy_MCP`. Źródła wersji 0.2.3 (paczka z 2026-09-24) w `GalaxyMcp/GalaxyMcp_0.2.3/`.
+- `Tools/GalaxyMcp.cs`, `Tools/GalaxyMcp_manifest.json` i `Tools/GalaxyMcp_README.md` były jeszcze w wersji 0.2.2 – podmienione na 0.2.3
+  (identyczne z paczką). `build.bat`, `pack_mcpb.bat` i ikona bez zmian.
+- `GalaxyMcp.exe` i `GalaxyMcp.mcpb` nie są trzymane w repozytorium. Buduje je workflow GitHub Actions (`.github/workflows/wydanie.yml`,
+  Windows, ten sam kompilator co `build.bat`) i dołącza do wydania `v<wersja>` w zakładce Releases, gdy na `main` trafi nowa wersja.

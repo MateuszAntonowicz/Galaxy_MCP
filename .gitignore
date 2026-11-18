@@ -1,10 +1,11 @@
 # Logi serwera GalaxyMcp i inne logi
 *.log
 
-# Binaria i wyniki kompilacji (GalaxyMcp.exe trafia do GitHub Releases, nie do repo)
+# Binaria i wyniki kompilacji (GalaxyMcp.exe i GalaxyMcp.mcpb są w GitHub Releases, nie w repo)
 *.exe
 *.dll
 *.pdb
+*.mcpb
 bin/
 obj/
 

@@ -1,16 +1,18 @@
 # GalaxyMcp – serwer MCP dla galaktyki AVEVA System Platform (GRAccess)
 
 Tryb **Auto** projektu *SCL → AVEVA*. Serwer wykonuje w galaktyce specyfikację `Spec_<UDT>.json`,
-którą generuje `scl_to_aveva.py`. Tworzy szablon z atrybutami i rozszerzeniami I/O, tworzy instancje
-i ustawia `InputSource`. Ta sama specyfikacja służy do generowania plików CSV w trybie **Manual**.
+którą generuje `scl_to_aveva.py`. Tworzy szablon z atrybutami i rozszerzeniami I/O, tworzy instancje,
+dodaje instancjom ich własne atrybuty i ustawia `InputSource`. Ta sama specyfikacja służy do generowania plików CSV w trybie **Manual**.
 
 ```
 SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
                                             └──► GalaxyMcp ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Status: wersja 0.2.2** (2026-09-18: bez limitu 32 znaków dla nazw szablonu i instancji; serwer kończy się po wyłączeniu
-> wtyczki; `build.bat` blokuje tylko exe z własnego folderu – do zbudowania i sprawdzenia).
+> **Status: wersja 0.2.3** (2026-09-24, do zbudowania i sprawdzenia): wszystkie typy UDA z okna IDE (Boolean, Integer, Float,
+> **Double**, String, Time, ElapsedTime, **InternationalizedString**, **BigString**); atrybuty UDA dodawane do **pojedynczej instancji**
+> (`instances[].attributes`) z wartością początkową i kierunkiem I/O; kontrola wartości początkowej w specyfikacji.
+> Wersja 0.2.2 (bez limitu 32 znaków nazw, zamykanie po wyłączeniu wtyczki) zainstalowana i potwierdzona 2026-09-23.
 > Wersja 0.2.1 (0.2.0 + instalacja jako rozszerzenie `.mcpb`) potwierdzona 2026-09-17. Wersja 0.1.5 potwierdzona 2026-09-17 (SP z IGalaxy17, galaktyki `test_1` i `test_mcp`):
 > logowanie, `galaxy_status`, `list_objects`, `get_object`, `export_csv`, `apply_spec` (plan i ZAPIS szablonu + 3 instancji,
 > idempotencja), praca z czatu Claude. Nowe w 0.2.0 (potwierdzone z czatu 2026-09-17): przełączanie galaktyk `list_galaxies` / `select_galaxy`,
@@ -184,13 +186,34 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 - Nazwy szablonu, instancji i atrybutów nie mają limitu długości po stronie serwera (od 0.2.2); sprawdzane są tylko
   znaki (`[A-Za-z_][A-Za-z0-9_]*`, szablon z `$`). Jeśli galaktyka nie przyjmie długiej nazwy, błąd zgłosi GRAccess
   (`CreateTemplate` / `CreateInstance` / `AddUDA`) i trafi do raportu zapisu.
+- Typy atrybutów (od 0.2.3 – wszystkie z listy „Data type” w oknie UDA): `MxBoolean`, `MxInteger`, `MxFloat`, `MxDouble`,
+  `MxString`, `MxTime`, `MxElapsedTime`, `MxInternationalizedString`, `MxBigString`. Kierunek `io`: `Input` (Read) albo
+  `InputOutput` (Read/Write); `Output` (Write) nadal nieobsługiwany.
+- Wartość początkowa (`default`, w IDE „Initial value”): Boolean `true`/`false`/`1`/`0`, Integer liczba całkowita, Float/Double
+  liczba z kropką albo przecinkiem – sprawdzane już przy odczycie specyfikacji (zła wartość = specyfikacja odrzucona, nic nie zapisano).
+  Teksty i czas (`MxTime`, `MxElapsedTime`, np. `00:00:05.0000000`) idą jako tekst – konwersję robi GRAccess, a błąd jest tylko
+  ostrzeżeniem w raporcie.
 - Szablon nie istnieje → zostaje utworzony z `$UserDefined`, z atrybutami UDA (kategoria
   `MxCategoryWriteable_USC_Lockable`, `MxSecurityOperate`) oraz rozszerzeniem `inputextension`
   albo `inputoutputextension`.
 - Szablon istnieje → dopisywane są **tylko brakujące** atrybuty. Nic nie jest usuwane ani zmieniane.
+  Od 0.2.3 lista `template.attributes` może być pusta, gdy specyfikacja dotyczy tylko instancji istniejącego szablonu.
 - Instancja nie istnieje → zostaje utworzona z szablonu i dostaje `InputSource` ze specyfikacji.
 - Instancja istnieje → zmieniane są tylko `InputSource` o innej wartości. Instancja pochodząca z innego
   szablonu jest pomijana z błędem.
+- **Atrybuty instancji** (od 0.2.3): `instances[].attributes` ma ten sam format co `template.attributes`. Brakujące atrybuty
+  są dodawane tylko do tej instancji (UDA + rozszerzenie I/O + wartość początkowa + opis), przed ustawieniem `InputSource`,
+  więc w `input_source` można podać adres także dla nich. Nazwa nie może powtarzać atrybutu szablonu. Przykład:
+
+```json
+{ "spec_version": 1, "source": "czat",
+  "template": { "name": "$UDT_zawor", "base": "$UserDefined", "attributes": [] },
+  "instances": [ { "name": "Instancja_test", "security_group": "Default",
+                   "attributes": [ { "name": "A_test", "type": "MxDouble", "default": "50", "io": "InputOutput",
+                                     "description": "" } ],
+                   "input_source": {} } ] }
+```
+
 - Każdy obiekt jest pobierany do edycji (CheckOut), zapisywany (Save) i zwracany (CheckIn) z komentarzem.
   Przy błędzie pobranie jest cofane (UndoCheckOut).
 - Błędy przy ustawianiu opisu, wartości domyślnej, obszaru (Area), grupy bezpieczeństwa (SecurityGroup)
@@ -208,7 +231,8 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
   Claude (wtyczka `.mcpb`) nie blokuje budowania w innym folderze.
 - `GalaxyMcp.exe --selftest` – ładowanie GRAccess, lista galaktyk, logowanie (kroki 1–4 w `GalaxyMcp.log`).
 - `GalaxyMcp.exe --dump-api` – zapisuje pełny opis API biblioteki GRAccess do `GRAccess_API.txt`
-  (interfejsy, metody, właściwości, wartości enumeracji). Przydatne przy błędzie „brak metody/właściwości”.
+  (interfejsy, metody, właściwości, wartości enumeracji). Przydatne przy błędzie „brak metody/właściwości”
+  albo „W GRAccess brak wartości MxDataType.…” (nazwa typu w tej wersji GRAccess).
 - Securden: serwer i każde jego przebudowanie wymagają zgody (najlepiej reguła dla folderu `C:\Tools\GalaxyMcp\`).
 - Od wersji 0.1.2 GRAccess jest wywoływany przez interfejsy interop (wiązanie wczesne). Późne wiązanie
   (IDispatch) zwracało `TYPE_E_LIBNOTREGISTERED`, bo biblioteka typów GRAccess nie jest zarejestrowana.
@@ -227,12 +251,13 @@ czytelny błąd z tą nazwą. Poprawka dotyczy wtedy tylko sekcji `warstwa GRAcc
 | lista | `QueryObjects(..., EConditionType.namedLike, wzorzec, EMatch.MatchCondition)` | potwierdzone |
 | tworzenie | `ITemplate.CreateTemplate(name, true)`, `CreateInstance(name, true)` | wysoka |
 | edycja | `CheckOut()`, `Save()`, `CheckIn(komentarz)`, `UndoCheckOut()` | wysoka |
-| atrybut UDA | `AddUDA(name, MxDataType, MxAttributeCategory, MxSecurityClassification, false, 0)` | wysoka (zgodne z API) |
-| rozszerzenie I/O | `AddExtensionPrimitive("inputextension" / "inputoutputextension", name, false)` | średnia (sygnatura OK, nazwy typów rozszerzeń do potwierdzenia) |
-| wartości | `ConfigurableAttributes[name].SetValue(MxValueClass)` + `PutString/PutBoolean/PutFloat/PutInteger` | średnia |
+| atrybut UDA | `AddUDA(name, MxDataType, MxAttributeCategory, MxSecurityClassification, false, 0)` – na szablonie potwierdzone; na instancji (0.2.3) do sprawdzenia | wysoka |
+| typy UDA 0.2.3 | `MxDataType.MxDouble`, `MxInternationalizedString`, `MxBigString` | średnia (nazwy do potwierdzenia w `GRAccess_API.txt`) |
+| rozszerzenie I/O | `AddExtensionPrimitive("inputextension" / "inputoutputextension", name, false)` | potwierdzone (0.1.5) |
+| wartości | `ConfigurableAttributes[name].SetValue(MxValueClass)` + `PutBoolean/PutInteger/PutFloat/PutDouble/PutString` | średnia (`PutDouble` nowe w 0.2.3) |
 | deploy | `IInstance.Deploy(deployChanges, dontSkipIfCurrentlyUndeployed, doDeployOnScan, doForceOffScan, dontCascade, false)` | wysoka (zgodne z API) |
 | import/eksport CSV | `IGalaxy.ImportTemplateFromText(plik, GRLoadMode)`, `GRLoad(plik, GRLoadMode)`, `ExportTemplateToText(string[], plik)`, `GRDump(string[], plik)` | wysoka (zgodne z API) |
-| referencje | `InputSource` typu `MxReferenceType`: `value.GetMxReference()` → `FullReferenceString` → `PutMxReference` (awaryjnie `PutString`) | średnia |
+| referencje | `InputSource` typu `MxReferenceType`: `value.GetMxReference()` → `FullReferenceString` → `PutMxReference` (awaryjnie `PutString`) | potwierdzone (0.1.5) |
 | opis / grupa | `IAttribute.Description` (właściwość), `ConfigurableAttributes.SecurityGroup` | wysoka (zgodne z API) |
 
 Nazwy zweryfikowano z `GRAccess_API.txt` (ArchestrA.GRAccess 2.0.0.0, 2026-09-17). `IgObject` nie ma właściwości `SecurityGroup` –
@@ -246,3 +271,5 @@ ustawia się ją przez `ConfigurableAttributes`.
    typy, kierunek I/O, opisy.
 4. Zapis instancji (`scope=instances`) i sprawdzenie `InputSource` w IDE.
 5. Porównanie z wynikiem importu CSV tego samego UDT (tryb Manual). Oba tryby powinny dać to samo.
+6. (0.2.3) Instancja z własnym atrybutem: `Instancja_test` z `$UDT_zawor` + `A_test` MxDouble = 50, InputOutput –
+   sprawdzenie w IDE typu, Initial value i Read/Write; dodatkowo po jednym atrybucie każdego nowego typu.
