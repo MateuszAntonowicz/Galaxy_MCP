@@ -147,3 +147,9 @@ osobnej decyzji oraz zmiany generatora.
 - Czy DTL da się czytać jako jeden atrybut w adresowaniu symbolicznym.
 - Czy Auto-Build z drivera daje te same szablony co nasz generator (porównanie wartościowe, gdy będzie licencja).
 - ~~Czy IDE i GRAccess przyjmują nazwy dłuższe niż 32 znaki~~ – tak, potwierdził użytkownik 2026-09-23.
+
+## 2026-11-18 – nowy tekst dokumentacji drivera
+- `OISIDIR_tekst.txt` podmieniony na pełniejszy tekst z `OISIDIR.pdf` od użytkownika (AVEVA Communication Drivers Pack – Siemens –
+  SIDIRECT Driver User Guide, © 2015-2023): ten sam podręcznik, ale z numerami stron („Page 98”) – przy cytowaniu podawaj stronę.
+  Sufiksy symboliczne (D, LDT, LT, S5T, T, TOD) są na stronach 98–100; DTL bez sufiksu = tekst (VT_BSTR), z TREAL = data (VT_DATE)
+  – tylko adresowanie absolutne (strony 79–84).
