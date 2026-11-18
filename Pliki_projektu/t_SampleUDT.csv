@@ -1,0 +1,113 @@
+﻿# ***************************************************************************
+# ******* This file contains multi-block CSV data: Edit with caution! *******
+# ***************************************************************************
+# 
+# ******************************** Sections *********************************
+# [options]
+# <template-declaration>
+# [User-defined attributes]
+# [Extended attributes]
+# [Graphical Content]
+# [Wizard Assets]
+# [Wizard Associations]
+# [Wizard Settings]
+# 
+# ***************************** Import Options ******************************
+# Options have the following format:
+#   .<condition> = <disposition>
+# Import options define what action the import operation should take when a conflict or boundary condition is encountered.
+# You must define import options before all other blocks in the import file.
+# 
+# # Boundary conditions are events that may cause a conflict with default import behavior. These include:
+#   - Conditions that are not allowed. For example: Changing the properties of an attribute that is locked in the parent object.
+#   - Conditions that may be allowed - but user action is required - such as creating an intermediate template to satisfy an import request.
+# # Dispositions may be specified individually or as a comma-separated set. They include:
+#   - abort:          Stop importing the current object and its descendants.
+#   - warn:           Log a warning message and skip (if the condition is not allowed) or process (if the condition is allowed) the action that triggered the boundary condition. Then continue importing the current object. The progress dialog will advise the IDE user to review the logs for boundary conditions handled in this way.
+#   - ignore:         Log an info message and skip (if the condition is not allowed) or process (if the condition is allowed) the action that triggered the boundary condition. Then continue with the import of the current object. No other indication is sent to the user when a condition is ignored.
+# [*] You only need to include the action (abort/ignore/warn) to be taken. The template generally will include all three possible actions when it is exported. To simplify editing you can simply add an asterisk to the specified action instead of deleting the other two actions. For example: {abort<comma> *warn<comma> ignore} is the same as specifying only warn.
+# [*] If you do not specify an option to handle a boundary condition the default option for that condition is used - typically *warn for disallowed conditions and *abort for allowed ones.
+# 
+# *************************** Template Declaration **************************
+# The template declaration block must contain exactly one line that declares the name of the template being imported and the name of the template from which it is derived in the following format:
+# $$template_name -> $base_template_name
+# The [$template_name] supports the following adornments:
+# - Its folder in the template toolbox:
+#   $System\Pumps\$TwoHP -> $Pump
+# - Protection indicator [^]:
+#   $System\Pumps\$TwoHP^ -> $Pump
+# - Its assigned Security Group:
+#   $System\Pumps\$TwoHP^{Default} -> $Pump
+# 
+# The [$base_template_name] identifies the template from which [$template_name] is derived.
+# - [$base_template_name] must identify an existing template for [$template_name] to be imported.
+# - [$base_template_name] can represent the entire lineage of [$template_name]:
+#   $$TwoHP -> $Pump -> $Electrical -> $Master_UserDefined -> $UserDefined
+# - [$base_template_name] are pure template names--they may not be adorned in any way.
+# 
+# ****************************** Data Sections *****************************
+# The remaining sections describe the data with which the template is to be configured.
+# - The Banner record--identified by the leading [&]--identifies the section as one of the following:
+#   &User-defined Attributes
+#   &Extended Attributes
+#   &Graphical Content
+#   &Wizard Assets
+#   &Wizard Associations
+#   &Wizard Settings
+# 
+# - The Header record--identified by the leading [:]--enumerates the names of the configurable elements in the section as a comma-separated list:
+#   :Attribute<comma>Type<comma>Value<comma>LockStatus<comma>SecurityClassification<comma>Category<comma>...:
+# 
+# - Configuration data corresponding to the cells identified by the Header record are listed as a comma-separated table.
+#   PV<comma>Integer<comma>12<comma>Unlocked<comma>Operate<comma>ObjectWriteable<comma>...:
+# 
+# ************ Wizard Setting values with special significance **************
+#   - <empty>:        Register an empty override ('')
+#   - <default>:      No value override (accept default value)
+#   - <inherited>:    No value override (accept inherited value)
+# 
+# ************************* File Import Options *****************************
+.asset_owned_by_parent = {abort,*warn,ignore}
+.nominal_template_declaration = {abort,*warn,ignore}
+.bad_visual_element_reference = {abort,*warn,ignore}
+.uncontained_dotted_object_name = {abort,*warn,ignore}
+.object_has_field_attributes = {abort,*warn,ignore}
+.invalid_wizsetting_attribution = {abort,warn,*ignore}
+.invalid_security_group = {abort,*warn,ignore}
+.experimental_features = {*abort,warn,ignore}
+# 
+$Application\$t_SampleUDT{Default} -> $UserDefined
+&User-defined Attributes
+:Attribute,Type,Value,LockStatus,SecurityClassification,Category,Description,Description.LockStatus,Description.SecurityClassification,EngUnits,EngUnits.LockStatus,Boolean.OnMsg,Boolean.OnMsg.LockStatus,Boolean.OffMsg,Boolean.OffMsg.LockStatus,#IO,#IO.Mode,#IO.ScalingEnabled,#IO.Buffered,#IO.DiffOutputDest,#IO.DiffOutputDest.LockStatus,#IO.Deadband,#IO.Deadband.LockStatus,#IO.Deadband.SecurityClassification,#IO.InvertValue,#IO.InvertValue.LockStatus,#History,#History.EnableSwingingDoor,#History.EnableSwingingDoor.LockStatus,#History.EnableSwingingDoor.SecurityClassification,#Limit Alarms,#Limit.HiHi,#Limit.HiHi.LockStatus,#Limit.Hi,#Limit.Hi.LockStatus,#Limit.Lo,#Limit.Lo.LockStatus,#Limit.LoLo,#Limit.LoLo.LockStatus,#ROC Alarms,#ROC.IncreasingHi,#ROC.IncreasingHi.LockStatus,#ROC.DecreasingHi,#ROC.DecreasingHi.LockStatus,#Deviation Alarms,#Dev.Minor,#Dev.Minor.LockStatus,#Dev.Major,#Dev.Major.LockStatus,#State Alarm,#Bad Value Alarm,#Statistics,#Log Change
+Cfg_Timeout,MxInteger,0,MxUnLocked,MxSecurityOperate,MxCategoryWriteable_USC_Lockable,,,,,,,,,,EnabledByMe,ReadWrite,,,,,0.0,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,MxBoolean,false,MxUnLocked,MxSecurityOperate,MxCategoryWriteable_USC_Lockable,Sygnał załączenia,MxUnLocked,MxSecurityOperate,,,,,,,EnabledByMe,ReadWrite,,,,,,,,Disabled,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PV_Speed,MxFloat,0.0,MxUnLocked,MxSecurityOperate,MxCategoryWriteable_USC_Lockable,Prędkość obrotowa,MxUnLocked,MxSecurityOperate,,,,,,,EnabledByMe,ReadOnly,,,,,0.0,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Status_Run,MxBoolean,false,MxUnLocked,MxSecurityOperate,MxCategoryWriteable_USC_Lockable,Potwierdzenie pracy,MxUnLocked,MxSecurityOperate,,,,,,,EnabledByMe,ReadOnly,,,,,,,,Disabled,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,
+#===========================================================================================================================================
+&Extended Attributes
+:Primitive,Attribute,PrimitiveType,Value,LockStatus,SecurityClassification,Description,Description.LockStatus,Description.SecurityClassification,EngUnits,EngUnits.LockStatus,Boolean.OnMsg,Boolean.OnMsg.LockStatus,Boolean.OffMsg,Boolean.OffMsg.LockStatus,#IO,#IO.Mode,#IO.ScalingEnabled,#IO.Buffered,#IO.DiffOutputDest,#IO.DiffOutputDest.LockStatus,#IO.Deadband,#IO.Deadband.LockStatus,#IO.Deadband.SecurityClassification,#IO.InvertValue,#IO.InvertValue.LockStatus,#History,#History.EnableSwingingDoor,#History.EnableSwingingDoor.LockStatus,#History.EnableSwingingDoor.SecurityClassification,#Limit Alarms,#Limit.HiHi,#Limit.HiHi.LockStatus,#Limit.Hi,#Limit.Hi.LockStatus,#Limit.Lo,#Limit.Lo.LockStatus,#Limit.LoLo,#Limit.LoLo.LockStatus,#ROC Alarms,#ROC.IncreasingHi,#ROC.IncreasingHi.LockStatus,#ROC.DecreasingHi,#ROC.DecreasingHi.LockStatus,#Deviation Alarms,#Dev.Minor,#Dev.Minor.LockStatus,#Dev.Major,#Dev.Major.LockStatus,#State Alarm,#Bad Value Alarm,#Statistics,#Log Change
+Cfg_Timeout,DiffOutputDest,InputOutput,false,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cfg_Timeout,InputSource,InputOutput,PLC_01.DB_Pump.Cfg_Timeout,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cfg_Timeout,OutputDest,InputOutput,---,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cfg_Timeout,WriteStatus,InputOutput,Unknown error,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cfg_Timeout,WriteValue,InputOutput,No Data,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,DiffOutputDest,InputOutput,false,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,InputSource,InputOutput,PLC_01.DB_Pump.Cmd_Start,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,OutputDest,InputOutput,---,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,WriteStatus,InputOutput,Unknown error,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Cmd_Start,WriteValue,InputOutput,No Data,MxUnLocked,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PV_Speed,InputSource,Input,PLC_01.DB_Pump.PV_Speed,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Status_Run,InputSource,Input,PLC_01.DB_Pump.Status_Run,MxUnLocked,MxSecurityConfigure,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+#===========================================================================================================================================
+&Graphical Content
+:Visual Element,Visual Element Type,Description,IsLinked
+#===========================================================================================================================================
+&Wizard Assets
+:ChoiceOrOption,ChoiceGroup,Description,VisibilityRules,Enabled,InstanceVisibility,PositionAfterGroupOrOption
+#===========================================================================================================================================
+&Wizard Associations
+:ChoiceOrOption,ChoiceGroup,LinkType,LinkedAsset,TrimIfUnchecked
+#===========================================================================================================================================
+&Wizard Settings
+:ChoiceOrOption,ChoiceGroup,LinkType,LinkedAsset,Setting,Value,InstanceVisibility,SymbolIsReference,SymbolWizardAssetIsChecked,IsOverride
+#===========================================================================================================================================

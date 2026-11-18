@@ -1,0 +1,3 @@
+Pełna instrukcja tego projektu jest w pliku Tools/Instrukcja_projektu.md w plikach projektu: /mnt/project-files/Tools/Instrukcja_projektu.md.
+Na początku każdego wątku przeczytaj ją w całości i stosuj jako instrukcję projektu (kolejność ważności plików – jej sekcja 0, sposób pracy w wątkach – sekcja 0.1). Pliki projektu czytasz i zapisujesz bezpośrednio w /mnt/project-files/. Narzędzia z instrukcji, których nie ma w wątku (project_read, project_write, TaskCreate, AskUserQuestion), zastępuj odpowiednikami: pliki w /mnt/project-files, lista kroków wątku i karty z pytaniem do kliknięcia.
+Jeśli pliku nie ma, powiedz to i poproś o dodanie Tools/Instrukcja_projektu.md (albo Context.zip) do Library projektu – nie zgaduj reguł.

@@ -1,0 +1,112 @@
+{
+  "manifest_version": "0.3",
+  "name": "galaxy",
+  "display_name": "AVEVA Galaxy (GalaxyMcp)",
+  "version": "0.2.2",
+  "description": "Tworzenie szablonów i instancji w galaktyce AVEVA System Platform przez GRAccess (tryb Auto projektu SCL → AVEVA).",
+  "long_description": "Lokalny serwer MCP dla galaktyki AVEVA System Platform. Wykonuje specyfikację `Spec_<UDT>.json` generowaną przez `scl_to_aveva.py`: tworzy szablon z atrybutami UDA i rozszerzeniami I/O, tworzy instancje i ustawia `InputSource`. Domyślnie tylko plan (`dry_run`); zapis wymaga wyłączenia trybu tylko do odczytu i dotyczy wyłącznie galaktyk z listy zapisu. Serwer niczego nie usuwa. Wymaga zainstalowanego AVEVA System Platform IDE (GRAccess) i .NET Framework 4.x.",
+  "author": {
+    "name": "Projekt MA_SCL -> CSV"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "binary",
+    "entry_point": "GalaxyMcp.exe",
+    "mcp_config": {
+      "command": "${__dirname}/GalaxyMcp.exe",
+      "args": [],
+      "env": {
+        "GALAXY_NODE": "${user_config.galaxy_node}",
+        "GALAXY_NAME": "${user_config.galaxy_name}",
+        "GALAXY_ALLOWED": "${user_config.galaxy_allowed}",
+        "GALAXY_WRITABLE": "${user_config.galaxy_writable}",
+        "GALAXY_READONLY": "${user_config.galaxy_readonly}",
+        "GALAXY_ALLOW_DEPLOY": "${user_config.galaxy_allow_deploy}",
+        "GALAXY_USER": "${user_config.galaxy_user}",
+        "GALAXY_PASSWORD": "${user_config.galaxy_password}",
+        "GRACCESS_DLL": "${user_config.graccess_dll}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "galaxy_status", "description": "Aktywna galaktyka, prawo zapisu, listy dozwolonych galaktyk, test połączenia." },
+    { "name": "list_galaxies", "description": "Galaktyki na węźle GR z oznaczeniem: aktywna, zapis, tylko odczyt, niedozwolona." },
+    { "name": "select_galaxy", "description": "Przełączenie aktywnej galaktyki (tylko z listy dozwolonych)." },
+    { "name": "list_objects", "description": "Szablony albo instancje pasujące do wzorca nazwy." },
+    { "name": "get_object", "description": "Właściwości i atrybuty obiektu." },
+    { "name": "export_csv", "description": "Eksport szablonu lub instancji do CSV (tylko odczyt)." },
+    { "name": "apply_spec", "description": "Plan albo zapis specyfikacji Spec_<UDT>.json (szablon, atrybuty, instancje, InputSource)." },
+    { "name": "import_csv", "description": "Import plików CSV z trybu Manual (zapis do galaktyki)." },
+    { "name": "deploy", "description": "Wdrożenie instancji (tylko gdy deploy jest włączony)." }
+  ],
+  "keywords": ["aveva", "system platform", "archestra", "graccess", "galaxy", "tia portal", "scl"],
+  "compatibility": {
+    "platforms": ["win32"]
+  },
+  "user_config": {
+    "galaxy_node": {
+      "type": "string",
+      "title": "Węzeł GR (Galaxy Repository)",
+      "description": "Nazwa komputera z serwerem galaktyk. Puste = ten komputer.",
+      "required": false,
+      "default": ""
+    },
+    "galaxy_name": {
+      "type": "string",
+      "title": "Galaktyka na start",
+      "description": "Galaktyka aktywna po uruchomieniu (zmiana z czatu: select_galaxy). Puste = trzeba wybrać w rozmowie.",
+      "required": false,
+      "default": ""
+    },
+    "galaxy_allowed": {
+      "type": "string",
+      "title": "Dozwolone galaktyki",
+      "description": "Lista po przecinku, np. test_mcp,test_1. Puste = wszystkie galaktyki z węzła.",
+      "required": false,
+      "default": ""
+    },
+    "galaxy_writable": {
+      "type": "string",
+      "title": "Galaktyki z prawem zapisu",
+      "description": "Lista po przecinku, np. test_mcp. Pozostałe są tylko do odczytu. Puste = wszystkie dozwolone (niezalecane).",
+      "required": false,
+      "default": ""
+    },
+    "galaxy_readonly": {
+      "type": "boolean",
+      "title": "Tylko odczyt (blokada zapisu we wszystkich galaktykach)",
+      "description": "Zaznaczone = serwer niczego nie zapisuje. Odznacz dopiero po ustawieniu listy galaktyk z prawem zapisu.",
+      "required": false,
+      "default": true
+    },
+    "galaxy_allow_deploy": {
+      "type": "boolean",
+      "title": "Zezwól na deploy",
+      "description": "Włącza narzędzie deploy (wdrażanie instancji).",
+      "required": false,
+      "default": false
+    },
+    "galaxy_user": {
+      "type": "string",
+      "title": "Użytkownik galaktyki",
+      "description": "Tylko gdy galaktyka ma włączone zabezpieczenia. Puste = logowanie bez użytkownika.",
+      "required": false,
+      "default": ""
+    },
+    "galaxy_password": {
+      "type": "string",
+      "title": "Hasło użytkownika galaktyki",
+      "description": "Tylko gdy galaktyka ma włączone zabezpieczenia.",
+      "required": false,
+      "sensitive": true,
+      "default": ""
+    },
+    "graccess_dll": {
+      "type": "string",
+      "title": "Ścieżka do ArchestrA.GRAccess.dll (opcjonalnie)",
+      "description": "Tylko gdy serwer nie znajduje biblioteki sam. Puste = wyszukiwanie automatyczne.",
+      "required": false,
+      "default": ""
+    }
+  }
+}

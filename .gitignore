@@ -1,0 +1,26 @@
+# Logi serwera GalaxyMcp i inne logi
+*.log
+
+# Binaria i wyniki kompilacji (GalaxyMcp.exe trafia do GitHub Releases, nie do repo)
+*.exe
+*.dll
+*.pdb
+bin/
+obj/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv*/
+venv/
+
+# Pliki tymczasowe, systemowe i edytorów
+*.tmp
+*.bak
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+.vs/
+.vscode/
+.idea/

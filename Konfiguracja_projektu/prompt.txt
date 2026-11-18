@@ -1,0 +1,19 @@
+To jest projekt „UDT->CSV” (dawniej „MA_SCL -> CSV”) odtwarzany z kopii zapasowej (backup z 2026-09-23, instrukcja zaktualizowana 2026-11-18 pod nowe projekty Claude). W ustawieniach projektu (Project settings → Memory → Project instructions) jest wklejony krótki tekst odsyłający do pełnej instrukcji w Tools/Instrukcja_projektu.md. Do plików projektu (Library) dodałem archiwum Context.zip (ewentualnie też Permissions.csv i OISIDIR.pdf jako osobne pliki).
+
+Najpierw odtwórz pliki projektu, a dopiero potem sprawdź kompletność. Nie generuj plików CSV i nie zapisuj niczego w galaktyce.
+
+1. Rozpakuj /mnt/project-files/Context.zip bezpośrednio do /mnt/project-files/, pod DOKŁADNIE tymi samymi ścieżkami co w archiwum, razem z folderami:
+   - Tools/scl_to_aveva.py, Tools/Metoda_Generowania.md, Tools/Instrukcja_projektu.md,
+   - Tools/GalaxyMcp.cs, Tools/GalaxyMcp_README.md, Tools/GalaxyMcp_manifest.json, Tools/GalaxyMcp_build.bat,
+     Tools/GalaxyMcp_pack_mcpb.bat, Tools/GalaxyMcp_icon.png.b64, Tools/GalaxyMcp_instrukcja_pdf.py,
+   - ITERACJE/tmp_OI_SIDirect_adresowanie.md, ITERACJE/tmp_GRAccessMCP_wdrozenie.md,
+   - t_SampleUDT.csv, OISIDIR_tekst.txt (w katalogu głównym projektu).
+   Nie nadpisuj plików, które już są w projekcie w nowszej wersji – jeśli plik istnieje i się różni, pokaż mi różnicę i zapytaj.
+   Jeśli Instructions.txt w katalogu głównym jest nowszy niż Tools/Instrukcja_projektu.md z archiwum, skopiuj jego treść do Tools/Instrukcja_projektu.md.
+   Permissions.csv i OISIDIR.pdf (jeśli je dodałem) zostają w katalogu głównym pod tymi nazwami.
+2. Porównaj listę plików w /mnt/project-files/ z listą z punktu 1 oraz z plikami wymienionymi w instrukcji (sekcje 0 i 7). OISIDIR_tekst.txt (tekst wyciągnięty z OISIDIR.pdf) traktuj jako zamiennik OISIDIR.pdf, dopóki nie dodam oryginału.
+3. Sprawdź, czy tekst w ustawieniach projektu odsyła do Tools/Instrukcja_projektu.md i czy ten plik jest zgodny z Instructions.txt (jeśli oba są).
+4. Sprawdź, czy skrypt działa: skopiuj Tools/scl_to_aveva.py do katalogu roboczego wątku, uruchom go z --help i na krótkim, własnym pliku testowym z jednym typem UDT (--no-address). Pokaż tylko wynik na stdout i ostrzeżenia.
+5. Sprawdź przez ToolSearch („galaxy_status”), czy są dostępne narzędzia serwera GalaxyMcp. Jeśli ich nie ma, poproś mnie o połączenie wątku z komputerem z AVEVA i sprawdź jeszcze raz. Jeśli są – wywołaj tylko galaxy_status (bez zapisu) i pokaż wynik.
+
+Na koniec napisz krótko (maks. 10 linii): co zapisano, czego brakuje, co jest niezgodne i czy projekt jest gotowy do pracy w trybie Manual i Auto.
