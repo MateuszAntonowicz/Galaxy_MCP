@@ -1,0 +1,42 @@
+# Testy automatyczne: generator scl_to_aveva.py (Linux) i test dymny serwera GalaxyMCP bez AVEVA (Windows).
+name: Testy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Testy generatora
+        run: python -m unittest discover -s tests -v
+
+  serwer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Budowanie GalaxyMcp.exe z Pliki_projektu/Tools (x86, jak build.bat)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build | Out-Null
+          Copy-Item Pliki_projektu/Tools/GalaxyMcp_manifest.json build/manifest.json
+          & "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\csc.exe" /nologo /codepage:65001 /target:exe /platform:x86 `
+            /optimize+ /out:build/GalaxyMcp.exe /r:System.Web.Extensions.dll /r:Microsoft.CSharp.dll /r:System.Core.dll `
+            Pliki_projektu/Tools/GalaxyMcp.cs
+          if ($LASTEXITCODE -ne 0) { throw 'Błąd kompilacji' }
+      - name: Specyfikacja z generatora (bez atrybutów Output)
+        shell: pwsh
+        run: |
+          python -I Pliki_projektu/Tools/scl_to_aveva.py tests/dane/typy.udt --db tests/dane/napedy.db `
+            --plc S7C_01 --scan-group SG1 --rules Cmd_=InputOutput Cfg_=InputOutput --out build/spec
+          if ($LASTEXITCODE -ne 0) { throw 'Błąd generatora' }
+      - name: Test dymny serwera
+        shell: pwsh
+        run: ./tests/test_serwer.ps1 -Exe build/GalaxyMcp.exe -Spec build/spec/Spec_UDT_Silnik.json

@@ -1,0 +1,43 @@
+DATA_BLOCK "DB_Napedy"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR
+      Pompa_01 : "UDT_Silnik";   // pompa
+      "Pompa 02" : "UDT_Silnik";
+      Silniki : Array[1..2] of "UDT_Silnik";
+      Sekcja_A : Struct
+         Mieszadlo : "UDT_Silnik";
+      END_STRUCT;
+      Liczba : Int;
+   END_VAR
+
+BEGIN
+   Pompa_01.Cmd_Start := TRUE;
+   Liczba := 5;
+
+END_DATA_BLOCK
+
+DATA_BLOCK "DB_Silnik_05"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+"UDT_Silnik"
+
+BEGIN
+
+END_DATA_BLOCK
+
+DATA_BLOCK "DB.Kropka"
+VERSION : 0.1
+   VAR
+      M1 : "UDT_Silnik";
+   END_VAR
+BEGIN
+END_DATA_BLOCK
+
+DATA_BLOCK "IDB_FB_X"
+VERSION : 0.1
+"FB_X"
+BEGIN
+END_DATA_BLOCK
