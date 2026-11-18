@@ -28,8 +28,8 @@ jobs:
           New-Item -ItemType Directory -Force build | Out-Null
           Copy-Item Pliki_projektu/Tools/GalaxyMcp_manifest.json build/manifest.json
           & "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\csc.exe" /nologo /codepage:65001 /target:exe /platform:x86 `
-            /optimize+ /out:build/GalaxyMcp.exe /r:System.Web.Extensions.dll /r:Microsoft.CSharp.dll /r:System.Core.dll `
-            Pliki_projektu/Tools/GalaxyMcp.cs
+            /optimize+ "/out:$PWD\build\GalaxyMcp.exe" /r:System.Web.Extensions.dll /r:Microsoft.CSharp.dll `
+            /r:System.Core.dll "$PWD\Pliki_projektu\Tools\GalaxyMcp.cs"
           if ($LASTEXITCODE -ne 0) { throw 'Błąd kompilacji' }
       - name: Specyfikacja z generatora (bez atrybutów Output)
         shell: pwsh
