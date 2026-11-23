@@ -56,7 +56,7 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 
 1. Pobierz ponownie repozytorium (Download ZIP albo `git pull`) i w Library projektu podmień pliki z nowego `Context.zip` (przy istniejącej nazwie wybierz **Replace**).
 2. W Project settings → Memory → Project instructions zastąp tekst całą treścią nowego `Project_instructions_ustawienia.txt` i kliknij **Save changes**.
-3. Jeśli w Releases jest nowsza wersja wtyczki, pobierz nowy `GalaxyMcp.mcpb` i zainstaluj go w miejsce starego (Ustawienia → Extensions). Wersję sprawdzisz poleceniem „pokaż status galaktyki” – pozycja „Wersja”.
+3. Jeśli w Releases jest nowsza wersja wtyczki, pobierz nowy `GalaxyMcp.mcpb` i zainstaluj go w miejsce zainstalowanego (Settings → Desktop app → Extensions (Manage) → Advanced settings → Install Extension…). Wersję sprawdzisz poleceniem „pokaż status galaktyki” – pozycja „Wersja”.
 
 ---
 

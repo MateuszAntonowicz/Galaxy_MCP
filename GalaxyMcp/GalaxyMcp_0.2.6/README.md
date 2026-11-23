@@ -68,7 +68,7 @@ rób wyłącznie na pustej galaktyce testowej, z `GALAXY_READONLY=0` i tą galak
 Obowiązująca instalacja to paczka `.mcpb` z sekcji 4. Wpis ręczny stosuj tylko wtedy, gdy rozszerzenia są niedostępne.
 
 1. Skopiuj folder, np. do `C:\Tools\GalaxyMcp\`.
-2. W Claude Desktop otwórz: Ustawienia → Developer → Edit Config (plik `claude_desktop_config.json`).
+2. W Claude Desktop otwórz: Settings → Developer → Edit Config (plik `claude_desktop_config.json`).
 3. Dopisz sekcję i uzupełnij `GALAXY_NAME`:
 
 ```json
@@ -114,7 +114,7 @@ uprawnieniami albo galaktyki testowej bez zabezpieczeń.
 ## 4. Instalacja jako rozszerzenie Claude Desktop (.mcpb) – zalecana na kolejnych komputerach
 
 Paczka `.mcpb` to archiwum ZIP z `manifest.json`, `GalaxyMcp.exe`, `GalaxyMcp.exe.config` i `icon.png`.
-Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – bez ręcznej edycji `claude_desktop_config.json`.
+Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam pokazuje formularz ustawień – bez ręcznej edycji `claude_desktop_config.json`.
 
 **Tworzenie paczki (raz, u osoby, która buduje serwer):**
 
@@ -127,7 +127,7 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 
 1. Jeśli serwer był dodany ręcznie: zamknij Claude Desktop (Quit), usuń wpis `"galaxy"` z `claude_desktop_config.json`
    i uruchom aplikację ponownie. Inaczej serwer działałby podwójnie.
-2. Dwuklik na `GalaxyMcp.mcpb` (albo przeciągnij plik do okna aplikacji, albo Ustawienia → Extensions → Advanced settings → Install Extension…).
+2. W Claude Desktop: Settings → Desktop app → przy Extensions **Manage** → **Advanced settings** → sekcja Extension Developer → **Install Extension…** i wskaż `GalaxyMcp.mcpb`. (Pliku `.mcpb` nie dodaje się w Settings → Plugins – tam trafiają paczki pluginów z `.claude-plugin/plugin.json`.)
 3. Wypełnij ustawienia:
 
 | Pole | Zmienna | Uwagi |
@@ -150,7 +150,7 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
   Claude Desktop (np. `%APPDATA%\Claude\` albo folder pakietu w `%LOCALAPPDATA%\Packages\`). Plik znajdzie polecenie PowerShell:
   `Get-ChildItem $env:LOCALAPPDATA, $env:APPDATA -Recurse -Filter GalaxyMcp.log -ErrorAction SilentlyContinue | Select-Object FullName`.
 - Securden widzi exe w folderze rozszerzeń, a nie w `C:\Tools\GalaxyMcp\` – reguła IT powinna dotyczyć skrótu (hash) pliku albo podpisu.
-- Zmiana ustawień: Ustawienia → Extensions → GalaxyMCP. Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
+- Zmiana ustawień: Settings → Desktop app → Extensions (Manage) → GalaxyMCP. Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
   wyłącz przełącznik Enabled, zrestartuj komputer i włącz Enabled. Sprawdzenie: `galaxy_status`.
 - Nowa wersja serwera = nowy `build.bat` + `pack_mcpb.bat` + podniesienie `version` w `manifest.json`; instalacja nadpisuje poprzednią.
 - W firmowym koncie administrator może ograniczyć instalowanie własnych rozszerzeń – wtedy potrzebna jest jego zgoda.
