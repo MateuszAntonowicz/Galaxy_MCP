@@ -82,6 +82,17 @@ class Generator(unittest.TestCase):
         self.assertEqual(self.attrs["Cfg_Czas"]["type"], "MxInteger")      # TIME do zapisu = liczba ms
         self.assertEqual(self.attrs["Czas_Odczyt"]["plc_path"], "attribute(Czas_Odczyt T)")
 
+    def test_atrybut_output_jak_eksport_ide(self):
+        # Wzorzec: eksport IDE (SP 2026, 2026-11-23) atrybutu ustawionego na Write - #IO.Mode=WriteOnly,
+        # w &Extended Attributes tylko OutputDest z PrimitiveType Output (bez InputSource i DiffOutputDest).
+        with open(os.path.join(self.out, "$t_UDT_Silnik.csv"), encoding="utf-8-sig") as f:
+            rows = [l.split(",") for l in f.read().splitlines()]
+        uda = [r for r in rows if r[0] == "Reset_Alarm"]
+        self.assertEqual(uda[0][16], "WriteOnly")
+        ext = [r[1:4] for r in rows if len(r) > 3 and r[0] == "Reset_Alarm" and r[2] == "Output"]
+        self.assertEqual(ext, [["OutputDest", "Output", ""]])
+        self.assertNotIn("niepotwierdzony", self.log)
+
     def test_rozwijanie_i_nazwy(self):
         for n in ("Temp_1", "Temp_3", "Neg_m1", "Siatka_2_1", "stan_Stan_Aktywny", "Zawory_2_Kod_Bledu",
                   "Grupa_Temp_1", "KomendaHMIAktywuj"):
