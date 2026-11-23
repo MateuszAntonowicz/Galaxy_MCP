@@ -384,3 +384,9 @@ i poprosić o wyniki kroków 1, 3 i 5:
   usunięte ostrzeżenie „format niepotwierdzony” dla Output; teksty: ścieżka logu, ponowny Galaxy Load po zmianie kierunku,
   wartość domyślna MxTime (czas utworzenia), dwa procesy serwera, ~30 s pierwszego połączenia, przecinek dziesiętny w GRDump.
 - Pliki z testu (eksporty, Galaxy Dump, log): folder projektu `test_0.2.5_astorman/`.
+
+## 2026-11-23 – wersja 0.2.7: wartości początkowe i atrybuty Write w trybie Auto (decyzje użytkownika)
+- Generator przenosi wartości początkowe `:=` (Bool, liczby z 16#/2#/typowane, Real, tekst, T#) do `default`/`Value`;
+  tablice i literały D#/TOD#/DTL# – ostrzeżenie, zostaje domyślna typu. Test `WartosciPoczatkowe` (tests/dane/wartosci_poczatkowe.udt).
+- Serwer: atrybuty `io=Output` pomijane (linia „POMINIĘTE atrybuty Write” w planie/raporcie), reszta specyfikacji zapisywana.
+- Decyzja: plan nie pokazuje różnic typu/kierunku w istniejących szablonach.

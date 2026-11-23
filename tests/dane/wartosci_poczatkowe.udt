@@ -1,0 +1,22 @@
+// Dane do testu wartości początkowych: literały TIA różnych typów, tekst z ';' i '//', tablice, wartości spoza zakresu.
+TYPE "UDT_Start"
+VERSION : 0.1
+   STRUCT
+      B_True : Bool := TRUE;
+      B_Zero : Bool := 0;   // komentarz
+      I_Ujemna : Int := -12;
+      I_Hex : Word := 16#FF;
+      I_Bin : Byte := 2#1010_1010;
+      I_Typowana : DInt := DINT#100000;
+      I_Duza : LInt := 5000000000;
+      R_Wykl : Real := 1.5E+3;
+      R_Zwykla : LReal := -0.25;
+      S_Tekst : String[40] := 'a;b // c ''d''';
+      S_Dolar : String := 'x$$y';
+      Cmd_Czas : Time := T#1m30s;   // zapisywalny -> MxInteger (ms)
+      T_Odczyt : Time := T#2h3m4s5ms;
+      D_Data : Date := D#2026-01-01;
+      Tab : Array[1..2] of Int := [1, 2];
+      Brak : Int;
+   END_STRUCT;
+END_TYPE

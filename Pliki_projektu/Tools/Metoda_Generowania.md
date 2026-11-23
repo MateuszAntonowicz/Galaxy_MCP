@@ -68,7 +68,12 @@ Specyfikacja ma `spec_version` 1 i jeden szablon w pliku, więc tryb Auto wykonu
 - Typy czasowe z sufiksem driver pozwala tylko czytać. Atrybut zapisywalny (`InputOutput` albo `Output`) dostaje ten sam item
   **bez sufiksu** i typ `MxInteger` w jednostce drivera (Time/S5Time/Time_Of_Day: ms, LTime: ns, Date: dni od 1990-01-01).
   `LDT` i `Date_And_Time` są zapisywalne z sufiksem.
-- Pomijane bez ostrzeżenia: wartości początkowe (`:= ...`), atrybuty `{ ... }`, komentarze bez deklaracji.
+- Wartości początkowe (`:= ...`) z deklaracji w UDT, STRUCT i VAR trafiają do `Value` atrybutu szablonu (`default` w specyfikacji):
+  Bool `TRUE`/`FALSE`/`1`/`0` → `true`/`false`; liczby całkowite (także `16#FF`, `2#1010`, `DINT#5`, `_` w liczbie) → liczba
+  dziesiętna (poza 32 bitami – pominięta z ostrzeżeniem); Real/LReal → liczba z kropką (`1.5E+3` → `1500.0`); tekst w apostrofach →
+  tekst bez apostrofów (`''` → `'`, `$$` → `$`); `T#…` → milisekundy (atrybut `MxInteger`) albo `hh:mm:ss.fffffff` (`MxElapsedTime`).
+  Bez przenoszenia, z ostrzeżeniem: tablice (`:= [1, 2]`) i literały innych typów (`D#…`, `TOD#…`, `DTL#…`).
+- Pomijane bez ostrzeżenia: atrybuty `{ ... }`, komentarze bez deklaracji, sekcja `BEGIN` w DB (wartości startowe instancji).
 
 ## Kierunek I/O i `Permissions.csv`
 - Trzy kierunki (nazwy jak w IDE w nawiasie):
@@ -84,7 +89,7 @@ Specyfikacja ma `spec_version` 1 i jeden szablon w pliku, więc tryb Auto wykonu
   jeszcze `OutputEveryScan=false` i `WriteStatus` – generator ich nie potrzebuje.
 - Zmiana kierunku atrybutu w szablonie (w IDE) usuwa jego adresy w instancjach – potem wczytaj ponownie `Instances_<UDT>.csv`.
 - `MxTime` bez wartości początkowej dostaje od GRAccess czas utworzenia szablonu; przy atrybutach I/O nie ma to znaczenia.
-- Tryb Auto: GalaxyMCP odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
+- Tryb Auto: GalaxyMCP pomija atrybuty z `io=Output` (linia „POMINIĘTE atrybuty Write” w planie) i zapisuje resztę; atrybuty Write – w IDE albo tryb Manual.
 - `Permissions.csv`: kolumny `Prefix_or_Keyword`, `Access_Mode`, `Description` (opcjonalna, generator jej nie czyta).
   **Nazw kolumn nie wolno zmieniać** – plik bez żadnej poprawnej reguły (np. nagłówek `Prefix_`) przerywa generator komunikatem,
   zamiast po cichu dać same Input.
@@ -162,7 +167,7 @@ błędu – sprawdzenie adresów na żywym sterowniku wpisuj w „Do sprawdzenia
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer GalaxyMCP 0.2.6 (rozszerzenie .mcpb, AVEVA System Platform 2026)
+## Tryb Auto – serwer GalaxyMCP 0.2.7 (rozszerzenie .mcpb, AVEVA System Platform 2026)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.

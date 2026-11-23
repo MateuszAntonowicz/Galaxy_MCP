@@ -113,7 +113,8 @@ Pełne reguły są w `Tools/Metoda_Generowania.md`. Najważniejsze:
 - Typy: tabela w `Metoda_Generowania.md` („Mapowanie typów”) = słownik `TYPES` w skrypcie; zmiana zawsze w obu miejscach.
 - Nazwy są spłaszczane przez `_` i czyszczone do wymagań AVEVA (bez spacji, polskie litery bez ogonków); adres zachowuje ścieżkę i oryginalną nazwę z PLC. Nazw i opisów nie skracasz – ani w skrypcie, ani ręcznie.
 - Kierunek: prefiks nazwy zmiennej (bez struktur nadrzędnych), pierwsza pasująca reguła, brak dopasowania = Input. Bez pliku i reguł ręcznych – reguły awaryjne (`Cmd_`, `Set_`, `Cfg_`, `Par_` = InputOutput); przekaż ostrzeżenie skryptu.
-- Output (Write): SCADA nie widzi wartości – odradzaj dla stanów i alarmów; tylko tryb Manual.
+- Output (Write): SCADA nie widzi wartości – odradzaj dla stanów i alarmów; tryb Auto je pomija (wymień je w podsumowaniu), w CSV są.
+- Wartości początkowe `:=` przechodzą do szablonu; tablice i literały D#/TOD#/DTL# nie – przekaż ostrzeżenia skryptu.
 - Adres: `{DI}.{SG}.{DB}.{ścieżka w PLC}`, driver SIDirect (S7-1200/1500). Inne obiekty DI (`$OPCClient`, `$DDESuiteLinkClient`, `$InTouchProxy`) są poza zakresem – zanotuj, nie przerabiaj adresów bez decyzji użytkownika.
 - Pomijane z ostrzeżeniem (wymień w podsumowaniu): tablice poza limitami drivera, granice ze stałej, typy bez definicji, `Variant`, rekurencja, zmienne proste w DB.
 - „Do sprawdzenia” w podsumowaniu, dopóki użytkownik nie potwierdzi: adresy na żywym sterowniku, import atrybutów Output i pól CSV w cudzysłowie (przy takich UDT proponuj Auto).
@@ -163,7 +164,7 @@ Auto: zakończ pytaniem o zgodę na zapis. Manual: dopisz skrótem import w IDE:
 
 ---
 
-## 5. Tryb Auto – GalaxyMCP 0.2.6
+## 5. Tryb Auto – GalaxyMCP 0.2.7
 
 GalaxyMCP to rozszerzenie Claude Desktop (`GalaxyMcp.mcpb`, instalacja: `Tools/GalaxyMcp_README.md`, sekcja 4) na komputerze użytkownika z AVEVA System Platform 2026. Narzędzia w wątku: `mcp__remote-devices__GalaxyMCP__*` – szukaj przez ToolSearch „galaxy_status”. Wątek widzi je, gdy jest połączony z tym komputerem, a Claude Desktop działa. Gdy ich brak – poproś o połączenie wątku z komputerem (karta połączenia urządzenia, np. `connect_device`) i szukaj ponownie.
 
@@ -193,7 +194,6 @@ Gdy coś nie działa:
 - Brak narzędzi → Claude Desktop uruchomiony, rozszerzenie włączone, wątek połączony z komputerem; w Claude Desktop Ustawienia → Code włączone „Use this computer from your phone and claude.ai”; nowa wersja wtyczki → nowy wątek.
 - Serwer znika bez komunikatu → program ochronny (np. Securden) zablokował `GalaxyMcp.exe` – użytkownik zatwierdza aplikację lub prosi IT o regułę.
 - „brak metody/właściwości” → `GalaxyMcp.exe --dump-api` i porównanie z `GRAccess_API.txt`.
-- „io musi być Input albo InputOutput” → atrybuty Output: tryb Manual.
 - `import_csv` zwraca `BŁĄD:` → obiekty z błędem nie zostały zaimportowane; pokaż komunikaty (np. E_FAIL w linii N).
 
 ---

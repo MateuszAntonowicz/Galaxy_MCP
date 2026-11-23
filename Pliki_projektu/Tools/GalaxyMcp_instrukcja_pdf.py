@@ -3,7 +3,7 @@
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
 Dotyczy projektów Claude (zakładka Code → Projects: rozmowa projektu + wątki, Library,
-połączenie wątku z komputerem) i wtyczki 0.2.6.
+połączenie wątku z komputerem) i wtyczki 0.2.7.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -23,7 +23,7 @@ from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, Simpl
                                 Spacer, Table, TableStyle)
 from reportlab.platypus.tableofcontents import TableOfContents
 
-VERSION = "0.2.6"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
+VERSION = "0.2.7"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
@@ -253,8 +253,9 @@ def build(icon_bytes):
         "Działa <b>lokalnie</b> na Twoim komputerze, przez bibliotekę GRAccess z ArchestrA IDE. Claude pracuje "
         "w chmurze, w wątku projektu, i sięga do wtyczki przez Claude Desktop uruchomiony na tym komputerze.",
         "Tworzy tylko zmienne, których wartość SCADA widzi: <b>Read</b> i <b>Read/Write</b>. Zmienne tylko do zapisu "
-        "(Write) celowo pomija – wysyłają polecenia do sterownika „na ślepo”, bez odczytu stanu (Dodatek B). "
-        "Takie zmienne zakładasz świadomie w trybie Manual.",
+        "(Write) pomija i wypisuje w planie jako „POMINIĘTE” – wysyłają polecenia do sterownika „na ślepo”, bez "
+        "odczytu stanu (Dodatek B). Resztę zapisuje normalnie. Zmienne Write zakładasz świadomie w IDE albo w trybie Manual.",
+        "Przenosi <b>wartości początkowe</b> ze sterownika (np. := TRUE, := 12.5, := 'abc', := T#5s) do szablonu.",
         "Zawsze najpierw pokazuje <b>plan</b>. Zapis następuje dopiero po Twoim wyraźnym „tak”, tylko w galaktykach, "
         "które dopuścisz w ustawieniach. Wtyczka <b>niczego nie usuwa</b>.",
         "Zmiana ustawień wtyczki wymaga <b>restartu komputera</b> albo <b>ręcznego zamknięcia procesów GalaxyMcp.exe</b> "
@@ -305,7 +306,7 @@ def build(icon_bytes):
     ])
     s.append(box("<b>Aktualizacja wtyczki:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastępuje on "
                  "zainstalowaną wtyczkę, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
-                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.6.", "info"))
+                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.7.", "info"))
     s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń "
                  f"{code('Claude Extensions')} (podfolder z „galaxy” w nazwie). Tam znajdziesz też plik "
                  f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów). Położenie folderu zależy od "
@@ -358,7 +359,7 @@ def build(icon_bytes):
     s.append(P("Prawidłowy wynik (przykład dla ustawień z rozdziału 3):"))
     s.append(table([
         ["Pozycja w statusie", "Oczekiwana wartość"],
-        ["Wersja", "0.2.6"],
+        ["Wersja", "0.2.7"],
         ["Galaktyka (aktywna)", "Galaktyka_Test"],
         ["Zapis w aktywnej galaktyce", "DOZWOLONY"],
         ["Dozwolone galaktyki", "Galaktyka_Test, Galaktyka_Dev, Galaktyka_Prod"],
@@ -420,8 +421,8 @@ def build(icon_bytes):
         "Deploy tylko na osobne, wyraźne polecenie i przy włączonym przełączniku „Zezwól na deploy”.",
         "Nie wpisuj haseł w rozmowie projektu ani w wątku. Hasło galaktyki – tylko w polu poufnym wtyczki.",
         "Wtyczka nigdy nie usuwa obiektów ani atrybutów. Usuwanie rób ręcznie w IDE.",
-        "Wtyczka nie tworzy zmiennych tylko do zapisu (Write). Każda zmienna, którą zakłada, ma odczyt ze "
-        "sterownika – operator zawsze widzi stan, na który wpływa.",
+        "Wtyczka nie tworzy zmiennych tylko do zapisu (Write) – pomija je i pokazuje w planie. Każda zmienna, "
+        "którą zakłada, ma odczyt ze sterownika – operator zawsze widzi stan, na który wpływa.",
     ])], "ok", "Dobre praktyki")]))
 
     # ---- 8. Problemy
@@ -464,8 +465,8 @@ def build(icon_bytes):
          "Popraw wskazaną linię pliku i zaimportuj ponownie; szczegóły w GalaxyMcp.log"],
         ["Po zmianie kierunku atrybutu w IDE instancje nie mają adresu", "IDE usuwa adresy atrybutu w instancjach "
          "przy zmianie Read/Write ↔ Write", "Wczytaj ponownie plik instancji (Galaxy Load albo import CSV)"],
-        ["„io musi być Input albo InputOutput”", "Zmienne tylko do zapisu (Write) – celowo wyłączone w trybie Auto "
-         "(Dodatek B)", "Przetwórz ten plik w trybie Manual (pliki CSV)"],
+        ["Plan pokazuje „POMINIĘTE atrybuty Write”", "Zmienne tylko do zapisu (Write) – celowo pomijane w trybie Auto "
+         "(Dodatek B)", "Dodaj je ręcznie w IDE albo zaimportuj pliki CSV (tryb Manual)"],
         ["„W GRAccess brak wartości MxDataType…”", "Twoja wersja GRAccess nie zna tego typu",
          "Zgłoś to osobie utrzymującej projekt (z wersją AVEVA System Platform)"],
         ["„Nie można załadować GRAccess”", "Brak IDE lub nietypowa ścieżka", "Zainstaluj IDE albo podaj ścieżkę DLL w ustawieniach"],
@@ -506,9 +507,11 @@ def build(icon_bytes):
     ], [42 * mm, 82 * mm, 46 * mm]))
     s.append(Spacer(1, 6))
     s.append(box(bullets([
-        "Kierunek wymiany z PLC: <b>Read</b> albo <b>Read/Write</b>. Write jest wyłączony w trybie Auto ze względów "
-        "bezpieczeństwa – zapisuje do sterownika „na ślepo”, bez podglądu stanu. Takie zmienne zakładaj świadomie "
-        "w trybie Manual.",
+        "Kierunek wymiany z PLC: <b>Read</b> albo <b>Read/Write</b>. Zmienne Write tryb Auto pomija ze względów "
+        "bezpieczeństwa – zapisują do sterownika „na ślepo”, bez podglądu stanu. Takie zmienne zakładaj świadomie "
+        "w IDE albo w trybie Manual.",
+        "Wartość początkowa pochodzi z deklaracji w sterowniku (:= …). Bez niej atrybut dostaje wartość z kolumny "
+        "„przykład” (Time bez wartości: czas utworzenia szablonu).",
         "Liczby (Boolean, Integer, Float, Double) wtyczka sprawdza przed zapisem – zła wartość zatrzymuje cały zapis. "
         "Teksty i czas przekazuje do galaktyki bez sprawdzania; błąd pokaże się jako ostrzeżenie w raporcie.",
     ]), "info", "Warto wiedzieć"))
