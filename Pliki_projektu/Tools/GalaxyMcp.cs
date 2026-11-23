@@ -39,7 +39,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.5";
+        public const string Version = "0.2.6";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -1381,8 +1381,21 @@ namespace GalaxyMcp
             string head = method + " (" + m + ") z pliku " + path;
             try { Com.Call(gal, method, path, E("GRLoadMode", m)); }
             catch (GrException) { throw; }
-            catch (Exception ex) { return "BŁĄD: " + head + ": " + ex.Message + Environment.NewLine + Results(gal); }
-            return head + Environment.NewLine + Results(gal);
+            catch (Exception ex)
+            {
+                Log.Error(method + ": " + ex.Message);
+                return "BŁĄD: " + head + ": " + ex.Message + Environment.NewLine + Results(gal);
+            }
+            // GRAccess zgłasza Success dla całej operacji, nawet gdy pojedynczy obiekt się nie zaimportował
+            // (test 2026-11-23: E_FAIL dla szablonu z atrybutami Stan_X i stan_x, a wynik ogólny Success).
+            // Wynik ogólny liczony więc także z komunikatów dla obiektów.
+            var failed = new List<string>();
+            string res = Results(gal, failed);
+            if (failed.Count == 0) return head + Environment.NewLine + res;
+            foreach (var f in failed) Log.Error(method + ": " + f);
+            return "BŁĄD: " + head + ": " + failed.Count + " " + (failed.Count == 1 ? "komunikat" : "komunikaty") +
+                   " z błędem - obiekty z błędem NIE zostały zaimportowane (szczegóły poniżej i w GalaxyMcp.log)." +
+                   Environment.NewLine + res;
         }
 
         public string ExportCsv(string kind, string[] names)
@@ -1426,25 +1439,35 @@ namespace GalaxyMcp
         }
 
         // Wynik ostatniej operacji: CommandResult + lista CommandResults (komunikaty dla poszczególnych obiektów).
-        static string Results(object gal)
+        static string Results(object gal, List<string> failed = null)
         {
             var sb = new StringBuilder();
-            object cr = CR(gal);
-            if (cr != null)
-                sb.AppendLine("Wynik: " + (Prop(cr, "Successful") == "True" ? "OK" : "BŁĄD") + " " +
-                              (Prop(cr, "Text") + " " + Prop(cr, "CustomMessage")).Trim());
+            var items = new StringBuilder();
+            int bad = 0;
             try
             {
                 object list = Com.Get(gal, "CommandResults");
                 int n = 0;
                 foreach (var x in Items(list))
                 {
-                    sb.AppendLine("  - " + (Prop(x, "Successful") == "True" ? "OK   " : "BŁĄD ") +
-                                  (Prop(x, "Text") + " " + Prop(x, "CustomMessage")).Trim());
-                    if (++n >= 300) { sb.AppendLine("  ... (ucięto)"); break; }
+                    bool ok = Prop(x, "Successful") == "True";
+                    string msg = (Prop(x, "Text") + " " + Prop(x, "CustomMessage")).Trim();
+                    if (!ok) { bad++; if (failed != null) failed.Add(msg); }
+                    if (n < 300) items.AppendLine("  - " + (ok ? "OK   " : "BŁĄD ") + msg);
+                    else if (n == 300) items.AppendLine("  ... (ucięto)");
+                    n++;
                 }
             }
             catch { }
+            object cr = CR(gal);
+            if (cr != null)
+            {
+                bool ok = Prop(cr, "Successful") == "True" && bad == 0;
+                sb.AppendLine("Wynik: " + (ok ? "OK" : "BŁĄD") + " " +
+                              (Prop(cr, "Text") + " " + Prop(cr, "CustomMessage")).Trim() +
+                              (bad > 0 ? " (błędy dla obiektów: " + bad + ")" : ""));
+            }
+            sb.Append(items);
             return sb.ToString();
         }
 

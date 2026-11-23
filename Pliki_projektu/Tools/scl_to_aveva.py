@@ -44,7 +44,7 @@ Zasady:
   * Opisy (komentarze // z TIA) też NIE są skracane - trafiają do Description w pełnej długości.
   * Kierunek I/O: prefiks dopasowywany do nazwy zmiennej w SCL (liścia), nie do nazwy spłaszczonej.
     Input = Read (ReadOnly), InputOutput = Read/Write (ReadWrite), Output = Write (WriteOnly: SCADA tylko
-    zapisuje, adres w OutputDest zamiast InputSource; format niepotwierdzony eksportem z IDE, tryb Auto
+    zapisuje, adres w OutputDest zamiast InputSource; format zgodny z eksportem z IDE, tryb Auto
     - GalaxyMCP - go nie obsługuje).
   * Adres (InputSource / OutputDest) wg dokumentacji drivera OI SIDirect (adresowanie symboliczne):
     <obiekt DI>.<grupa skanowania>.<item>, item = [DB].[Tag]<[i]>.[Member]; nazwy ze spacją lub kropką
@@ -482,8 +482,8 @@ def build_spec(udt, attrs, instances, plc, scan_group, source, warn, no_address=
             entry["output_dest"] = {a["name"]: adr[a["name"]] for a in attrs if a["io"] == "Output"}
         out.append(entry)
     if any(a["io"] == "Output" for a in attrs):
-        warn.append("atrybuty Output (Write, #IO.Mode=WriteOnly, adres w OutputDest): format niepotwierdzony "
-                    "eksportem z IDE; tryb Auto (GalaxyMCP) ich nie obsługuje - użyj trybu Manual")
+        warn.append("atrybuty Output (Write, #IO.Mode=WriteOnly, adres w OutputDest): tryb Auto (GalaxyMCP) "
+                    "ich nie obsługuje - użyj trybu Manual")
     tpl = "$" + template_prefix + clean_name(udt, warn)
     return {
         "spec_version": SPEC_VERSION,

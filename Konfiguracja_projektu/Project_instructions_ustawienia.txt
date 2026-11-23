@@ -159,11 +159,11 @@ Auto: zakończ pytaniem o zgodę na zapis. Manual: dopisz skrótem import w IDE:
 1. Pobierz pliki z wątku albo z Library, nazw nie zmieniaj.
 2. Szablony: `Galaxy` → `Import` → `Object(s)…`; przy wielu typach najpierw typ zawierany. Szablon nie może być otwarty ani wyewidencjonowany. Przy konflikcie nazw: `Replace entire template`, gdy szablon nie ma ręcznych dodatków; gdy ma – najpierw eksport kopii, potem `Overwrite Wizards, and update attributes and linked content`.
 3. Instancje: `Galaxy` → `Galaxy Load…` → `Instances_{UDT}.csv`.
-4. Sprawdź jeden obiekt (`#IO.Mode`, `InputSource` / `OutputDest`), potem check in i deploy.
+4. Sprawdź jeden obiekt (`#IO.Mode`, `InputSource` / `OutputDest`), potem check in i deploy. Zmiana kierunku atrybutu w IDE kasuje jego adresy w instancjach – wtedy ponownie Galaxy Load.
 
 ---
 
-## 5. Tryb Auto – GalaxyMCP 0.2.5
+## 5. Tryb Auto – GalaxyMCP 0.2.6
 
 GalaxyMCP to rozszerzenie Claude Desktop (`GalaxyMcp.mcpb`, instalacja: `Tools/GalaxyMcp_README.md`, sekcja 4) na komputerze użytkownika z AVEVA System Platform 2026. Narzędzia w wątku: `mcp__remote-devices__GalaxyMCP__*` – szukaj przez ToolSearch „galaxy_status”. Wątek widzi je, gdy jest połączony z tym komputerem, a Claude Desktop działa. Gdy ich brak – poproś o połączenie wątku z komputerem (karta połączenia urządzenia, np. `connect_device`) i szukaj ponownie.
 
@@ -174,7 +174,7 @@ GalaxyMCP to rozszerzenie Claude Desktop (`GalaxyMcp.mcpb`, instalacja: `Tools/G
 | `list_objects` / `get_object` | obiekty wg wzorca (`%`) / atrybuty obiektu (np. `InputSource`) | nie |
 | `export_csv` | eksport szablonu lub instancji do CSV | nie |
 | `apply_spec` | plan (`dry_run=true`) albo zapis specyfikacji | `dry_run=false` |
-| `import_csv` / `deploy` | import CSV / wdrożenie (`GALAXY_ALLOW_DEPLOY=1`) – nietestowane | tak |
+| `import_csv` / `deploy` | import CSV / wdrożenie (`GALAXY_ALLOW_DEPLOY=1`, nietestowane) | tak |
 
 Procedura:
 
@@ -194,6 +194,7 @@ Gdy coś nie działa:
 - Serwer znika bez komunikatu → program ochronny (np. Securden) zablokował `GalaxyMcp.exe` – użytkownik zatwierdza aplikację lub prosi IT o regułę.
 - „brak metody/właściwości” → `GalaxyMcp.exe --dump-api` i porównanie z `GRAccess_API.txt`.
 - „io musi być Input albo InputOutput” → atrybuty Output: tryb Manual.
+- `import_csv` zwraca `BŁĄD:` → obiekty z błędem nie zostały zaimportowane; pokaż komunikaty (np. E_FAIL w linii N).
 
 ---
 
