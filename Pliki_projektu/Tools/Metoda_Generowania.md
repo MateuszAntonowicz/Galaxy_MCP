@@ -1,4 +1,4 @@
-# Metoda generowania (UDT_Mixer 2026-09-16; tryb Auto 2026-09-16; pliki .udt/.db z zagnieżdżonymi UDT 2026-09-17; porządki w opisie 2026-09-17; przedrostek nazwy szablonu 2026-09-17; sprzątanie plików projektu 2026-09-17; pełne nazwy atrybutów, szablonów i instancji oraz pełne opisy bez skracania 2026-09-18; kierunek Output (Write) i kontrola Permissions.csv 2026-09-22; pełna obsługa plików .db 2026-09-23)
+# Metoda generowania – TIA Portal SCL → AVEVA System Platform 2026
 
 Narzędzie: `Tools/scl_to_aveva.py` (samodzielne, bez zależności).
 
@@ -12,7 +12,7 @@ Pliki wejściowe:
 
 - `*.udt` / `*.scl` – bloki `TYPE "<UDT>" ... STRUCT ... END_TYPE`; **może być ich wiele w jednym pliku**. Każdy typ = jeden szablon.
 - `*.db` – bloki `DATA_BLOCK "<DB>" ... VAR ... END_VAR`; każdy element typu UDT = jedna instancja tego szablonu.
-  Jeden plik może mieć wiele bloków danych (np. `Mieszalnik_1`, `Mieszalnik_2`). Obsługiwane układy DB (od 2026-09-23):
+  Jeden plik może mieć wiele bloków danych (np. `Mieszalnik_1`, `Mieszalnik_2`). Obsługiwane układy DB:
 
 | Układ w DB | Nazwa instancji | Adres (item) |
 | :--- | :--- | :--- |
@@ -46,8 +46,29 @@ python scl_to_aveva.py MA_Mixer.scl --permissions Permissions.csv --plc S7C_01 -
 ```
 
 Dla każdego wybranego typu powstaje osobny zestaw: `Spec_<UDT>.json`, `<nazwa szablonu>.csv` (`$t_<UDT>.csv`, a przy `--template-prefix ""` `$<UDT>.csv`), `Instances_<UDT>.csv`.
-Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), więc tryb Auto wykonuje po jednym
-`apply_spec` na typ – serwer GalaxyMCP nie wymaga zmian (nazwę szablonu bierze z `template.name`, więc przedrostek działa w obu trybach).
+Specyfikacja ma `spec_version` 1 i jeden szablon w pliku, więc tryb Auto wykonuje po jednym `apply_spec` na typ
+(serwer bierze nazwę szablonu z `template.name`, więc przedrostek działa w obu trybach).
+
+## Mapowanie typów (bez względu na wielkość liter)
+
+| Siemens | AVEVA | Wartość domyślna |
+| :--- | :--- | :--- |
+| `Bool` | `MxBoolean` | `false` |
+| `Real` | `MxFloat` | `0.0` |
+| `LReal` | `MxDouble` | `0.0` |
+| `SInt`, `Int`, `DInt`, `USInt`, `UInt`, `UDInt`, `Byte`, `Word`, `DWord` | `MxInteger` | `0` |
+| `LInt`, `LWord`, `ULInt` | `MxInteger` (64 bity w 32-bitowym MxInteger – ostrzeżenie o zakresie) | `0` |
+| `String`, `String[n]`, `WString`, `Char`, `WChar` | `MxString` | puste |
+| `Time` | `MxElapsedTime` (sufiks `T`) | puste |
+| `LTime`, `S5Time`, `Time_Of_Day`, `Date` | `MxTime` tylko do odczytu (sufiksy `LT`, `S5T`, `TOD`, `D`) | puste |
+| `LDT`, `Date_And_Time` | `MxTime` zapisywalne z sufiksem (`LDT`, `DT`) | puste |
+| `DTL`, `LTime_Of_Day` | `MxTime` **bez sufiksu** – driver go nie podaje (DTL to struktura `.YEAR`, `.MONTH`…); ostrzeżenie „sprawdź w Object Viewer” | puste |
+
+- Ta tabela i słownik `TYPES` w `scl_to_aveva.py` to jedyne miejsca mapowania typów – każda zmiana idzie w obu naraz.
+- Typy czasowe z sufiksem driver pozwala tylko czytać. Atrybut zapisywalny (`InputOutput` albo `Output`) dostaje ten sam item
+  **bez sufiksu** i typ `MxInteger` w jednostce drivera (Time/S5Time/Time_Of_Day: ms, LTime: ns, Date: dni od 1990-01-01).
+  `LDT` i `Date_And_Time` są zapisywalne z sufiksem.
+- Pomijane bez ostrzeżenia: wartości początkowe (`:= ...`), atrybuty `{ ... }`, komentarze bez deklaracji.
 
 ## Kierunek I/O i `Permissions.csv`
 - Trzy kierunki (nazwy jak w IDE w nawiasie):
@@ -68,7 +89,9 @@ Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), w
 - Separator: przecinek albo średnik (Excel z polskimi ustawieniami) – wykrywany z pierwszych dwóch linii.
 - `Access_Mode` bez względu na wielkość liter i spacje; przyjmowane też nazwy z IDE: `Read`, `Read/Write`, `Write`.
   Nieznana wartość → reguła pominięta z ostrzeżeniem. `--rules` z nieznanym trybem → przerwanie.
-- Brak pliku i brak `--rules` → reguły awaryjne `DEFAULT_RULES` (`Cmd_`, `Set_`, `Cfg_`, `Par_` → InputOutput).
+- Brak pliku i brak `--rules` → reguły awaryjne `DEFAULT_RULES` (`Cmd_`, `Set_`, `Cfg_`, `Par_` → InputOutput) i ostrzeżenie
+  o braku pliku – przekaż je użytkownikowi.
+- Category zawsze `MxCategoryWriteable_USC_Lockable`.
 
 ## Specyfikacja `Spec_<UDT>.json` (spec_version 1) – format pośredni
 - WSZYSTKIE decyzje (typy, wartości domyślne, kierunek I/O, format adresu, nazwa szablonu) zapadają w `build_spec()`.
@@ -78,8 +101,8 @@ Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), w
 - `instances[]`: `name`, `area`, `security_group`, `plc`, `db`, `input_source{atrybut: adres}` (atrybuty Input i InputOutput,
   adres już złożony) oraz – tylko gdy szablon ma atrybuty Output – `output_dest{atrybut: adres}`.
 - `warnings[]`: pominięte elementy SCL, problemy z Permissions.csv, zmiany i kolizje nazw, uwaga o atrybutach Output.
-- Zmiana formatu specyfikacji = podbicie `spec_version` w skrypcie i w serwerze (`Spec.Parse`). `output_dest` jest polem
-  opcjonalnym (bez Output specyfikacja jest taka jak wcześniej), więc `spec_version` zostaje 1.
+- `output_dest` jest polem opcjonalnym (występuje tylko przy atrybutach Output).
+- Zmiana formatu specyfikacji = podbicie `spec_version` w skrypcie i w serwerze (`Spec.Parse`).
 
 ## Szablon `<nazwa szablonu>.csv` (domyślnie `$t_<UDT>.csv`)
 - Nagłówek i opcje importu skopiowane 1:1 z `t_SampleUDT.csv`. Deklaracja: `$<toolset>\<name>{<security_group>} -> <base>`.
@@ -90,10 +113,20 @@ Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), w
 - Bool → `#IO.InvertValue=Disabled,MxUnLocked`. Float/Integer (Input, InputOutput) → `#IO.Deadband=0.0,MxUnLocked,MxSecurityConfigure`;
   dla Output bez deadbandu (dotyczy odczytu).
 - Extended wg tabeli w sekcji „Kierunek I/O”. Pominięte: `WriteStatus`, `WriteValue` (wartości runtime).
-- Na końcu puste bloki Graphical Content / Wizard Assets / Associations / Settings.
+- Bloki w kolejności: `&User-defined Attributes` → `&Extended Attributes` → puste `&Graphical Content`, `&Wizard Assets`,
+  `&Wizard Associations`, `&Wizard Settings`, rozdzielone liniami `#====...`.
+- Szablon nie zawiera adresów PLC (`InputSource` / `OutputDest` puste).
+- Po imporcie IDE samo wstawia wartości domyślne: MxElapsedTime `00:00:00.0000000`, MxTime = moment utworzenia,
+  `InputSource` = `---Auto---`. Eksport szablonu z IDE ma też wiersze `WriteStatus`/`WriteValue` – przy porównaniu z plikiem
+  generatora to nie są różnice.
 
 ## Adresy (InputSource / OutputDest) – wg dokumentacji drivera OI SIDirect
 Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OISIDIR.pdf`).
+
+**Zakres:** driver **SIDirect** (adresowanie symboliczne, S7-1200/1500). Inne obiekty Device Integration – `$OPCClient`
+(OPC UA), `$DDESuiteLinkClient`, `$InTouchProxy` – są poza zakresem; jeśli w galaktyce komunikacja idzie przez nie, zanotuj to,
+ale nie przerabiaj adresów bez decyzji użytkownika. Driver waliduje itemy z opóźnieniem, więc zły adres nie musi od razu dać
+błędu – sprawdzenie adresów na żywym sterowniku wpisuj w „Do sprawdzenia”, dopóki użytkownik go nie potwierdzi.
 
 - Pełny adres: **`<obiekt DI>.<grupa skanowania>.<item>`**, np. `S7C_01.SG1.Mieszalnik_1.Zawor_Wody.stan.Stan_Aktywny`.
   Obiekt DI podaje `--plc` (bez niego generator przerywa), grupę skanowania `--scan-group` (brak = ostrzeżenie).
@@ -119,97 +152,56 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
 ## Instancje `Instances_<UDT>.csv`
 - Format Galaxy Load: `:TEMPLATE=<nazwa szablonu ze specyfikacji>` (`$t_<UDT>` albo `$<UDT>`), kolumny `Tagname,Area,SecurityGroup,<Attr>.InputSource…`
   (dla atrybutów Output: `<Attr>.OutputDest`), w kolejności atrybutów szablonu.
-- Bez adresów (`--no-address`, wszystkie adresy puste) plik ma **tylko** `Tagname,Area,SecurityGroup` – wg wzorca użytkownika
-  `Instances_UDT_Naped_2stany.csv` (2026-09-23); puste kolumny `<Attr>.InputSource` nadpisałyby wartości z szablonu.
+- Bez adresów (`--no-address`, wszystkie adresy puste) plik ma **tylko** `Tagname,Area,SecurityGroup` – puste kolumny
+  `<Attr>.InputSource` nadpisałyby wartości z szablonu.
 - Area puste, SecurityGroup `Default`.
 - Nazwy kolumn `<Attr>.InputSource` / `<Attr>.OutputDest` mają pełne nazwy atrybutów (bez skracania).
 - Ścieżka PLC zachowuje strukturę DB (NIE nazwę spłaszczoną):
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer GalaxyMCP (aktualna wersja 0.2.5; rozszerzenie .mcpb, AVEVA System Platform 2026)
+## Tryb Auto – serwer GalaxyMCP 0.2.5 (rozszerzenie .mcpb, AVEVA System Platform 2026)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.
-  Pliki testowe serwera (`test.bat`, `test_write.bat`, `*_requests.jsonl`, testowa `Spec_UDT_Mixer_Advanced.json`), przykład
-  `claude_desktop_config.json` i gotowy PDF instrukcji **nie są trzymane w projekcie** (2026-09-17) – sposób testowania i wzór
-  konfiguracji są opisane w README (sekcje 2 i 3), a brakujące pliki agent odtwarza na czacie.
+  Pliki testowe serwera (`test.bat`, `test_write.bat`, `*_requests.jsonl`, testowa specyfikacja), przykład
+  `claude_desktop_config.json` i gotowy PDF instrukcji **nie są trzymane w projekcie** – sposób testowania i wzór
+  konfiguracji są w README (sekcje 2 i 3); potrzebne pliki agent tworzy w `Wyniki/`.
   Instalacja na kolejnych komputerach: paczka `GalaxyMcp.mcpb` (README, sekcja 4). Po pobraniu na komputer usuń z plików pomocniczych przedrostek `GalaxyMcp_`
   (np. `build.bat`, `README.md`); `GalaxyMcp.cs` zostaje bez zmian, bo `build.bat` oczekuje tej nazwy.
 - C# 5 / .NET Framework 4.x, budowany `build.bat` (wbudowany csc, `/codepage:65001`, domyślnie x86). GRAccess ładowany w czasie działania,
   wywołania przez interfejsy interop (wiązanie wczesne, klasa `Com`).
 - Narzędzia: `galaxy_status`, `list_galaxies`, `select_galaxy`, `list_objects`, `get_object`, `export_csv`, `apply_spec`
-  (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` obowiązkowe przy zapisie od 0.2.5), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
+  (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` obowiązkowe przy każdym zapisie), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
 - `apply_spec`: tworzy brakujący szablon i dopisuje brakujące UDA (+ `inputextension`/`inputoutputextension`); tworzy brakujące instancje; zmienia tylko różniące się `InputSource`. Niczego nie usuwa. CheckOut → Save → CheckIn, przy błędzie UndoCheckOut. Log zapisów: `GalaxyMcp.log`.
   Kierunku Output (`outputextension`, `OutputDest`) serwer nie obsługuje – specyfikację z `io=Output` odrzuca w `Spec.Parse`.
-- Od GalaxyMCP 0.2.2 serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
+- Serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
   (`[A-Za-z_][A-Za-z0-9_]*`, szablon z `$`). Ewentualne ograniczenie galaktyki zgłosi GRAccess przy zapisie.
-- W sesji Cowork narzędzia serwera zarejestrowanego w Claude Desktop pojawiają się z przedrostkiem
-  `mcp__remote-devices__GalaxyMCP__` (rozszerzenie `.mcpb`) albo `mcp__remote-devices__galaxy__` (ręczny wpis).
+- W wątku połączonym z komputerem użytkownika narzędzia serwera mają przedrostek
+  `mcp__remote-devices__GalaxyMCP__` (rozszerzenie `.mcpb`) albo `mcp__remote-devices__galaxy__` (ręczny wpis w konfiguracji).
 - Procedura agenta: spec → `apply_spec` dry_run → pokazać plan → zapis dopiero po potwierdzeniu → deploy tylko na wyraźne polecenie.
-
-## Weryfikacja (2026-09-17, galaktyka test_mcp)
-- Tryb Auto (GalaxyMCP 0.1.5, apply_spec) utworzył szablon i 3 instancje; eksport IDE szablonu jest zgodny z `$t_<UDT>.csv`
-  generatora we wszystkich kolumnach poza wartościami domyślnymi nadawanymi przez IDE:
-  MxElapsedTime → `00:00:00.0000000`, MxTime → czas utworzenia, `InputSource` → `---Auto---` (generator: puste).
-  Eksport IDE zawiera też wiersze runtime `WriteStatus`/`WriteValue` – generator celowo ich nie tworzy.
-- Adresy tablic `X[i]` i ścieżki struktur `A.B` są przyjmowane przez GRAccess jako `InputSource` (bez błędów zapisu).
-  Poprawność względem drivera PLC nadal niesprawdzona (brak sterownika).
-- 2026-09-17 (porządki w opisie): sprawdzono plikiem brzegowym (nazwa ze spacją, `Temp-1`, tablica 2D, indeks ujemny,
-  granice ze stałej, `Variant`, DTL, Time RW, nazwa > 32 znaków, DB z tablicą UDT i skalarem): nagłówek szablonu
-  jest identyczny z `t_SampleUDT.csv` (78 linii), wszystkie wiersze mają zgodną liczbę kolumn (UDA/Extended: 53),
-  pominięcia i zmiany nazw wychodzą jako ostrzeżenia.
-- 2026-09-17 (przedrostek nazwy szablonu): `--template-prefix ""` daje pliki `$<UDT>.csv` i deklarację
-  `$Application\$<UDT>{Default} -> $UserDefined`; bez parametru wynik jest taki jak wcześniej (`$t_<UDT>.csv`).
-  Zgodność z importem w IDE dla nazw bez `t_` – do sprawdzenia przy pierwszym imporcie.
-- 2026-09-18 (pełne nazwy atrybutów): decyzja użytkownika – nazwy zmiennych nie są ograniczone do 32 znaków.
-  Test: atrybut `stan_Stan_Blokada_Przyczyna_Slownik_Bardzo_Dlugi` (48 znaków) trafia bez zmian do szablonu,
-  do kolumny `…InputSource` w instancjach i do specyfikacji; kolizja `Temp-1`/`Temp[1]` nadal daje `Temp_1_1`;
-  Nagłówek szablonu zgodny z `t_SampleUDT.csv`, liczba kolumn 53. Pierwszy import długiej nazwy w IDE / GRAccess – do potwierdzenia.
-- 2026-09-18 (pełne nazwy obiektów): limit 32 znaków zniesiony także dla szablonów i instancji (generator + GalaxyMCP 0.2.2).
-  Test: instancja `DB_Bardzo_Dluga_Nazwa_Bloku_Danych_Element_Instancji_Z_Dluga_Nazwa` (66 znaków) bez skracania
-  w `Instances_<UDT>.csv` i specyfikacji. Czy galaktyka przyjmuje tagname > 32 znaków – do sprawdzenia przy pierwszym zapisie.
-- 2026-09-18 (pełne opisy): komentarz z TIA dłuższy niż 200 znaków trafia do Description w całości (szablon CSV,
-  specyfikacja, tryb Auto). Czy IDE/GRAccess mają własny limit długości opisu – do sprawdzenia.
-- 2026-09-23 (pełna obsługa .db): pliki użytkownika `przykładowa_struktura.udt` + `Napedy.db` (DB_Napedy: Pompa_01, Pompa_02,
-  Mieszadlo_01 typu `UDT_Naped_2stany`) przy `--no-address --template-prefix ""` dają `Instances_UDT_Naped_2stany.csv`
-  bajt w bajt jak wzorzec użytkownika, szablon bez zmian; z adresami wynik identyczny jak przed zmianą. Nowe przypadki
-  (DB typu UDT, UDT w STRUCT, tablica STRUCT z UDT, DB instancyjny FB, sekcja BEGIN z wartościami, komentarz po `Struct`
-  bez średnika, wartość tekstowa z `//`) – poprawne instancje i adresy, zgodna liczba kolumn. Regresja: pliki CSV z testu
-  2026-09-23 (typy.udt + bloki.db) bajt w bajt bez zmian. Galaktyka przyjmuje nazwy > 32 znaków (potwierdził użytkownik).
-- 2026-09-22 (kierunek Output): szablon bez reguł Output jest bajt w bajt taki jak wcześniej (porównanie z wynikiem wzorcowym
-  paczki UDT_to_CSV przy `--no-address --template-prefix ""`). Z regułą `Komenda_=Write`: `#IO.Mode=WriteOnly`, jeden wiersz
-  `OutputDest` (PrimitiveType `Output`), w instancjach kolumna `stan_Komenda_HMI_Aktywuj.OutputDest` z adresem
-  `attribute(...)`; `--from-spec` odtwarza te same pliki. Plik reguł ze średnikami działa, nagłówek `Prefix_` przerywa generator.
-  Import atrybutu Write w IDE – do potwierdzenia.
 
 ## Wspólne
 - Kodowanie CSV: UTF-8 z BOM, końce linii CRLF. Specyfikacja JSON: UTF-8 bez BOM.
-- Typy AVEVA wg tabeli Auto-Build drivera: `LReal` → `MxDouble`, `Time` → `MxElapsedTime` (sufiks `T`),
-  `LTime`/`S5Time`/`Time_Of_Day`/`Date` → `MxTime` tylko do odczytu (sufiksy `LT`/`S5T`/`TOD`/`D`),
-  `LDT`/`Date_And_Time` → `MxTime` zapisywalne z sufiksem (`LDT`/`DT`), `LInt`/`LWord`/`ULInt` → `MxInteger`
-  (64 bity w 32-bitowym MxInteger – ostrzeżenie). `DTL` i `LTime_Of_Day` → `MxTime` **bez sufiksu**: driver nie podaje
-  dla nich sufiksu (DTL to struktura `.YEAR`, `.MONTH`…), więc generator dodaje ostrzeżenie „sprawdź w Object Viewer”.
-  Pełna tabela jest w dwóch miejscach i tylko tam: instrukcja projektu (sekcja 2) i słownik `TYPES` w `scl_to_aveva.py`
-  (dawny `TypeMapping.json` usunięto 2026-09-17 jako trzecią, nieużywaną kopię). Szczegóły drivera: `ITERACJE/tmp_OI_SIDirect_adresowanie.md`.
+- Typy AVEVA: sekcja „Mapowanie typów”. Szczegóły drivera: `ITERACJE/tmp_OI_SIDirect_adresowanie.md`.
 - STRUCT w STRUCT → `A_B`. `String[n]` → String. Nieobsługiwane typy są pomijane z ostrzeżeniem.
 - **Zagnieżdżone UDT** (`stan : "UDT_urzadzenie_stany"`) są rozwijane rekurencyjnie z definicji podanych w plikach:
   atrybut `stan_Stan_Aktywny`, adres `stan.Stan_Aktywny`. Brak definicji typu → pominięcie z ostrzeżeniem.
   Rekurencja (typ w sobie samym) jest przerywana i zgłaszana.
 - **Tablice UDT i STRUCT** też są rozwijane: `Subs : Array[1..3] of "UDT_Sub"` → `Subs_1_Val`, adres `Subs[1].Val`.
 - **Nazwy z TIA** są czyszczone do wymagań AVEVA: spacje są usuwane, polskie litery zamieniane na litery bez ogonków
-  (`Prędkość` → `Predkosc`, od 0.2.5), a pozostałe znaki inne niż litera, cyfra i `_` na `_`
+  (`Prędkość` → `Predkosc`), a pozostałe znaki inne niż litera, cyfra i `_` na `_`
   (`"Komenda_HMI_ Aktywuj"` → `Komenda_HMI_Aktywuj`, `Temp-1` → `Temp_1`). Tak samo czyszczone są nazwa szablonu
   (`TYPE "UDT Mój typ"` → `$t_UDTMojtyp`; nazwy typów i DB w cudzysłowie mogą mieć spacje) i nazwy z `--instances`. Adres w PLC zachowuje
   oryginalną nazwę w cudzysłowie (`stan."Komenda_HMI_ Aktywuj"`, `"Temp-1"`). Każda zmiana nazwy jest w ostrzeżeniach.
   Czyszczenie może dać nazwę, która już istnieje (`Temp-1` i `Temp[1]` → `Temp_1`) – druga dostaje licznik
   (`Temp_1_1`) z ostrzeżeniem „koliduje z inną nazwą”. Kolizje są wykrywane bez rozróżniania wielkości liter
-  (od 0.2.5: `Stan_X` i `stan_x` → `Stan_X`, `stan_x_1`), bo AVEVA i serwer GalaxyMCP traktują je jako tę samą nazwę.
-- **Nazwy atrybutów nie są skracane** (od 2026-09-18): atrybut ma pełną spłaszczoną nazwę, np.
+  (`Stan_X` i `stan_x` → `Stan_X`, `stan_x_1`), bo AVEVA i serwer GalaxyMCP traktują je jako tę samą nazwę.
+- **Nazwy atrybutów nie są skracane**: atrybut ma pełną spłaszczoną nazwę, np.
   `stan_Stan_Blokada_Przyczyna_Slownik_Bardzo_Dlugi`, taką samą w szablonie, w kolumnie `<Attr>.InputSource`
   instancji i w specyfikacji. Licznik dostaje tylko nazwa kolidująca z inną (patrz wyżej). Opis atrybutu to sam komentarz z TIA.
 - **Opis atrybutu**: komentarz `//` sklejony do jednej linii, bez otaczających cudzysłowów, **w pełnej długości –
-  bez skracania** (od 2026-09-18; wcześniej był przycinany do 200 znaków z „...”).
+  bez skracania**.
 - Tablice (stałe granice, także wielowymiarowe): `Array[1..3] of X` → atrybuty `X_1..X_3`, adresy `X[1]..X[3]`.
   Indeks ujemny: `Array[-1..1]` → `X_m1, X_0, X_1` (`-` niedozwolony w nazwie atrybutu), adres `X[-1]`.
   Tablica wielowymiarowa: `Array[1..2, 0..1] of Real` → `Siatka_1_0`… , adres `Siatka[1,0]` (indeksy w jednym nawiasie).
@@ -222,16 +214,17 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   Pozostałe zasady pliku reguł: sekcja „Kierunek I/O i `Permissions.csv`”.
 - Reguły prefiksów: dopasowanie do nazwy LIŚCIA (zmiennej w SCL, bez prefiksów struktur nadrzędnych), wielkość liter ma znaczenie,
   pierwsze dopasowanie wygrywa. Brak dopasowania → Input.
-- **Nazwy szablonów i instancji też nie są skracane** (od 2026-09-18) – generator nie ma żadnego limitu długości nazw,
-  serwer GalaxyMCP od 0.2.2 również. Galaktyka przyjmuje nazwy dłuższe niż 32 znaki (potwierdzone 2026-09-23).
+- **Nazwy szablonów i instancji też nie są skracane** – ani generator, ani serwer GalaxyMCP nie mają limitu długości nazw.
+  Galaktyka przyjmuje nazwy dłuższe niż 32 znaki – nie zgłaszaj tego w „Do sprawdzenia”.
 - Instancje z `.db`: nazwa `<DB>_<element>` (pełna, bez skracania), adres `<DI>.<SG>.<DB>.<element>.<ścieżka w UDT>`.
   Tablica elementów w DB daje kilka instancji (`DB_Tablica_1`, `DB_Tablica_2`); UDT w STRUCT i DB typu UDT – tabela w „Pliki wejściowe”.
 - Pola CSV są cytowane zgodnie z RFC 4180 (`csv.writer`), bo opisy z TIA zawierają przecinki i cudzysłowy,
   a adresy nazw ze spacją mają cudzysłowy. Do sprawdzenia w IDE: czy import przyjmuje cytowane pola
   (w trybie Auto problem nie występuje – wartości idą przez GRAccess, nie przez CSV).
 - Kontrola: każdy wiersz danych ma tyle kolumn co nagłówek (UDA/Extended: 53).
-- Wygenerowane pliki CSV i specyfikacje oddawać tylko na czacie. NIE zapisywać ich w projekcie i nie dodawać przedrostka `tmp_`.
+- Wygenerowane pliki CSV i specyfikacje zapisuj tylko w `Wyniki/<RRRR-MM-DD>_<UDT>/` i dołączaj do odpowiedzi w wątku.
+  Nie zapisuj ich w `Tools/`, `ITERACJE/` ani w katalogu głównym i nie dodawaj przedrostka `tmp_`.
 - Narzędzia potrzebne do działania projektu (skrypt, opis metody, pliki serwera) są w `Tools/` bez przedrostka `tmp_`.
 - Przedrostek `tmp_` (folder `ITERACJE/`) tylko dla notatek: ustalenia, historia wdrożenia, kopia instrukcji.
 - Zanim dopiszesz nowy plik do projektu, sprawdź, czy jego treści nie ma już w instrukcji, tym opisie albo README serwera.
-  Duplikat, którego nic nie czyta, rozjeżdża się z resztą – lepiej oddać taki plik na czacie.
+  Duplikat, którego nic nie czyta, rozjeżdża się z resztą – taki plik oddaj w `Wyniki/`.

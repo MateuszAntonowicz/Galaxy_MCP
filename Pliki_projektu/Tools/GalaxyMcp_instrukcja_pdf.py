@@ -2,8 +2,8 @@
 """
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
-Stan na 2026-11: nowe projekty Claude (zakładka Code → Projects: rozmowa projektu + wątki, Biblioteka plików,
-połączenie wątku z komputerem) i wtyczka 0.2.5.
+Dotyczy projektów Claude (zakładka Code → Projects: rozmowa projektu + wątki, Library,
+połączenie wątku z komputerem) i wtyczki 0.2.5.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -203,8 +203,7 @@ def on_page(c, doc):
 
 
 # Ponowne uruchomienie wtyczki po zmianie ustawień - jedno miejsce, używane w rozdz. 3, 4 i 8.
-# 2026-09-18 (wersja 0.2.2): po wyłączeniu i włączeniu Enabled status nadal pokazywał stare listy galaktyk -
-# samo przełączenie nie zamyka procesu GalaxyMcp.exe, który czyta ustawienia tylko przy starcie.
+# Samo przełączenie Enabled nie zamyka procesu GalaxyMcp.exe, który czyta ustawienia tylko przy starcie.
 RESTART_SHORT = ("wyłącz Enabled, zrestartuj komputer (albo zakończ wszystkie procesy GalaxyMcp.exe "
                  "w Menedżerze zadań) i włącz Enabled")
 
@@ -281,7 +280,7 @@ def build(icon_bytes):
          "GRAccess) i dostępem do serwera galaktyk (Galaxy Repository)", "IDE otwiera galaktykę, z którą chcesz pracować"],
         [".NET Framework", "4.x (jest w każdym Windows 10/11)", "–"],
         ["Claude Desktop", "Aktualna wersja aplikacji, zalogowana na Twoje konto i <b>uruchomiona na tym komputerze</b> "
-         "w czasie pracy w trybie Auto. Plan <b>Pro, Max lub Ultra</b> (nowe projekty są w becie i nie ma ich jeszcze "
+         "w czasie pracy w trybie Auto. Plan <b>Pro, Max lub Ultra</b> (projekty są w becie i nie ma ich jeszcze "
          "w planach Team i Enterprise).", "Zakładka <b>Code</b> → w lewym pasku <b>Projects</b> (albo pod <b>More</b>)"],
         ["Projekt UDT->CSV", "Projekt z plikami i instrukcją konwersji (założenie: instrukcja „Instrukcja działania "
          "projektu UDT->CSV”, rozdział 3)", "Projekt widoczny na liście <b>Projects</b>"],
@@ -299,11 +298,11 @@ def build(icon_bytes):
         f"<b>Install Extension…</b>, a następnie wskaż plik {code('GalaxyMcp.mcpb')}.",
         "W oknie instalacji sprawdź nazwę <b>GalaxyMCP</b> i listę 9 narzędzi, potwierdź instalację.",
         "Wypełnij formularz ustawień (rozdział 3) i zapisz.",
-        "Upewnij się, że przełącznik <b>Enabled</b> jest włączony. Jeśli wtyczka działała już wcześniej "
-        "(np. aktualizacja do nowej wersji), uruchom ją ponownie tak, jak po zmianie ustawień (rozdział 3).",
+        "Upewnij się, że przełącznik <b>Enabled</b> jest włączony. Jeśli na tym komputerze wtyczka była już "
+        "zainstalowana, uruchom ją ponownie tak, jak po zmianie ustawień (rozdział 3).",
     ])
-    s.append(box("<b>Aktualizacja do nowej wersji:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastąpi "
-                 "poprzednią wersję, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
+    s.append(box("<b>Aktualizacja wtyczki:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastępuje on "
+                 "zainstalowaną wtyczkę, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
                  "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.5.", "info"))
     s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń. Tam znajdziesz też plik "
                  f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów).", "info"))
@@ -433,7 +432,7 @@ def build(icon_bytes):
          "zamknięty lub komputer uśpiony, wtyczka wyłączona albo wątek założony przed instalacją",
          "Uruchom Claude Desktop i sprawdź Enabled; w wątku poproś „Połącz się z moim komputerem” i zatwierdź kartę; "
          "jeśli nie pomoże – poproś w rozmowie projektu o nowy wątek"],
-        ["Brak Projects w zakładce Code", "Plan bez nowych projektów (np. Team/Enterprise) albo beta jeszcze nie "
+        ["Brak Projects w zakładce Code", "Plan bez projektów (np. Team/Enterprise) albo beta jeszcze nie "
          "dotarła na konto", "Sprawdź pod More; zaktualizuj Claude Desktop; w razie potrzeby pracuj w trybie Manual "
          "u osoby z dostępem"],
         ["Wtyczka znika bez komunikatu", "Oprogramowanie ochronne zablokowało GalaxyMcp.exe",
@@ -441,7 +440,7 @@ def build(icon_bytes):
         ["Status pokazuje stare ustawienia mimo przełączenia Enabled",
          "Stary proces GalaxyMcp.exe nadal działa – samo przełączenie Enabled go nie zamyka",
          f"{RESTART_SHORT[0].upper()}{RESTART_SHORT[1:]} (rozdział 3)"],
-        ["GalaxyMcp.exe działa w tle po wyłączeniu wtyczki", "Proces nie zakończył się sam (zdarza się także w nowszych wersjach)",
+        ["GalaxyMcp.exe działa w tle po wyłączeniu wtyczki", "Proces nie zakończył się sam",
          "Menedżer zadań → Szczegóły → zakończ każdy GalaxyMcp.exe albo zrestartuj komputer"],
         ["„Nie wybrano galaktyki”", "Puste pole „Galaktyka na start”", "Wpisz galaktykę w ustawieniach albo poproś o przełączenie"],
         ["„Zapis … zablokowany”", "Tylko odczyt lub galaktyka spoza listy zapisu",
@@ -453,8 +452,6 @@ def build(icon_bytes):
         ["„istnieje, ale pochodzi z …”", "Instancja o tej nazwie ma inny szablon", "Zmień nazwę obiektu lub usuń go ręcznie w IDE"],
         ["Błąd przy tworzeniu obiektu lub atrybutu o długiej nazwie", "Galaktyka nie przyjęła nazwy dłuższej niż 32 znaki",
          "Zgłoś to osobie utrzymującej projekt; do tego czasu skróć nazwę w programie sterownika"],
-        ["„nieobsługiwany typ 'MxDouble'” (albo InternationalizedString, BigString)",
-         "Stara wersja wtyczki (0.2.2 lub starsza)", "Zainstaluj wersję 0.2.5 (rozdział 2) i sprawdź status"],
         ["„wartość początkowa … nie pasuje do typu …”", "Initial value niezgodna z typem (np. tekst w Integer)",
          "Popraw wartość (Dodatek B) – nic nie zostało zapisane"],
         ["„io musi być Input albo InputOutput”", "Zmienne tylko do zapisu (Write) – celowo wyłączone w trybie Auto "

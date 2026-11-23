@@ -330,3 +330,45 @@ i poprosić o wyniki kroków 1, 3 i 5:
   `GalaxyMcp/GalaxyMcp_<wersja>`); `tests/test_serwer.ps1` sprawdza odmowę zapisu bez `galaxy`.
 - Nie sprawdzone w galaktyce (brak dostępu do AVEVA w sesji) – do potwierdzenia po instalacji 0.2.5: zapis z `galaxy` działa
   jak w 0.2.4, a bez `galaxy` serwer odmawia.
+
+## Weryfikacje generatora 2026-09-17 … 2026-09-23 (przeniesione z Metoda_Generowania.md)
+- Tryb Auto (GalaxyMCP 0.1.5, apply_spec) utworzył szablon i 3 instancje; eksport IDE szablonu jest zgodny z `$t_<UDT>.csv`
+  generatora we wszystkich kolumnach poza wartościami domyślnymi nadawanymi przez IDE:
+  MxElapsedTime → `00:00:00.0000000`, MxTime → czas utworzenia, `InputSource` → `---Auto---` (generator: puste).
+  Eksport IDE zawiera też wiersze runtime `WriteStatus`/`WriteValue` – generator celowo ich nie tworzy.
+- Adresy tablic `X[i]` i ścieżki struktur `A.B` są przyjmowane przez GRAccess jako `InputSource` (bez błędów zapisu).
+  Poprawność względem drivera PLC nadal niesprawdzona (brak sterownika).
+- 2026-09-17 (porządki w opisie): sprawdzono plikiem brzegowym (nazwa ze spacją, `Temp-1`, tablica 2D, indeks ujemny,
+  granice ze stałej, `Variant`, DTL, Time RW, nazwa > 32 znaków, DB z tablicą UDT i skalarem): nagłówek szablonu
+  jest identyczny z `t_SampleUDT.csv` (78 linii), wszystkie wiersze mają zgodną liczbę kolumn (UDA/Extended: 53),
+  pominięcia i zmiany nazw wychodzą jako ostrzeżenia.
+- 2026-09-17 (przedrostek nazwy szablonu): `--template-prefix ""` daje pliki `$<UDT>.csv` i deklarację
+  `$Application\$<UDT>{Default} -> $UserDefined`; bez parametru wynik jest taki jak wcześniej (`$t_<UDT>.csv`).
+  Zgodność z importem w IDE dla nazw bez `t_` – do sprawdzenia przy pierwszym imporcie.
+- 2026-09-18 (pełne nazwy atrybutów): decyzja użytkownika – nazwy zmiennych nie są ograniczone do 32 znaków.
+  Test: atrybut `stan_Stan_Blokada_Przyczyna_Slownik_Bardzo_Dlugi` (48 znaków) trafia bez zmian do szablonu,
+  do kolumny `…InputSource` w instancjach i do specyfikacji; kolizja `Temp-1`/`Temp[1]` nadal daje `Temp_1_1`;
+  Nagłówek szablonu zgodny z `t_SampleUDT.csv`, liczba kolumn 53. Pierwszy import długiej nazwy w IDE / GRAccess – do potwierdzenia.
+- 2026-09-18 (pełne nazwy obiektów): limit 32 znaków zniesiony także dla szablonów i instancji (generator + GalaxyMCP 0.2.2).
+  Test: instancja `DB_Bardzo_Dluga_Nazwa_Bloku_Danych_Element_Instancji_Z_Dluga_Nazwa` (66 znaków) bez skracania
+  w `Instances_<UDT>.csv` i specyfikacji. Czy galaktyka przyjmuje tagname > 32 znaków – do sprawdzenia przy pierwszym zapisie.
+- 2026-09-18 (pełne opisy): komentarz z TIA dłuższy niż 200 znaków trafia do Description w całości (szablon CSV,
+  specyfikacja, tryb Auto). Czy IDE/GRAccess mają własny limit długości opisu – do sprawdzenia.
+- 2026-09-23 (pełna obsługa .db): pliki użytkownika `przykładowa_struktura.udt` + `Napedy.db` (DB_Napedy: Pompa_01, Pompa_02,
+  Mieszadlo_01 typu `UDT_Naped_2stany`) przy `--no-address --template-prefix ""` dają `Instances_UDT_Naped_2stany.csv`
+  bajt w bajt jak wzorzec użytkownika, szablon bez zmian; z adresami wynik identyczny jak przed zmianą. Nowe przypadki
+  (DB typu UDT, UDT w STRUCT, tablica STRUCT z UDT, DB instancyjny FB, sekcja BEGIN z wartościami, komentarz po `Struct`
+  bez średnika, wartość tekstowa z `//`) – poprawne instancje i adresy, zgodna liczba kolumn. Regresja: pliki CSV z testu
+  2026-09-23 (typy.udt + bloki.db) bajt w bajt bez zmian. Galaktyka przyjmuje nazwy > 32 znaków (potwierdził użytkownik).
+- 2026-09-22 (kierunek Output): szablon bez reguł Output jest bajt w bajt taki jak wcześniej (porównanie z wynikiem wzorcowym
+  paczki UDT_to_CSV przy `--no-address --template-prefix ""`). Z regułą `Komenda_=Write`: `#IO.Mode=WriteOnly`, jeden wiersz
+  `OutputDest` (PrimitiveType `Output`), w instancjach kolumna `stan_Komenda_HMI_Aktywuj.OutputDest` z adresem
+  `attribute(...)`; `--from-spec` odtwarza te same pliki. Plik reguł ze średnikami działa, nagłówek `Prefix_` przerywa generator.
+  Import atrybutu Write w IDE – do potwierdzenia.
+
+## 2026-11-23 – instrukcje opisują tylko aktualną wersję
+- Z instrukcji (PDF, Instrukcja_projektu.md, Metoda_Generowania.md, README serwera i repozytorium, prompt.txt) usunięto
+  historię wersji i daty – historia zostaje tylko w tym pliku.
+- Instrukcja_projektu.md skrócona do < 16 000 znaków i wklejana w całości w Project instructions
+  (Konfiguracja_projektu/Project_instructions_ustawienia.txt = jej kopia; pilnuje tego test `Repozytorium`).
+  Szczegółowe reguły (tabela typów, format CSV, zakres SIDirect) przeniesione do Metoda_Generowania.md.
