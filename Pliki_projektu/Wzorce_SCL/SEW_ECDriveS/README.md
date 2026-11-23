@@ -1,6 +1,6 @@
 # Prawdziwe źródła SCL z projektu SEW ECDriveS_Positioning
 
-Pliki w tym katalogu to oryginalne *External source files* (UDT, DB, FB) wyciągnięte z przykładowego
+Pliki w tym katalogu to oryginalne *External source files* (typy UDT i bloki DB) wyciągnięte z przykładowego
 projektu TIA **SEW-EURODRIVE ECDriveS_Positioning V1.0** (luty 2019, TIA V14 → V15).
 Pobrane z sew-eurodrive.com > Data & documents > Software, plik `SEW_ECDriveS_Positioning_V1.0.zip`.
 Autor i właściciel treści: SEW-EURODRIVE GmbH & Co KG. Według README projektu to tylko program
@@ -18,12 +18,12 @@ angielska i niemiecka projektu mają te same źródła. Zachowano oryginalną tr
 | Plik | Zawartość |
 |---|---|
 | `ECCDFC_ALL_UDTs_rev1.7.udt` | 10 typów `ECCDFC*_IN/_OUT` (dane procesowe sterownika ECC-DFC-24-00 w trybach PLC i ZPA) |
-| `MDRUDTs.scl` | typ `MDR_PM_Data` (dane identyfikacyjne silnika MDR); typy w pliku `.scl` też działają |
-| `EC_Positioning.scl` | typy `ECCDFCPLC_IN/_OUT` w starszej wersji i blok `FUNCTION_BLOCK "EC_Positioning"` |
+| `MDRUDTs.udt` | typ `MDR_PM_Data` (dane identyfikacyjne silnika MDR); w projekcie SEW plik nazywał się `MDRUDTs.scl`, treść bez zmian |
 | `IO_data.db` | globalny DB z **dostępem klasycznym** (`S7_Optimized_Access := 'FALSE'`), wartości startowe w `BEGIN` |
 | `EC_Positioning_DB.db` | DB instancyjny FB: zamiast `VAR` sama nazwa bloku `"EC_Positioning"` |
 
-W projekcie był też `ECCDFC ALL UDTs rev1.6.scl` (starsza wersja tych samych typów), pominięty.
+Pominięto pliki `.scl` z projektu: `EC_Positioning.scl` (blok funkcyjny SEW i starsza wersja typów
+`ECCDFCPLC_IN/_OUT`) oraz `ECCDFC ALL UDTs rev1.6.scl` (starsza wersja tych samych typów).
 
 ## Co z nich wynika dla składni
 

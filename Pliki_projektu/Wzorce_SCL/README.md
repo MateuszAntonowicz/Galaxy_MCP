@@ -10,7 +10,7 @@ generatora `Tools/scl_to_aveva.py` (UDT → CSV dla AVEVA), co sprawdza test `te
 | `UDT_Wzorzec.udt` | dwa typy PLC: prosty `UDT_Wz_Alarm` i `UDT_Wz_Naped` z wartościami startowymi, komentarzami, atrybutami członków, tablicą, zagnieżdżonym UDT, tablicą UDT i strukturą anonimową |
 | `DB_Wzorzec_Globalny.db` | globalny DB z sekcją `VAR`, instancjami UDT (pojedynczo, w tablicy, w strukturze) i wartościami startowymi w `BEGIN` |
 | `DB_Wzorzec_Typu_UDT.db` | DB utworzony wprost z typu UDT (bez `VAR`, sama nazwa typu) |
-| `SEW_ECDriveS/` | prawdziwe źródła UDT/DB/FB z przykładowego projektu SEW (opis w `SEW_ECDriveS/README.md`) |
+| `SEW_ECDriveS/` | prawdziwe pliki .udt/.db z przykładowego projektu SEW (opis w `SEW_ECDriveS/README.md`) |
 
 Pliki `*_Wzorzec*` napisano samodzielnie na podstawie źródeł z sekcji [Źródła](#źródła-ocena-z-2026-11-23); nie są kopią cudzych przykładów.
 
@@ -122,7 +122,7 @@ TIA nada go sam.
    - Przykładowy projekt *ECDriveS_Positioning* (sew-eurodrive.com > Data & documents > Software,
      `SEW_ECDriveS_Positioning_V1.0.zip`): binarny projekt TIA V14/V15 bez plików `.udt`/`.db` na
      wierzchu, ale z dołączonymi źródłami zewnętrznymi zapisanymi wewnątrz `System/PEData.plf`.
-     Wyciągnięte źródła (5 plików) są w `SEW_ECDriveS/`. Najcenniejsze źródło: prawdziwe pliki
+     Wyciągnięte pliki .udt i .db (4 pliki) są w `SEW_ECDriveS/`. Najcenniejsze źródło: prawdziwe pliki
      z TIA, m.in. DB z dostępem klasycznym i atrybuty członków.
 4. **[Speedstuff/TiaExportBlocks](https://github.com/Speedstuff/TiaExportBlocks)** (GitHub, fork
    cezar1/TiaExportBlocks): narzędzie C# na TIA Openness (testowane z V15.1), które hurtowo eksportuje
