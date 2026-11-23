@@ -61,7 +61,7 @@ Format specyfikacji się nie zmienił (spec_version 1, jeden szablon w pliku), w
 - `Output` = SCADA tylko zapisuje do PLC i nie odczytuje wartości z powrotem – nie dla alarmów i stanów.
   **Wiersz Output (`WriteOnly`, sam `OutputDest`, bez `#IO.Deadband`) nie jest potwierdzony eksportem z IDE** – przy pierwszym
   użyciu porównać z eksportem atrybutu ustawionego w IDE na Write i wspomnieć o tym w „Do sprawdzenia”.
-- Tryb Auto: GalaxyMCP 0.2.2 odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
+- Tryb Auto: GalaxyMCP odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
 - `Permissions.csv`: kolumny `Prefix_or_Keyword`, `Access_Mode`, `Description` (opcjonalna, generator jej nie czyta).
   **Nazw kolumn nie wolno zmieniać** – plik bez żadnej poprawnej reguły (np. nagłówek `Prefix_`) przerywa generator komunikatem,
   zamiast po cichu dać same Input.
@@ -127,7 +127,7 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer GalaxyMCP (wersja 0.2.1 jako rozszerzenie .mcpb potwierdzona 2026-09-17; 0.2.2 bez limitu 32 znaków – do zbudowania)
+## Tryb Auto – serwer GalaxyMCP (aktualna wersja 0.2.5; rozszerzenie .mcpb, AVEVA System Platform 2026)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.
@@ -139,9 +139,9 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
 - C# 5 / .NET Framework 4.x, budowany `build.bat` (wbudowany csc, `/codepage:65001`, domyślnie x86). GRAccess ładowany w czasie działania,
   wywołania przez interfejsy interop (wiązanie wczesne, klasa `Com`).
 - Narzędzia: `galaxy_status`, `list_galaxies`, `select_galaxy`, `list_objects`, `get_object`, `export_csv`, `apply_spec`
-  (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` przy zapisie), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
+  (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` obowiązkowe przy zapisie od 0.2.5), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
 - `apply_spec`: tworzy brakujący szablon i dopisuje brakujące UDA (+ `inputextension`/`inputoutputextension`); tworzy brakujące instancje; zmienia tylko różniące się `InputSource`. Niczego nie usuwa. CheckOut → Save → CheckIn, przy błędzie UndoCheckOut. Log zapisów: `GalaxyMcp.log`.
-  Kierunku Output (`outputextension`, `OutputDest`) serwer 0.2.2 nie obsługuje – specyfikację z `io=Output` odrzuca w `Spec.Parse`.
+  Kierunku Output (`outputextension`, `OutputDest`) serwer nie obsługuje – specyfikację z `io=Output` odrzuca w `Spec.Parse`.
 - Od GalaxyMCP 0.2.2 serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
   (`[A-Za-z_][A-Za-z0-9_]*`, szablon z `$`). Ewentualne ograniczenie galaktyki zgłosi GRAccess przy zapisie.
 - W sesji Cowork narzędzia serwera zarejestrowanego w Claude Desktop pojawiają się z przedrostkiem
@@ -197,11 +197,14 @@ Szczegóły i cytaty: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` (źródło: `OIS
   atrybut `stan_Stan_Aktywny`, adres `stan.Stan_Aktywny`. Brak definicji typu → pominięcie z ostrzeżeniem.
   Rekurencja (typ w sobie samym) jest przerywana i zgłaszana.
 - **Tablice UDT i STRUCT** też są rozwijane: `Subs : Array[1..3] of "UDT_Sub"` → `Subs_1_Val`, adres `Subs[1].Val`.
-- **Nazwy z TIA** są czyszczone do wymagań AVEVA: spacje są usuwane, a pozostałe znaki inne niż litera, cyfra i `_`
-  zamieniane na `_` (`"Komenda_HMI_ Aktywuj"` → `Komenda_HMI_Aktywuj`, `Temp-1` → `Temp_1`). Adres w PLC zachowuje
+- **Nazwy z TIA** są czyszczone do wymagań AVEVA: spacje są usuwane, polskie litery zamieniane na litery bez ogonków
+  (`Prędkość` → `Predkosc`, od 0.2.5), a pozostałe znaki inne niż litera, cyfra i `_` na `_`
+  (`"Komenda_HMI_ Aktywuj"` → `Komenda_HMI_Aktywuj`, `Temp-1` → `Temp_1`). Tak samo czyszczone są nazwa szablonu
+  (`TYPE "UDT Mój typ"` → `$t_UDTMojtyp`; nazwy typów i DB w cudzysłowie mogą mieć spacje) i nazwy z `--instances`. Adres w PLC zachowuje
   oryginalną nazwę w cudzysłowie (`stan."Komenda_HMI_ Aktywuj"`, `"Temp-1"`). Każda zmiana nazwy jest w ostrzeżeniach.
   Czyszczenie może dać nazwę, która już istnieje (`Temp-1` i `Temp[1]` → `Temp_1`) – druga dostaje licznik
-  (`Temp_1_1`) z ostrzeżeniem „koliduje z inną nazwą”.
+  (`Temp_1_1`) z ostrzeżeniem „koliduje z inną nazwą”. Kolizje są wykrywane bez rozróżniania wielkości liter
+  (od 0.2.5: `Stan_X` i `stan_x` → `Stan_X`, `stan_x_1`), bo AVEVA i serwer GalaxyMCP traktują je jako tę samą nazwę.
 - **Nazwy atrybutów nie są skracane** (od 2026-09-18): atrybut ma pełną spłaszczoną nazwę, np.
   `stan_Stan_Blokada_Przyczyna_Slownik_Bardzo_Dlugi`, taką samą w szablonie, w kolumnie `<Attr>.InputSource`
   instancji i w specyfikacji. Licznik dostaje tylko nazwa kolidująca z inną (patrz wyżej). Opis atrybutu to sam komentarz z TIA.

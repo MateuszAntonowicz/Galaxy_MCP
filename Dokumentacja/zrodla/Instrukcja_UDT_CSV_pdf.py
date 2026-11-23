@@ -22,7 +22,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
-PLUGIN_VERSION = "0.2.4"
+PLUGIN_VERSION = "0.2.5"
 
 # ------------------------------------------------------------------ czcionki
 FONT_SETS = [
@@ -420,7 +420,8 @@ def build():
         f"Struktury i zagnieżdżone UDT są spłaszczane przez „_”: {c('stan.Stan_Aktywny')} → "
         f"{c('stan_Stan_Aktywny')}; adres zachowuje ścieżkę w PLC.",
         f"Tablice: {c('Temp[1..3]')} → {c('Temp_1…Temp_3')}; 2D {c('Siatka_1_0')}; indeks ujemny {c('Neg_m1')}.",
-        "Spacje są usuwane, inne niedozwolone znaki zamieniane na „_”; adres zachowuje oryginalną nazwę.",
+        "Spacje są usuwane, polskie litery bez ogonków (Prędkość → Predkosc), inne niedozwolone znaki zamieniane na „_”; "
+        "nazwy różniące się tylko wielkością liter dostają licznik (stan_x_1); adres zachowuje oryginalną nazwę.",
         f"Nazwy i opisy nie są skracane. Instancja z DB ma nazwę {c('&lt;DB&gt;_&lt;element&gt;')}, np. "
         f"{c('Mieszalnik_1_Zawor_Wody')}.",
     ])

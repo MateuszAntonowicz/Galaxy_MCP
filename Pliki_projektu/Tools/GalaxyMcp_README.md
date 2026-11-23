@@ -9,7 +9,10 @@ SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
                                             └──► GalaxyMCP ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Status: wersja 0.2.4** (2026-11-18): nowa nazwa wtyczki **GalaxyMCP** (dawniej „AVEVA Galaxy (GalaxyMcp)”), działa na
+> **Status: wersja 0.2.5** (2026-11-23): parametr `galaxy` jest obowiązkowy przy każdym zapisie (`apply_spec` z `dry_run=false`,
+> `import_csv`, `deploy`) – bez niego serwer odmawia i nic nie zapisuje. Poza tym bez zmian względem 0.2.4.
+>
+> Wersja 0.2.4 (2026-11-18): nowa nazwa wtyczki **GalaxyMCP** (dawniej „AVEVA Galaxy (GalaxyMcp)”), działa na
 > **AVEVA System Platform 2026**; kod bez zmian względem 0.2.3. Nazwy plików (`GalaxyMcp.exe`, `GalaxyMcp.mcpb`, `GalaxyMcp.log`) bez zmian.
 >
 > Wersja 0.2.3 (2026-09-24): wszystkie typy UDA z okna IDE (Boolean, Integer, Float,
@@ -19,7 +22,7 @@ SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
 > Wersja 0.2.1 (0.2.0 + instalacja jako rozszerzenie `.mcpb`) potwierdzona 2026-09-17. Wersja 0.1.5 potwierdzona 2026-09-17 (SP z IGalaxy17, galaktyki `test_1` i `test_mcp`):
 > logowanie, `galaxy_status`, `list_objects`, `get_object`, `export_csv`, `apply_spec` (plan i ZAPIS szablonu + 3 instancji,
 > idempotencja), praca z czatu Claude. Nowe w 0.2.0 (potwierdzone z czatu 2026-09-17): przełączanie galaktyk `list_galaxies` / `select_galaxy`,
-> listy `GALAXY_ALLOWED` / `GALAXY_WRITABLE`, odmowa zapisu poza `GALAXY_WRITABLE` i przy niezgodnym parametrze `galaxy`.
+> listy `GALAXY_ALLOWED` / `GALAXY_WRITABLE`, odmowa zapisu poza `GALAXY_WRITABLE` oraz przy brakującym (od 0.2.5) albo niezgodnym parametrze `galaxy`.
 > Po zmianie konfiguracji nowe narzędzia widać dopiero w nowej rozmowie. Nietestowane: `import_csv`, `deploy`.
 
 > W projekcie Claude pliki serwera leżą w `Tools/` z przedrostkiem `GalaxyMcp_`: `GalaxyMcp.cs`, `GalaxyMcp_build.bat`,
@@ -180,7 +183,7 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 
 - Każdy zapis (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) sprawdza, czy aktywna galaktyka jest na liście
   `GALAXY_WRITABLE` (i czy nie ustawiono `GALAXY_READONLY=1`).
-- Parametr `galaxy` przy zapisie musi być równy aktywnej galaktyce – inaczej serwer odmawia i nic nie zapisuje.
+- Parametr `galaxy` jest przy zapisie obowiązkowy (od 0.2.5) i musi być równy aktywnej galaktyce – inaczej serwer odmawia i nic nie zapisuje.
   Agent podaje w nim nazwę potwierdzoną przez użytkownika.
 - Plan i raport zapisu zawsze zaczynają się od nazwy galaktyki.
 
