@@ -275,7 +275,8 @@ def build():
     s.append(H2("3.3. Instrukcja projektu"))
     s += steps([
         f"W nagłówku projektu kliknij menu <font name=\"Mono\"><b>⋯</b></font> (trzy kropki) → {ui('Settings')}. Otworzy się {ui('Project settings')}.",
-        f"Wejdź w {ui('Memory')} → {ui('Project instructions')}.",
+        f"W lewym menu wybierz {ui('Memory')} i przewiń do pola {ui('Project instructions')}. To nie jest pole "
+        f"{ui('What do you want to work on?')} z zakładki {ui('General')} – tam wpisuje się tylko jedno zdanie celu.",
         f"Otwórz w Notatniku plik {c('Tools/Instrukcja_projektu.md')} z rozpakowanego Context.zip (tę samą treść ma "
         f"{c('Konfiguracja_projektu/Project_instructions_ustawienia.txt')} w repozytorium). Zaznacz całość "
         f"({ui('Ctrl+A')}), skopiuj ({ui('Ctrl+C')}) i wklej w pole ({ui('Ctrl+V')}).",
