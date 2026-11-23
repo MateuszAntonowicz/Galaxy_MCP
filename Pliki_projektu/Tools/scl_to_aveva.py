@@ -45,7 +45,10 @@ Zasady:
   * Kierunek I/O: prefiks dopasowywany do nazwy zmiennej w SCL (liścia), nie do nazwy spłaszczonej.
     Input = Read (ReadOnly), InputOutput = Read/Write (ReadWrite), Output = Write (WriteOnly: SCADA tylko
     zapisuje, adres w OutputDest zamiast InputSource; format zgodny z eksportem z IDE, tryb Auto
-    - GalaxyMCP - go nie obsługuje).
+    - GalaxyMCP - pomija takie atrybuty z ostrzeżeniem).
+  * Wartości początkowe z deklaracji (:= TRUE, := 12.5, := 'abc', := T#5s, := 16#FF) trafiają do Value
+    atrybutu (Bool true/false, liczby, tekst bez apostrofów, TIME jako ms albo czas trwania). Tablice i literały
+    nieobsługiwane dla danego typu zostają z wartością domyślną typu - z ostrzeżeniem.
   * Adres (InputSource / OutputDest) wg dokumentacji drivera OI SIDirect (adresowanie symboliczne):
     <obiekt DI>.<grupa skanowania>.<item>, item = [DB].[Tag]<[i]>.[Member]; nazwy ze spacją lub kropką
     w cudzysłowie (indeks poza nim), a cały item w attribute(...). Obiekt DI (--plc) jest wymagany,
@@ -218,7 +221,7 @@ def parse_source(text, warn, types=None, dbs=None):
             continue
         t = re.sub(r':=.*$', '', m.group("type")).strip()          # usuń wartość początkową
         node = {"raw": m.group("qname") or m.group("name"), "desc": (m.group("desc") or "").strip(),
-                "dims": None, "kind": "scalar", "type": t, "members": None}
+                "dims": None, "kind": "scalar", "type": t, "members": None, "init": raw_init(line)}
         a = ARR.match(t)
         if a:
             node["dims"] = a.group(1)
@@ -326,6 +329,93 @@ def indices(dims, label, warn):
     return [tuple(c) for c in itertools.product(*ranges)]
 
 
+def raw_init(line):
+    """Tekst wartości początkowej z deklaracji SCL (po ':='), bez średnika i komentarza; None = brak.
+    Tekst w apostrofach może zawierać ';' i '//'."""
+    m = re.search(r":=\s*", line)
+    if not m:
+        return None
+    rest, i = line[m.end():], 0
+    if rest.startswith("'"):
+        i = 1
+        while i < len(rest):
+            if rest[i] == "$":
+                i += 2
+                continue
+            if rest[i] == "'":
+                if rest[i + 1:i + 2] == "'":
+                    i += 2
+                    continue
+                return rest[:i + 1]
+            i += 1
+        return rest
+    end = re.search(r";|//", rest)
+    return (rest[:end.start()] if end else rest).strip() or None
+
+
+SCL_ESC = {"$$": "$", "$'": "'", "$N": " ", "$L": " ", "$R": " ", "$T": " ", "$P": " "}
+
+
+def time_ms(text):
+    """T#1d2h3m4s5ms / TIME#-5s / T#1.5s -> milisekundy (int); None, gdy to nie jest literał czasu."""
+    m = re.fullmatch(r"(?:T|TIME|LT|LTIME)#(-?)(.+)", text.replace("_", ""), re.I)
+    if not m:
+        return None
+    total, rest = 0.0, m.group(2).upper()
+    while rest:
+        u = re.match(r"(\d+(?:\.\d+)?)(MS|US|NS|D|H|M|S)", rest)
+        if not u:
+            return None
+        v, unit = float(u.group(1)), u.group(2)
+        total += v * {"D": 86400000, "H": 3600000, "M": 60000, "S": 1000, "MS": 1, "US": 0.001, "NS": 1e-6}[unit]
+        rest = rest[u.end():]
+    return int(round(-total if m.group(1) else total))
+
+
+def init_value(text, mx_type, plc_type, name, warn):
+    """Wartość początkowa z TIA (':= ...') w postaci przyjmowanej przez IDE/GRAccess; None = zostaje domyślna
+    wartość typu (literał nieobsługiwany dla tego typu - z ostrzeżeniem)."""
+    if text is None:
+        return None
+    t = text.strip()
+    t = re.sub(r"^(?:BOOL|[SUL]?INT|U?[SDL]INT|BYTE|L?WORD|D?WORD|L?REAL|W?CHAR|W?STRING)#", "", t, flags=re.I)
+    try:
+        if mx_type == "MxBoolean":
+            v = {"TRUE": "true", "FALSE": "false", "1": "true", "0": "false"}.get(t.upper())
+            if v:
+                return v
+        elif mx_type == "MxInteger":
+            ms = time_ms(t)
+            if ms is not None:
+                v = ms
+            else:
+                b = re.fullmatch(r"(16|8|2)#([0-9A-Fa-f_]+)", t)
+                v = int(b.group(2).replace("_", ""), int(b.group(1))) if b else int(t.replace("_", ""))
+            if -2 ** 31 <= v < 2 ** 31:
+                return str(v)
+            warn.append("%s: wartość początkowa %s poza zakresem MxInteger (32 bity) - pominięta" % (name, text))
+            return None
+        elif mx_type in ("MxFloat", "MxDouble"):
+            v = float(t.replace("_", ""))
+            return repr(v)
+        elif mx_type == "MxString" and t.startswith("'") and t.endswith("'") and len(t) >= 2:
+            body = t[1:-1].replace("''", "'")
+            return re.sub(r"\$[$'NLRTP]", lambda e: SCL_ESC[e.group(0).upper()], body, flags=re.I)
+        elif mx_type == "MxElapsedTime":
+            ms = time_ms(t)
+            if ms is not None:
+                sign, ms = ("-" if ms < 0 else ""), abs(ms)
+                d, r = divmod(ms, 86400000)
+                h, r = divmod(r, 3600000)
+                mi, r = divmod(r, 60000)
+                sec, msec = divmod(r, 1000)
+                return "%s%s%02d:%02d:%02d.%07d" % (sign, ("%d." % d) if d else "", h, mi, sec, msec * 10000)
+    except ValueError:
+        pass
+    warn.append("%s: wartość początkowa %s (typ %s) nie jest przenoszona - zostaje domyślna" % (name, text, plc_type))
+    return None
+
+
 def flatten(members, types, warn, names=(), path=(), seen=()):
     """Liście struktury: nazwa spłaszczona, nazwa zmiennej w SCL, ścieżka w PLC (lista elementów),
     typ Siemensa i opis. Ścieżka jest listą, bo cudzysłowy dokłada dopiero item_ref()."""
@@ -342,6 +432,9 @@ def flatten(members, types, warn, names=(), path=(), seen=()):
         if len(m["raw"]) > MAX_SYMBOL:
             warn.append("%s: nazwa symboliczna dłuższa niż %d znaków - driver jej nie przyjmie"
                         % (base, MAX_SYMBOL))
+        if m["dims"] and m.get("init"):
+            warn.append("%s: wartość początkowa tablicy (%s) nie jest przenoszona - elementy dostają domyślną"
+                        % ("_".join(names + (base,)), m["init"]))
         for i in indices(m["dims"], "_".join(names + (base,)), warn):
             if i is None:
                 nm, pt = names + (base,), path + (m["raw"],)
@@ -355,7 +448,8 @@ def flatten(members, types, warn, names=(), path=(), seen=()):
                     warn.append("%s: nieobsługiwany typ '%s' pominięty" % (full, m["type"]))
                     continue
                 out.append({"name": full, "leaf": base, "plc_parts": list(pt),
-                            "plc_type": key, "desc": clean_desc(m["desc"])})
+                            "plc_type": key, "desc": clean_desc(m["desc"]),
+                            "init": None if m["dims"] else m.get("init")})
             elif m["kind"] == "struct":
                 out += flatten(m["members"], types, warn, nm, pt, seen)
             elif m["type"].upper() in UNSUPPORTED:
@@ -391,6 +485,9 @@ def attributes(udt, types, rules, warn):
                         % (name, leaf["plc_type"]))
         if note:
             warn.append("%s (%s): %s" % (name, leaf["plc_type"], note))
+        init = init_value(leaf.get("init"), mx_type, leaf["plc_type"], name, warn)
+        if init is not None:
+            default = init
         attrs.append({"name": name, "plc_type": leaf["plc_type"], "type": mx_type, "default": default,
                       "io": io, "description": desc, "plc_parts": leaf["plc_parts"],
                       "plc_suffix": suffix, "plc_path": item_ref(leaf["plc_parts"], suffix)})
@@ -483,7 +580,7 @@ def build_spec(udt, attrs, instances, plc, scan_group, source, warn, no_address=
         out.append(entry)
     if any(a["io"] == "Output" for a in attrs):
         warn.append("atrybuty Output (Write, #IO.Mode=WriteOnly, adres w OutputDest): tryb Auto (GalaxyMCP) "
-                    "ich nie obsługuje - użyj trybu Manual")
+                    "pomija je z ostrzeżeniem - dodaj je w IDE albo zaimportuj pliki CSV (tryb Manual)")
     tpl = "$" + template_prefix + clean_name(udt, warn)
     return {
         "spec_version": SPEC_VERSION,

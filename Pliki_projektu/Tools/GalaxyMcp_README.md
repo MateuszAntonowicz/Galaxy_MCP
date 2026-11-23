@@ -9,7 +9,7 @@ SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
                                             └──► GalaxyMCP ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Wersja 0.2.6** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
+> **Wersja 0.2.7** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
 > `select_galaxy`, listy `GALAXY_ALLOWED` / `GALAXY_WRITABLE`), wszystkie typy UDA z okna IDE, atrybuty dodawane do pojedynczej
 > instancji i plan zmian przed zapisem. Każdy zapis (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) wymaga parametru
 > `galaxy` równego aktywnej galaktyce. Nie był testowany w galaktyce: `deploy`.
@@ -186,7 +186,9 @@ Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam po
   (`CreateTemplate` / `CreateInstance` / `AddUDA`) i trafi do raportu zapisu.
 - Typy atrybutów (wszystkie z listy „Data type” w oknie UDA): `MxBoolean`, `MxInteger`, `MxFloat`, `MxDouble`,
   `MxString`, `MxTime`, `MxElapsedTime`, `MxInternationalizedString`, `MxBigString`. Kierunek `io`: `Input` (Read) albo
-  `InputOutput` (Read/Write); `Output` (Write) nie jest obsługiwany – takie UDT idą przez tryb Manual.
+  `InputOutput` (Read/Write). Atrybuty `Output` (Write) serwer pomija: plan i raport wypisują je w linii
+  „POMINIĘTE atrybuty Write”, a pozostałe atrybuty specyfikacji są zapisywane. Atrybuty Write dodaje się w IDE albo
+  importem plików CSV (tryb Manual).
 - Wartość początkowa (`default`, w IDE „Initial value”): Boolean `true`/`false`/`1`/`0`, Integer liczba całkowita, Float/Double
   liczba z kropką albo przecinkiem – sprawdzane już przy odczycie specyfikacji (zła wartość = specyfikacja odrzucona, nic nie zapisano).
   Teksty i czas (`MxTime`, `MxElapsedTime`, np. `00:00:05.0000000`) idą jako tekst – konwersję robi GRAccess, a błąd jest tylko

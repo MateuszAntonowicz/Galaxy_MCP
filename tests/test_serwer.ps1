@@ -12,7 +12,7 @@ $ver = (& $Exe --version).Trim()
 Check ($ver -eq $manifest.version) "--version = $ver (manifest: $($manifest.version))"
 
 $specJson = (Get-Content $Spec -Raw -Encoding utf8 | ConvertFrom-Json | ConvertTo-Json -Depth 20 -Compress)
-$bad = '{"spec_version":1,"template":{"name":"bez_dolara","attributes":[{"name":"1zla nazwa","type":"MxFoo","io":"Output","default":"x"}]},"instances":[{"name":"Zła instancja"}]}'
+$bad = '{"spec_version":1,"template":{"name":"bez_dolara","attributes":[{"name":"1zla nazwa","type":"MxFoo","io":"Zapis","default":"x"}]},"instances":[{"name":"Zła instancja"}]}'
 $req = @(
   '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"1"}}}',
   '{"jsonrpc":"2.0","method":"notifications/initialized"}',

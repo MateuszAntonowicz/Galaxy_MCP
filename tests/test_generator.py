@@ -17,7 +17,18 @@ MX = {"MxBoolean", "MxInteger", "MxFloat", "MxDouble", "MxString", "MxTime", "Mx
 NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
-def server_errors(spec, allow_output=False):
+def value_ok(mx, v):   # jak Galaxy.ValueParses w serwerze
+    v = v.strip()
+    if mx == "MxBoolean": return v.lower() in ("true", "false", "1", "0")
+    if mx == "MxInteger": return re.fullmatch(r"[+-]?\d+", v) is not None and -2 ** 31 <= int(v) < 2 ** 31
+    if mx in ("MxFloat", "MxDouble"):
+        try: float(v.replace(",", ".")); return True
+        except ValueError: return False
+    return True
+
+
+def server_errors(spec):
+    """Błędy, przez które serwer odrzuciłby specyfikację (atrybuty Output serwer pomija - to nie jest błąd)."""
     err, seen = [], set()
     for a in spec["template"]["attributes"]:
         n = a["name"]
@@ -25,8 +36,8 @@ def server_errors(spec, allow_output=False):
         if n.lower() in seen: err.append("zdublowany atrybut " + n)
         seen.add(n.lower())
         if a["type"] not in MX: err.append("typ " + a["type"])
-        if a["io"] not in ("Input", "InputOutput") and not (allow_output and a["io"] == "Output"):
-            err.append("io " + a["io"])
+        if a["io"] not in ("Input", "InputOutput", "Output"): err.append("io " + a["io"])
+        if a["default"] != "" and not value_ok(a["type"], a["default"]): err.append("wartość " + n)
     inst = set()
     for i in spec["instances"]:
         if not NAME.match(i["name"]): err.append("nazwa instancji " + i["name"])
@@ -116,9 +127,20 @@ class Generator(unittest.TestCase):
         self.assertEqual(self.inst["DB_Silnik_05"]["output_dest"]["Reset_Alarm"], "S7C_01.SG1.DB_Silnik_05.Reset_Alarm")
 
     def test_zgodnosc_ze_serwerem(self):
-        # jedyna różnica dopuszczona: atrybuty Output (tryb Auto ich nie obsługuje - tylko Manual)
-        self.assertEqual(server_errors(self.spec, allow_output=True), [])
-        self.assertEqual(server_errors(self.spec), ["io Output"])
+        # atrybuty Output są w specyfikacji; serwer je pomija z ostrzeżeniem, nie odrzuca całości
+        self.assertEqual(server_errors(self.spec), [])
+        self.assertIn("pomija je z ostrzeżeniem", self.log)
+
+    def test_wartosci_poczatkowe_typy_udt(self):
+        self.assertEqual(self.attrs["Cmd_Stop"]["default"], "true")          # := TRUE
+        self.assertEqual(self.attrs["Predkosc"]["default"], "12.5")          # := 12.5
+        self.assertEqual(self.attrs["Tekst"]["default"], "abc")              # := 'abc'
+        self.assertEqual(self.attrs["Cfg_Czas"]["default"], "5000")          # := T#5s, TIME do zapisu = ms
+        self.assertEqual(self.attrs["Cmd_Start"]["default"], "false")        # bez := - domyślna typu
+        with open(os.path.join(self.out, "$t_UDT_Silnik.csv"), encoding="utf-8-sig") as f:
+            rows = {r[0]: r for r in (l.split(",") for l in f.read().splitlines()) if len(r) > 2 and r[1].startswith("Mx")}
+        self.assertEqual(rows["Predkosc"][2], "12.5")
+        self.assertEqual(rows["Cmd_Stop"][2], "true")
 
     def test_csv_z_specyfikacji_identyczne(self):
         with tempfile.TemporaryDirectory() as t:
@@ -217,6 +239,47 @@ class Poprawki025(unittest.TestCase):
     def test_bez_starych_wersji_w_tekstach(self):                  # błąd 8: „GalaxyMCP 0.2.2” w ostrzeżeniu
         with open(GEN, encoding="utf-8") as f:
             self.assertNotIn("GalaxyMCP 0.2.2", f.read())
+
+
+class WartosciPoczatkowe(unittest.TestCase):
+    """Literały TIA (:= ...) różnych typów -> Value atrybutu szablonu (tests/dane/wartosci_poczatkowe.udt)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.code, cls.log = run(os.path.join(DANE, "wartosci_poczatkowe.udt"), "--all-types", "--no-address",
+                                "--rules", "Cmd_=InputOutput", "--out", cls.tmp.name)
+        with open(os.path.join(cls.tmp.name, "Spec_UDT_Start.json"), encoding="utf-8") as f:
+            cls.spec = json.load(f)
+        cls.d = {a["name"]: a["default"] for a in cls.spec["template"]["attributes"]}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_wartosci(self):
+        self.assertEqual(self.code, 0, self.log)
+        oczekiwane = {"B_True": "true", "B_Zero": "false", "I_Ujemna": "-12", "I_Hex": "255", "I_Bin": "170",
+                      "I_Typowana": "100000", "R_Wykl": "1500.0", "R_Zwykla": "-0.25", "S_Tekst": "a;b // c 'd'",
+                      "S_Dolar": "x$y", "Cmd_Czas": "90000", "T_Odczyt": "02:03:04.0050000", "Brak": "0"}
+        for k, v in oczekiwane.items():
+            self.assertEqual(self.d[k], v, k)
+
+    def test_nieprzenoszone_z_ostrzezeniem(self):
+        self.assertEqual(self.d["I_Duza"], "0")                              # poza 32 bitami
+        self.assertEqual(self.d["D_Data"], "")                               # D#... nie jest przenoszony
+        self.assertEqual((self.d["Tab_1"], self.d["Tab_2"]), ("0", "0"))     # tablica
+        self.assertIn("I_Duza: wartość początkowa 5000000000 poza zakresem", self.log)
+        self.assertIn("D_Data: wartość początkowa D#2026-01-01", self.log)
+        self.assertIn("Tab: wartość początkowa tablicy", self.log)
+
+    def test_serwer_przyjmie(self):
+        self.assertEqual(server_errors(self.spec), [])
+
+    def test_csv_z_tekstem_ze_srednikiem(self):
+        with open(os.path.join(self.tmp.name, "$t_UDT_Start.csv"), encoding="utf-8-sig") as f:
+            row = [l for l in f.read().splitlines() if l.startswith("S_Tekst,MxString,")][0]
+        self.assertTrue(row.startswith("S_Tekst,MxString,a;b // c 'd',"), row)
 
 
 class Wzorce(unittest.TestCase):

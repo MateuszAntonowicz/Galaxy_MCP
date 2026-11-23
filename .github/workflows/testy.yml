@@ -31,11 +31,11 @@ jobs:
             /optimize+ "/out:$PWD\build\GalaxyMcp.exe" /r:System.Web.Extensions.dll /r:Microsoft.CSharp.dll `
             /r:System.Core.dll "$PWD\Pliki_projektu\Tools\GalaxyMcp.cs"
           if ($LASTEXITCODE -ne 0) { throw 'Błąd kompilacji' }
-      - name: Specyfikacja z generatora (bez atrybutów Output)
+      - name: Specyfikacja z generatora (z atrybutem Output i wartościami początkowymi)
         shell: pwsh
         run: |
           python -I Pliki_projektu/Tools/scl_to_aveva.py tests/dane/typy.udt --db tests/dane/napedy.db `
-            --plc S7C_01 --scan-group SG1 --rules Cmd_=InputOutput Cfg_=InputOutput --out build/spec
+            --plc S7C_01 --scan-group SG1 --permissions tests/dane/Permissions.csv --out build/spec
           if ($LASTEXITCODE -ne 0) { throw 'Błąd generatora' }
       - name: Test dymny serwera
         shell: pwsh

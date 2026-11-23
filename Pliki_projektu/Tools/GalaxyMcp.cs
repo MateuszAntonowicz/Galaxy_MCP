@@ -39,7 +39,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.6";
+        public const string Version = "0.2.7";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -531,6 +531,7 @@ namespace GalaxyMcp
         public List<SpecAttr> Attrs = new List<SpecAttr>();
         public List<SpecInstance> Instances = new List<SpecInstance>();
         public List<string> Warnings = new List<string>();
+        public List<string> Skipped = new List<string>();   // atrybuty Output (Write) pominięte w trybie Auto
 
         // 0.2.3: wszystkie typy danych z okna UDA w IDE (Data type).
         public static readonly string[] Types = { "MxBoolean", "MxInteger", "MxFloat", "MxDouble", "MxString",
@@ -546,7 +547,8 @@ namespace GalaxyMcp
             if (!AttrName.IsMatch(sa.Name)) err.Add(p + "niepoprawna nazwa atrybutu '" + sa.Name + "'");
             if (!seen.Add(sa.Name)) err.Add(p + "zdublowany atrybut '" + sa.Name + "'" + (owner == "" ? "" : " (jest już w szablonie albo w tej instancji)"));
             if (!Types.Contains(sa.Type)) err.Add(p + sa.Name + ": nieobsługiwany typ '" + sa.Type + "' (dozwolone: " + string.Join(", ", Types) + ")");
-            if (sa.Io != "Input" && sa.Io != "InputOutput") err.Add(p + sa.Name + ": io musi być Input albo InputOutput");
+            if (sa.Io != "Input" && sa.Io != "InputOutput" && sa.Io != "Output")
+                err.Add(p + sa.Name + ": io musi być Input, InputOutput albo Output");
             if (sa.Default != "" && !Galaxy.ValueParses(sa.Type, sa.Default))
                 err.Add(p + sa.Name + ": wartość początkowa '" + sa.Default + "' nie pasuje do typu " + sa.Type);
             return sa;
@@ -574,7 +576,9 @@ namespace GalaxyMcp
             {
                 var a = o as Dictionary<string, object>;
                 if (a == null) continue;
-                s.Attrs.Add(ParseAttr(a, "", seen, err));
+                var sa = ParseAttr(a, "", seen, err);
+                if (sa.Io == "Output") s.Skipped.Add(sa.Name);
+                else s.Attrs.Add(sa);
             }
 
             var seenInst = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -593,7 +597,9 @@ namespace GalaxyMcp
                 {
                     var a = ao as Dictionary<string, object>;
                     if (a == null) continue;
-                    si.Attrs.Add(ParseAttr(a, si.Name, seenHere, err));
+                    var sa = ParseAttr(a, si.Name, seenHere, err);
+                    if (sa.Io == "Output") s.Skipped.Add(si.Name + "." + sa.Name);
+                    else si.Attrs.Add(sa);
                 }
                 var src = J.Obj(i, "input_source");
                 if (src != null)
@@ -606,7 +612,8 @@ namespace GalaxyMcp
             }
             // 0.2.3: szablon bez atrybutów jest dozwolony, gdy specyfikacja dotyczy instancji (np. instancja z własnym UDA
             // na istniejącym szablonie).
-            if (s.Attrs.Count == 0 && s.Instances.Count == 0) err.Add("specyfikacja nie ma ani atrybutów szablonu, ani instancji");
+            if (s.Attrs.Count == 0 && s.Instances.Count == 0)
+                err.Add("specyfikacja nie ma ani atrybutów szablonu (poza pominiętymi Output), ani instancji");
             foreach (var w in J.Arr(d, "warnings") ?? new object[0]) s.Warnings.Add(Convert.ToString(w));
 
             if (err.Count > 0)
@@ -689,6 +696,11 @@ namespace GalaxyMcp
                         if (!DoInstance(si, tpl, dryRun)) errors++;
             }
 
+            if (s.Skipped.Count > 0)
+            {
+                r.AppendLine("POMINIĘTE atrybuty Write (io=Output) - tryb Auto ich nie tworzy; dodaj je w IDE " +
+                             "albo zaimportuj pliki CSV (tryb Manual): " + string.Join(", ", s.Skipped));
+            }
             if (s.Warnings.Count > 0)
             {
                 r.AppendLine("Ostrzeżenia generatora (elementy pominięte w specyfikacji):");

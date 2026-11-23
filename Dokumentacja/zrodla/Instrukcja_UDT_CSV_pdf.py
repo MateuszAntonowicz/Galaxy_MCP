@@ -22,7 +22,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
-PLUGIN_VERSION = "0.2.6"
+PLUGIN_VERSION = "0.2.7"
 
 # ------------------------------------------------------------------ czcionki
 FONT_SETS = [
@@ -423,7 +423,7 @@ def build():
         ["Access_Mode", "W IDE", "Przykładowe prefiksy (wzorcowy Permissions.csv)"],
         ["Input", "Read (R)", "Stan_, Status_, Alarm, Warn_, PV_, Act_, Wydajnosc_, Komenda_Historia"],
         ["InputOutput", "Read/Write (RW)", "Komenda_, Konfiguracja_, Zadana_, Nastawa_, Cmd_, Set_, Cfg_, Par_"],
-        ["Output", "Write (W)", "brak we wzorcowym pliku; tylko tryb Manual"],
+        ["Output", "Write (W)", "brak we wzorcowym pliku; w trybie Auto pomijane z ostrzeżeniem"],
     ], [W * 0.18, W * 0.2, W * 0.62]))
     s.append(Spacer(1, 4))
     s.append(P(f"Plik Permissions.csv ma kolumny {c('Prefix_or_Keyword')}, {c('Access_Mode')} i opcjonalnie "
@@ -434,7 +434,9 @@ def build():
         "Variant, typy bez definicji w dołączonych plikach, rekurencja typów.",
         f"Tablice o granicach ze stałej ({c('[1..&quot;MAX_N&quot;]')}) i poza limitami drivera (ponad 6 wymiarów "
         "lub 1600 elementów).",
-        "Zmienne proste na poziomie głównym DB (nie są instancją żadnego UDT); wartości początkowe.",
+        "Zmienne proste na poziomie głównym DB (nie są instancją żadnego UDT).",
+        f"Wartości początkowe tablic ({c(':= [1, 2]')}) i literały dat i godzin ({c('D#…')}, {c('TOD#…')}) – "
+        f"pozostałe wartości {c(':= …')} (Bool, liczby, tekst, T#…) trafiają do szablonu.",
     ])
 
     # ---- 9
@@ -471,7 +473,7 @@ def build():
          "(wyłącz Enabled, restart komputera lub zamknięcie procesów GalaxyMcp.exe, włącz Enabled)."],
         ["Zapis odrzucony – obiekt wyewidencjonowany", "Zamknij edytor obiektu w IDE (check in) i powtórz."],
         ["Serwer znika bez komunikatu", "Securden zablokował GalaxyMcp.exe – zatwierdź aplikację albo poproś IT o regułę."],
-        ["„io musi być Input albo InputOutput”", "Reguły zawierają Output – użyj trybu Manual."],
+        ["Plan pokazuje „POMINIĘTE atrybuty Write”", "Reguły zawierają Output – tryb Auto ich nie tworzy; dodaj je w IDE albo użyj trybu Manual."],
     ], [W * 0.36, W * 0.64]))
     return s
 
