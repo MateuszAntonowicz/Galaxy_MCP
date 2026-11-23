@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generuje Instrukcja_UDT_CSV.pdf - instrukcję działania projektu UDT->CSV (TIA Portal -> AVEVA System Platform)
-w projektach Claude (Claude Desktop, zakładka Code -> Projects; rozmowa projektu + wątki).
+w projektach Claude (Claude Desktop, lewe menu -> Projects; rozmowa projektu + wątki).
 
 Użycie:  python Instrukcja_UDT_CSV_pdf.py [--out Instrukcja_UDT_CSV.pdf]
 Wymaga:  reportlab; czcionki z polskimi znakami (Carlito/Liberation/DejaVu albo Calibri/Arial/Consolas na Windows).
@@ -218,12 +218,13 @@ def build():
     # ---- 2
     s.append(H1("2. Wymagania"))
     s += bullets([
-        "Aktualny <b>Claude Desktop</b> (albo przeglądarka: claude.ai/code). Projekty są w zakładce "
-        f"{ui('Code')} → {ui('Projects')} w lewym pasku (albo pod {ui('More')}).",
+        "Aktualny <b>Claude Desktop</b> (albo przeglądarka: claude.ai/code). Projekty są w lewym menu: "
+        f"{ui('Projects')}, pod {ui('Search')}.",
         "Plan <b>Pro, Max lub Ultra</b>. Projekty są w becie: nie ma ich jeszcze w planach Team i Enterprise, "
         "a dostęp włączany jest stopniowo.",
-        "Pliki projektu: zawartość archiwum <b>Context.zip</b> (foldery Tools, ITERACJE i Wzorce_SCL, t_SampleUDT.csv, "
-        "OISIDIR_tekst.txt) i opcjonalnie OISIDIR.pdf oraz Permissions.csv.",
+        f"Folder {c('Konfiguracja_projektu')} z repozytorium: {c('Context.zip')}, "
+        f"{c('Project_instructions_ustawienia.txt')} i {c('prompt.txt')} (rozdział 3); opcjonalnie OISIDIR.pdf "
+        "oraz Permissions.csv.",
         f"Tryb Auto: komputer z <b>AVEVA System Platform 2026</b> (lub dostęp do węzła GR), rozszerzenie "
         f"<b>GalaxyMCP</b> w wersji {PLUGIN_VERSION} oraz <b>uruchomiony Claude Desktop</b> na tym komputerze "
         "w czasie pracy – instalacja i ustawienia w instrukcji użytkownika wtyczki "
@@ -235,62 +236,121 @@ def build():
     # ---- 3 NOWY
     s.append(H1("3. Założenie projektu w Claude Desktop"))
     s.append(P("Projekt zakładasz raz. Potem każde nowe zlecenie wpisujesz w jego rozmowie (rozdział 5)."))
+    s.append(P(f"Wszystko, czego potrzebujesz do założenia projektu, jest w folderze {c('Konfiguracja_projektu')} "
+               f"repozytorium (po pobraniu: {c('Galaxy_MCP-main\\Konfiguracja_projektu')}):"))
+    s.append(table([
+        ["Plik", "Do czego", "Gdzie go użyć"],
+        [c("Context.zip"), "Pliki projektu: foldery Tools, ITERACJE i Wzorce_SCL, t_SampleUDT.csv, OISIDIR_tekst.txt.",
+         f"{ui('Library')} projektu – rozdział 3.2"],
+        [c("Project_instructions_ustawienia.txt"), "Instrukcja projektu – reguły, według których Claude pracuje "
+         "w każdym wątku.", f"{ui('Project settings')} → {ui('Memory')} → {ui('Project instructions')} – rozdział 3.3"],
+        [c("prompt.txt"), "Pierwszy prompt: rozpakowanie Context.zip i sprawdzenie projektu.",
+         "Rozmowa projektu, raz po założeniu – rozdział 3.6"],
+    ], [W * 0.30, W * 0.38, W * 0.32]))
+    s.append(Spacer(1, 4))
+    s.append(P(f"Do trybu Auto potrzebny jest jeszcze plik wtyczki {c('GalaxyMcp.mcpb')}. Nie ma go w folderze "
+               f"Konfiguracja_projektu ani w Download ZIP – pobierasz go z {ui('Releases')} repozytorium (rozdział 3.5)."))
     s.append(H2("3.1. Utworzenie projektu"))
     s += steps([
-        f"Otwórz Claude Desktop, przejdź do zakładki {ui('Code')} i w lewym pasku wybierz {ui('Projects')} "
-        f"(jeśli go nie widać – rozwiń {ui('More')}).",
-        f"Kliknij {ui('New project')}. Jeśli zamiast niego jest {ui('Get started')}, kliknij go i wykonaj kroki, "
-        "które pokaże aplikacja (przeniesienie albo archiwizacja projektów z czatu), potem wróć do tego kroku.",
+        f"Otwórz Claude Desktop i w lewym menu wybierz {ui('Projects')} – pozycja pod {ui('Search')}.",
+        f"Kliknij {ui('New project')} (prawy górny róg listy projektów). Jeśli zamiast niego jest "
+        f"{ui('Get started')}, kliknij go i wykonaj kroki, które pokaże aplikacja (przeniesienie albo archiwizacja "
+        "projektów z czatu), potem wróć do tego kroku.",
         f"W oknie {ui('New project')} wypełnij: {ui('Name')} – np. <b>UDT->CSV</b>; "
         f"{ui('What do you want to work on?')} (opcjonalnie) – jedno zdanie celu, np. „Konwersja typów i bloków "
         "danych z TIA Portal na szablony i instancje AVEVA (pliki CSV albo zapis przez GalaxyMCP)”.",
-        f"W polu {ui('Context')} kliknij {ui('+')} i dodaj pliki projektu (rozdział 3.2). Repozytorium GitHub "
-        "nie jest potrzebne.",
+        f"W polu {ui('Context')} kliknij {ui('+')} i dodaj plik {c('Context.zip')} (rozdział 3.2). Repozytorium "
+        "GitHub nie jest potrzebne.",
         f"Kliknij {ui('Create project')}. Otworzy się rozmowa projektu z polem wiadomości na dole.",
         f"Jeśli Claude pokaże {ui('Setup recommendations')} (proponowane repozytoria, zadania cykliczne), "
         f"wyłącz wszystkie propozycje albo po prostu je pomiń – temu projektowi nie są potrzebne.",
     ])
     s.append(H2("3.2. Pliki projektu (Library)"))
-    s.append(P("Rozpakuj Context.zip na dysku i dodaj do projektu – w polu Context przy zakładaniu albo później "
-               f"przyciskiem {ui('Library')} w nagłówku projektu → {ui('Add')}:"))
-    s.append(table([
-        ["Co dodać", "Uwagi"],
-        [f"folder {c('Tools')}", "skrypt scl_to_aveva.py, Metoda_Generowania.md, Instrukcja_projektu.md, pliki "
-                                 "GalaxyMcp* – dodaj <b>cały folder</b>, żeby zachować ścieżki Tools/…"],
-        [f"folder {c('ITERACJE')}", "notatki o adresowaniu SIDirect i z testów wtyczki"],
-        [f"folder {c('Wzorce_SCL')}", "wzorcowe pliki .udt/.db z opisem składni (do pisania plików bez TIA i do testów)"],
-        [f"{c('t_SampleUDT.csv')}, {c('OISIDIR_tekst.txt')}", "wzorzec eksportu z IDE i tekst dokumentacji drivera"],
-        [f"{c('OISIDIR.pdf')} (opcjonalnie)", "oryginał dokumentacji drivera OI SIDirect"],
-        [f"{c('Permissions.csv')} (opcjonalnie)", "reguły zapisu – możesz go też dołączać do pojedynczego zlecenia"],
-    ], [W * 0.36, W * 0.64]))
-    s.append(Spacer(1, 6))
-    s.append(note([
-        P("<b>Szybciej z kopii zapasowej:</b> dodaj do Library sam plik Context.zip i napisz w rozmowie projektu: "
-          "„Rozpakuj Context.zip do plików projektu z zachowaniem folderów Tools, ITERACJE i Wzorce_SCL, potem sprawdź "
-          "kompletność plików”. Claude zrobi to w wątku."),
-        P(f"<b>Aktualizacja pliku:</b> pliki w projekcie są kopiami. Po zmianie pliku na dysku dodaj go ponownie "
+    s.append(P(f"Do Library dodajesz <b>jeden plik: {c('Context.zip')}</b> z folderu {c('Konfiguracja_projektu')}. "
+               f"Dodaj go w polu {ui('Context')} przy zakładaniu projektu albo później przyciskiem {ui('Library')} "
+               f"w nagłówku projektu → {ui('Add')}. Nie rozpakowuj go na dysku – Claude rozpakuje go do plików "
+               "projektu po pierwszym prompcie (rozdział 3.6)."))
+    s.append(P(f"Opcjonalnie dodaj obok, jako osobne pliki: {c('OISIDIR.pdf')} (oryginał dokumentacji drivera "
+               f"OI SIDirect) i {c('Permissions.csv')} (reguły zapisu – możesz go też dołączać do pojedynczego "
+               "zlecenia)."))
+    s.append(note(
+        (f"<b>Aktualizacja pliku:</b> pliki w projekcie są kopiami. Po zmianie pliku na dysku dodaj go ponownie "
           f"({ui('Library')} → {ui('Add')}) i przy pytaniu o istniejącą nazwę wybierz {ui('Replace')}. "
-          "Wątki czytają zawsze tę wersję pliku, która jest w Library."),
-    ]))
+          "Wątki czytają zawsze tę wersję pliku, która jest w Library. Nowy Context.zip rozpakuj tym samym "
+          "pierwszym promptem (rozdział 3.6).")))
     s.append(H2("3.3. Instrukcja projektu"))
     s += steps([
         f"W nagłówku projektu kliknij menu <font name=\"Mono\"><b>⋯</b></font> (trzy kropki) → {ui('Settings')}. Otworzy się {ui('Project settings')}.",
         f"W lewym menu wybierz {ui('Memory')} i przewiń do pola {ui('Project instructions')}. To nie jest pole "
         f"{ui('What do you want to work on?')} z zakładki {ui('General')} – tam wpisuje się tylko jedno zdanie celu.",
-        f"Otwórz w Notatniku plik {c('Tools/Instrukcja_projektu.md')} z rozpakowanego Context.zip (tę samą treść ma "
-        f"{c('Konfiguracja_projektu/Project_instructions_ustawienia.txt')} w repozytorium). Zaznacz całość "
-        f"({ui('Ctrl+A')}), skopiuj ({ui('Ctrl+C')}) i wklej w pole ({ui('Ctrl+V')}).",
+        f"Otwórz w Notatniku plik {c('Konfiguracja_projektu/Project_instructions_ustawienia.txt')}. Zaznacz całość "
+        f"({ui('Ctrl+A')}), skopiuj ({ui('Ctrl+C')}) i wklej w pole ({ui('Ctrl+V')}). Plik mieści się w limicie "
+        "pola (16 000 znaków) – wklej go w całości, bez skracania.",
         f"Kliknij {ui('Save changes')}.",
     ])
-    s.append(P("Instrukcja działa w każdym nowym wątku. Po aktualizacji projektu wklej w to pole nową treść "
-               "pliku tak samo (zaznacz w polu całość i wklej) i zlecaj pracę w nowym wątku."))
-    s.append(H2("3.4. Ustawienia i sprawdzenie"))
+    s.append(P("Instrukcja projektu to reguły pracy Claude: tryby Manual i Auto, kolejność pytań w wątku, "
+               "zasady generowania i zapisu do galaktyki oraz lista plików projektu. Działa w każdym nowym wątku. "
+               "Po aktualizacji projektu wklej w to pole nową treść pliku tak samo (zaznacz w polu całość i wklej) "
+               "i zlecaj pracę w nowym wątku."))
+    s.append(H2("3.4. Modele"))
     s += bullets([
-        f"{ui('Project settings')} → {ui('General')}: {ui('Thread model')} i {ui('Thread effort')} – domyślnie "
-        "najmocniejszy model; możesz obniżyć „effort”, jeśli limit planu kończy się za szybko. Tam są też "
-        f"{ui('Pause')}, {ui('Archive')} i {ui('Delete')} (usunięcie projektu jest nieodwracalne).",
-        "Na koniec napisz w rozmowie projektu: „Sprawdź kompletność plików projektu i zgodność instrukcji”. "
-        "Claude założy wątek i zgłosi braki.",
+        f"{ui('Project settings')} → sekcja {ui('Models')}: {ui('Coordinator')} – model rozmowy projektu, "
+        f"{ui('Threads')} – model i poziom effort wątków (wybierane razem w jednym polu, np. „Opus 5.5 Medium”).",
+        f"Zalecany effort wątków: <b>{ui('Medium')}</b> albo <b>{ui('High')}</b>. Medium wystarcza do zwykłych "
+        "zleceń i oszczędza limit planu; High wybierz przy dużych plikach i wielu typach naraz.",
+        f"W {ui('General')} są też {ui('Pause')}, {ui('Archive')} i {ui('Delete')} (usunięcie projektu jest "
+        "nieodwracalne).",
+    ])
+    s.append(H2("3.5. Wtyczka GalaxyMCP (tylko tryb Auto)"))
+    s.append(P("Wtyczkę instalujesz na komputerze z AVEVA System Platform 2026, na którym działa Claude Desktop. "
+               "W trybie Manual pomiń ten rozdział."))
+    s += steps([
+        f"Na stronie repozytorium na GitHubie otwórz {ui('Releases')} (prawa kolumna strony) i wybierz najnowsze "
+        f"wydanie – <b>GalaxyMCP {PLUGIN_VERSION}</b>, oznaczone {ui('Latest')}. Bezpośredni link: "
+        f"{c('github.com/MateuszAntonowicz/Galaxy_MCP/releases/latest')}.",
+        f"W sekcji {ui('Assets')} kliknij {c('GalaxyMcp.mcpb')} i zapisz plik na dysku tego komputera (np. w folderze "
+        f"Pobrane). {c('GalaxyMcp.exe')} i {c('GalaxyMcp.exe.config')} z tego wydania nie są potrzebne – wtyczka jest "
+        "w całości w pliku .mcpb.",
+        f"W Claude Desktop otwórz {ui('Settings')} → {ui('Desktop app')} → {ui('Extensions')} → {ui('Manage')}, "
+        f"kliknij {ui('Advanced settings')} i w sekcji {ui('Extension Developer')} kliknij {ui('Install Extension…')}. "
+        f"Wskaż pobrany plik {c('GalaxyMcp.mcpb')}. Pliku nie dodajesz w {ui('Settings')} → {ui('Plugins')} – "
+        f"{ui('Upload a plugin')} przyjmuje tylko paczki pluginów i skille, nie pliki .mcpb.",
+        "W oknie instalacji sprawdź nazwę <b>GalaxyMCP</b> i listę narzędzi, potwierdź instalację. Claude Desktop "
+        "rozpakowuje wtyczkę do własnego folderu, więc pobrany plik może zostać w dowolnym miejscu.",
+        "Wypełnij formularz ustawień (później: ta sama ścieżka → GalaxyMCP): <b>Węzeł GR</b> – nazwa komputera "
+        "z serwerem galaktyk (puste = ten komputer); <b>Galaktyka na start</b>; <b>Dozwolone galaktyki</b>; "
+        "<b>Galaktyki z prawem zapisu</b> – tylko galaktyki testowe; <b>Tylko odczyt</b> odznacz dopiero po "
+        "wypełnieniu listy zapisu; <b>Zezwól na deploy</b> – zostaw wyłączone, dopóki nie potrzebujesz wdrażania.",
+        f"Zapisz i upewnij się, że przełącznik {ui('Enabled')} jest włączony.",
+    ])
+    s.append(note([
+        P("<b>Zmiana ustawień wtyczki:</b> wtyczka czyta ustawienia tylko przy starcie, a samo przełączenie "
+          f"{ui('Enabled')} nie zamyka działającego procesu. Po zmianie wyłącz {ui('Enabled')}, zrestartuj komputer "
+          f"(albo zakończ wszystkie procesy {c('GalaxyMcp.exe')} w Menedżerze zadań) i włącz {ui('Enabled')}."),
+        P(f"<b>Aktualizacja:</b> nowy {c('GalaxyMcp.mcpb')} z {ui('Releases')} instalujesz tak samo – zastępuje "
+          "zainstalowaną wtyczkę, ustawienia zostają. Wersję pokazuje status galaktyki (pozycja „Wersja”)."),
+        P(f"<b>Dziennik GalaxyMcp.log</b> jest w folderze rozszerzeń Claude Desktop ({c('Claude Extensions')}, "
+          "podfolder z „galaxy” w nazwie). Znajdziesz go w PowerShell poleceniem: "
+          f"{c('Get-ChildItem $env:LOCALAPPDATA, $env:APPDATA -Recurse -Filter GalaxyMcp.log -ErrorAction SilentlyContinue')}. "
+          "Dołączaj go do zgłoszeń problemów."),
+    ]))
+    s.append(P(f"Szczegóły ustawień i diagnostyki: {c('GalaxyMcp_Instrukcja_uzytkownika.pdf')}, rozdziały 2–4 i 8."))
+    s.append(H2("3.6. Pierwszy prompt"))
+    s.append(P("Pierwszy prompt wysyłasz raz, gdy Context.zip jest już w Library (3.2), a instrukcja projektu "
+               "jest zapisana (3.3), a w trybie Auto – po instalacji wtyczki (3.5). Wysyłasz go też po każdej podmianie Context.zip na nowszy."))
+    s += steps([
+        f"Otwórz w Notatniku plik {c('Konfiguracja_projektu/prompt.txt')}, zaznacz całość ({ui('Ctrl+A')}) "
+        f"i skopiuj ({ui('Ctrl+C')}).",
+        "Wklej treść w pole wiadomości rozmowy projektu i wyślij. Claude założy wątek.",
+        "W wątku Claude: rozpakuje Context.zip do plików projektu (z folderami Tools, ITERACJE, Wzorce_SCL), "
+        "sprawdzi kompletność plików, porówna instrukcję projektu z ustawień z Tools/Instrukcja_projektu.md, "
+        "uruchomi próbnie generator i sprawdzi, czy są dostępne narzędzia wtyczki GalaxyMCP (tylko odczyt, "
+        "galaxy_status).",
+        "Jeśli plik w projekcie różni się od wersji z archiwum, Claude zapyta kartą, którą wersję zostawić. "
+        "Jeśli nie widzi narzędzi GalaxyMCP, poprosi o połączenie wątku z komputerem z AVEVA – zatwierdź to "
+        "(potrzebne tylko w trybie Auto).",
+        "Na koniec dostaniesz krótkie podsumowanie: co zapisano, czego brakuje i czy projekt jest gotowy "
+        "do pracy w trybie Manual i Auto. Wtedy możesz wysłać pierwsze zlecenie (rozdział 5).",
     ])
 
     # ---- 4
@@ -322,7 +382,7 @@ def build():
     # ---- 5
     s.append(H1("5. Przebieg pracy krok po kroku"))
     s += steps([
-        f"Otwórz projekt: zakładka {ui('Code')} → {ui('Projects')} → <b>UDT->CSV</b>. Zlecenia piszesz w polu "
+        f"Otwórz projekt: lewe menu → {ui('Projects')} → <b>UDT->CSV</b>. Zlecenia piszesz w polu "
         "wiadomości na dole <b>rozmowy projektu</b>.",
         f"Dołącz pliki .udt i .db (opcjonalnie także Permissions.csv) przyciskiem {ui('+')} obok pola wiadomości "
         f"albo dodaj je wcześniej do {ui('Library')}. Napisz np. „Wygeneruj szablony i instancje z tych plików”.",
@@ -443,14 +503,15 @@ def build():
     s.append(H1("9. Najczęstsze problemy"))
     s.append(table([
         ["Objaw", "Rozwiązanie"],
-        [f"Brak {ui('Projects')} w zakładce Code",
+        [f"Brak {ui('Projects')} w lewym menu pod {ui('Search')}",
          f"Sprawdź pod {ui('More')} i zaktualizuj Claude Desktop. Projekty wymagają planu Pro, Max lub Ultra "
          "(beta, włączana stopniowo; brak w Team i Enterprise)."],
         [f"{ui('Get started')} zamiast {ui('New project')}",
          "Kliknij go i wykonaj kroki, które pokazuje aplikacja (przeniesienie albo archiwizacja projektów z czatu)."],
         ["Claude nie zna reguł projektu / pracuje „po swojemu”",
-         "Sprawdź, czy w Project instructions jest wklejona cała treść Tools/Instrukcja_projektu.md (rozdział 3.3) "
-         "i czy w Library są pliki z Context.zip. Instrukcja działa w nowych wątkach – zleć zadanie ponownie."],
+         "Sprawdź, czy w Project instructions jest wklejona cała treść Project_instructions_ustawienia.txt "
+         "(rozdział 3.3) i czy po pierwszym prompcie (3.6) w Library są foldery Tools, ITERACJE i Wzorce_SCL. "
+         "Instrukcja działa w nowych wątkach – zleć zadanie ponownie."],
         ["Wątek czyta nieaktualną treść pliku",
          f"Dodaj plik ponownie w {ui('Library')} i wybierz {ui('Replace')}; potem nowy wątek."],
         ["Wątek czeka i nic się nie dzieje",

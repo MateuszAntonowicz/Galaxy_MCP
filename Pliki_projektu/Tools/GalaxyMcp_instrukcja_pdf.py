@@ -2,7 +2,7 @@
 """
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
-Dotyczy projektów Claude (zakładka Code → Projects: rozmowa projektu + wątki, Library,
+Dotyczy projektów Claude (lewe menu → Projects: rozmowa projektu + wątki, Library,
 połączenie wątku z komputerem) i wtyczki 0.2.7.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
@@ -282,7 +282,7 @@ def build(icon_bytes):
         [".NET Framework", "4.x (jest w każdym Windows 10/11)", "–"],
         ["Claude Desktop", "Aktualna wersja aplikacji, zalogowana na Twoje konto i <b>uruchomiona na tym komputerze</b> "
          "w czasie pracy w trybie Auto. Plan <b>Pro, Max lub Ultra</b> (projekty są w becie i nie ma ich jeszcze "
-         "w planach Team i Enterprise).", "Zakładka <b>Code</b> → w lewym pasku <b>Projects</b> (albo pod <b>More</b>)"],
+         "w planach Team i Enterprise).", "Lewe menu → <b>Projects</b> (pod <b>Search</b>)"],
         ["Projekt UDT->CSV", "Projekt z plikami i instrukcją konwersji (założenie: instrukcja „Instrukcja działania "
          "projektu UDT->CSV”, rozdział 3)", "Projekt widoczny na liście <b>Projects</b>"],
         ["Plik wtyczki", code("GalaxyMcp.mcpb"), "–"],
@@ -344,7 +344,7 @@ def build(icon_bytes):
     s += steps([
         "Na komputerze z AVEVA uruchom <b>Claude Desktop</b> i zostaw go otwartego (wtyczka działa tylko razem "
         "z aplikacją; komputer nie może przejść w uśpienie).",
-        "Otwórz projekt: zakładka <b>Code</b> → <b>Projects</b> → <b>UDT->CSV</b>.",
+        "Otwórz projekt: lewe menu → <b>Projects</b> → <b>UDT->CSV</b>.",
         "W polu wiadomości na dole rozmowy projektu wpisz polecenie:",
     ])
     s.append(prompt_box("Sprawdź status galaktyki i listę galaktyk."))
@@ -438,7 +438,7 @@ def build(icon_bytes):
          "zamknięty lub komputer uśpiony, wtyczka wyłączona albo wątek założony przed instalacją",
          "Uruchom Claude Desktop i sprawdź Enabled; w wątku poproś „Połącz się z moim komputerem” i zatwierdź kartę; "
          "jeśli nie pomoże – poproś w rozmowie projektu o nowy wątek"],
-        ["Brak Projects w zakładce Code", "Plan bez projektów (np. Team/Enterprise) albo beta jeszcze nie "
+        ["Brak Projects w lewym menu pod Search", "Plan bez projektów (np. Team/Enterprise) albo beta jeszcze nie "
          "dotarła na konto", "Sprawdź pod More; zaktualizuj Claude Desktop; w razie potrzeby pracuj w trybie Manual "
          "u osoby z dostępem"],
         ["Wtyczka znika bez komunikatu", "Oprogramowanie ochronne zablokowało GalaxyMcp.exe",
