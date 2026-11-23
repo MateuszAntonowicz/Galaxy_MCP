@@ -3,7 +3,7 @@
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
 Dotyczy projektów Claude (zakładka Code → Projects: rozmowa projektu + wątki, Library,
-połączenie wątku z komputerem) i wtyczki 0.2.5.
+połączenie wątku z komputerem) i wtyczki 0.2.6.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -23,7 +23,7 @@ from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, Simpl
                                 Spacer, Table, TableStyle)
 from reportlab.platypus.tableofcontents import TableOfContents
 
-VERSION = "0.2.5"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
+VERSION = "0.2.6"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
@@ -305,9 +305,12 @@ def build(icon_bytes):
     ])
     s.append(box("<b>Aktualizacja wtyczki:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastępuje on "
                  "zainstalowaną wtyczkę, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
-                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.5.", "info"))
-    s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń. Tam znajdziesz też plik "
-                 f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów).", "info"))
+                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.6.", "info"))
+    s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń "
+                 f"{code('Claude Extensions')} (podfolder z „galaxy” w nazwie). Tam znajdziesz też plik "
+                 f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów). Położenie folderu zależy od "
+                 "wersji Claude Desktop. Plik znajdziesz w PowerShell poleceniem: "
+                 f"{code('Get-ChildItem $env:LOCALAPPDATA, $env:APPDATA -Recurse -Filter GalaxyMcp.log -ErrorAction SilentlyContinue')}.", "info"))
 
     # ---- 3. Ustawienia
     s.append(H1("3. Ustawienia wtyczki"))
@@ -355,7 +358,7 @@ def build(icon_bytes):
     s.append(P("Prawidłowy wynik (przykład dla ustawień z rozdziału 3):"))
     s.append(table([
         ["Pozycja w statusie", "Oczekiwana wartość"],
-        ["Wersja", "0.2.5"],
+        ["Wersja", "0.2.6"],
         ["Galaktyka (aktywna)", "Galaktyka_Test"],
         ["Zapis w aktywnej galaktyce", "DOZWOLONY"],
         ["Dozwolone galaktyki", "Galaktyka_Test, Galaktyka_Dev, Galaktyka_Prod"],
@@ -456,6 +459,11 @@ def build(icon_bytes):
          "Zgłoś to osobie utrzymującej projekt; do tego czasu skróć nazwę w programie sterownika"],
         ["„wartość początkowa … nie pasuje do typu …”", "Initial value niezgodna z typem (np. tekst w Integer)",
          "Popraw wartość (Dodatek B) – nic nie zostało zapisane"],
+        ["Import CSV kończy się wynikiem BŁĄD", "Część obiektów nie została zaimportowana (np. E_FAIL w linii N, "
+         "zwykle dwa atrybuty o nazwach różniących się tylko wielkością liter)",
+         "Popraw wskazaną linię pliku i zaimportuj ponownie; szczegóły w GalaxyMcp.log"],
+        ["Po zmianie kierunku atrybutu w IDE instancje nie mają adresu", "IDE usuwa adresy atrybutu w instancjach "
+         "przy zmianie Read/Write ↔ Write", "Wczytaj ponownie plik instancji (Galaxy Load albo import CSV)"],
         ["„io musi być Input albo InputOutput”", "Zmienne tylko do zapisu (Write) – celowo wyłączone w trybie Auto "
          "(Dodatek B)", "Przetwórz ten plik w trybie Manual (pliki CSV)"],
         ["„W GRAccess brak wartości MxDataType…”", "Twoja wersja GRAccess nie zna tego typu",
@@ -476,7 +484,7 @@ def build(icon_bytes):
         [code("export_csv"), "Eksport szablonu lub instancji do CSV", "nie"],
         [code("apply_spec"), "Plan (domyślnie) albo zapis specyfikacji: szablon, atrybuty, instancje "
          "(także ich własne atrybuty), adresy", "tylko po zgodzie"],
-        [code("import_csv"), "Import plików CSV z trybu Manual (niesprawdzone)", "tak"],
+        [code("import_csv"), "Import plików CSV z trybu Manual; błąd choćby jednego obiektu daje wynik BŁĄD", "tak"],
         [code("deploy"), "Wdrożenie instancji (wymaga włączenia w ustawieniach; niesprawdzone)", "tak"],
     ], [34 * mm, 106 * mm, 30 * mm]))
 

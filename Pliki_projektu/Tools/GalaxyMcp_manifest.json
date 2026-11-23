@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "galaxy",
   "display_name": "GalaxyMCP",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Tworzenie szablonów i instancji w galaktyce AVEVA System Platform przez GRAccess (tryb Auto projektu SCL → AVEVA).",
   "long_description": "Lokalny serwer MCP dla galaktyki AVEVA System Platform. Wykonuje specyfikację `Spec_<UDT>.json` generowaną przez `scl_to_aveva.py`: tworzy szablon z atrybutami UDA i rozszerzeniami I/O, tworzy instancje, dodaje instancjom własne atrybuty UDA i ustawia `InputSource`. Obsługuje wszystkie typy UDA z IDE (Boolean, Integer, Float, Double, String, Time, ElapsedTime, InternationalizedString, BigString). Domyślnie tylko plan (`dry_run`); zapis wymaga wyłączenia trybu tylko do odczytu i dotyczy wyłącznie galaktyk z listy zapisu. Serwer niczego nie usuwa. Wymaga zainstalowanego AVEVA System Platform IDE (GRAccess) i .NET Framework 4.x.",
   "author": {

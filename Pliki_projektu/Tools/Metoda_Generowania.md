@@ -80,8 +80,10 @@ Specyfikacja ma `spec_version` 1 i jeden szablon w pliku, więc tryb Auto wykonu
 | `Output` | Write | `WriteOnly` | `Output` | `OutputDest` (puste) | `<Attr>.OutputDest` |
 
 - `Output` = SCADA tylko zapisuje do PLC i nie odczytuje wartości z powrotem – nie dla alarmów i stanów.
-  **Wiersz Output (`WriteOnly`, sam `OutputDest`, bez `#IO.Deadband`) nie jest potwierdzony eksportem z IDE** – przy pierwszym
-  użyciu porównać z eksportem atrybutu ustawionego w IDE na Write i wspomnieć o tym w „Do sprawdzenia”.
+  Wiersz Output (`WriteOnly`, sam `OutputDest`, bez `#IO.Deadband`) jest zgodny z eksportem z IDE (SP 2026). IDE dopisuje
+  jeszcze `OutputEveryScan=false` i `WriteStatus` – generator ich nie potrzebuje.
+- Zmiana kierunku atrybutu w szablonie (w IDE) usuwa jego adresy w instancjach – potem wczytaj ponownie `Instances_<UDT>.csv`.
+- `MxTime` bez wartości początkowej dostaje od GRAccess czas utworzenia szablonu; przy atrybutach I/O nie ma to znaczenia.
 - Tryb Auto: GalaxyMCP odrzuca specyfikację z `io=Output` („io musi być Input albo InputOutput”) – dla takich UDT tryb Manual.
 - `Permissions.csv`: kolumny `Prefix_or_Keyword`, `Access_Mode`, `Description` (opcjonalna, generator jej nie czyta).
   **Nazw kolumn nie wolno zmieniać** – plik bez żadnej poprawnej reguły (np. nagłówek `Prefix_`) przerywa generator komunikatem,
@@ -160,7 +162,7 @@ błędu – sprawdzenie adresów na żywym sterowniku wpisuj w „Do sprawdzenia
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer GalaxyMCP 0.2.5 (rozszerzenie .mcpb, AVEVA System Platform 2026)
+## Tryb Auto – serwer GalaxyMCP 0.2.6 (rozszerzenie .mcpb, AVEVA System Platform 2026)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.

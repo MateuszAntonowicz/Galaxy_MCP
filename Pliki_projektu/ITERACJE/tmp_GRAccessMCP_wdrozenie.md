@@ -372,3 +372,15 @@ i poprosić o wyniki kroków 1, 3 i 5:
 - Instrukcja_projektu.md skrócona do < 16 000 znaków i wklejana w całości w Project instructions
   (Konfiguracja_projektu/Project_instructions_ustawienia.txt = jej kopia; pilnuje tego test `Repozytorium`).
   Szczegółowe reguły (tabela typów, format CSV, zakres SIDirect) przeniesione do Metoda_Generowania.md.
+
+## 2026-11-23 – test 0.2.5 w SP 2026 (AstorMAN, galaktyka test) i wersja 0.2.6
+- Test 0.2.5: zapis bez `galaxy` odrzucony; `apply_spec` utworzył `$t_Test_025` (14 atrybutów: TIME, DATE, DTL, tablice
+  1D i 2D) i 2 instancje z adresami – Galaxy Dump zgodny ze specyfikacją. `import_csv` plików z generatora (nazwy po
+  poprawkach 0.2.5) OK. Szablon z `Stan_X` i `stan_x` – E_FAIL w linii `stan_x` (potwierdza potrzebę poprawki kolizji).
+  AVEVA przyjmuje nazwę atrybutu z polskimi literami (`Prędkość_zadana`) – transliteracja to ostrożność, nie wymóg.
+- Eksport IDE atrybutu ustawionego na Write: `#IO.Mode=WriteOnly`, PrimitiveType `Output`, `OutputDest`, `OutputEveryScan`,
+  `WriteStatus` – format generatora potwierdzony. Zmiana kierunku w IDE usuwa adres atrybutu w instancjach (`OutputDest = ---`).
+- 0.2.6: `import_csv` zwraca BŁĄD i loguje ERROR, gdy któryś obiekt się nie zaimportował (GRAccess zgłaszał wtedy Success);
+  usunięte ostrzeżenie „format niepotwierdzony” dla Output; teksty: ścieżka logu, ponowny Galaxy Load po zmianie kierunku,
+  wartość domyślna MxTime (czas utworzenia), dwa procesy serwera, ~30 s pierwszego połączenia, przecinek dziesiętny w GRDump.
+- Pliki z testu (eksporty, Galaxy Dump, log): folder projektu `test_0.2.5_astorman/`.

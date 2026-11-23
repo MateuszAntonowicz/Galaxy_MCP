@@ -22,7 +22,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
-PLUGIN_VERSION = "0.2.5"
+PLUGIN_VERSION = "0.2.6"
 
 # ------------------------------------------------------------------ czcionki
 FONT_SETS = [

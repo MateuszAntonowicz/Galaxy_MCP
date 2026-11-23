@@ -9,10 +9,10 @@ SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
                                             └──► GalaxyMCP ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Wersja 0.2.5** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
+> **Wersja 0.2.6** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
 > `select_galaxy`, listy `GALAXY_ALLOWED` / `GALAXY_WRITABLE`), wszystkie typy UDA z okna IDE, atrybuty dodawane do pojedynczej
 > instancji i plan zmian przed zapisem. Każdy zapis (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) wymaga parametru
-> `galaxy` równego aktywnej galaktyce. Nie były testowane w galaktyce: `import_csv`, `deploy`.
+> `galaxy` równego aktywnej galaktyce. Nie był testowany w galaktyce: `deploy`.
 > Po zmianie konfiguracji lub instalacji nowej paczki nowe narzędzia widać w nowym wątku projektu.
 
 > W projekcie Claude pliki serwera leżą w `Tools/` z przedrostkiem `GalaxyMcp_`: `GalaxyMcp.cs`, `GalaxyMcp_build.bat`,
@@ -114,7 +114,7 @@ uprawnieniami albo galaktyki testowej bez zabezpieczeń.
 ## 4. Instalacja jako rozszerzenie Claude Desktop (.mcpb) – zalecana na kolejnych komputerach
 
 Paczka `.mcpb` to archiwum ZIP z `manifest.json`, `GalaxyMcp.exe`, `GalaxyMcp.exe.config` i `icon.png`.
-Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – bez ręcznej edycji `claude_desktop_config.json`.
+Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam pokazuje formularz ustawień – bez ręcznej edycji `claude_desktop_config.json`.
 
 **Tworzenie paczki (raz, u osoby, która buduje serwer):**
 
@@ -145,8 +145,10 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
 
 **Uwagi:**
 
-- Claude Desktop rozpakowuje rozszerzenie do własnego folderu (Settings → Desktop app → Extensions (Manage) pokazuje szczegóły).
-  Tam powstaje `GalaxyMcp.log`; tam też można uruchomić `GalaxyMcp.exe --selftest`.
+- Claude Desktop rozpakowuje rozszerzenie do własnego folderu `Claude Extensions\local.mcpb.<autor>.galaxy\`.
+  Tam powstaje `GalaxyMcp.log`; tam też można uruchomić `GalaxyMcp.exe --selftest`. Położenie folderu zależy od wersji
+  Claude Desktop (np. `%APPDATA%\Claude\` albo folder pakietu w `%LOCALAPPDATA%\Packages\`). Plik znajdzie polecenie PowerShell:
+  `Get-ChildItem $env:LOCALAPPDATA, $env:APPDATA -Recurse -Filter GalaxyMcp.log -ErrorAction SilentlyContinue | Select-Object FullName`.
 - Securden widzi exe w folderze rozszerzeń, a nie w `C:\Tools\GalaxyMcp\` – reguła IT powinna dotyczyć skrótu (hash) pliku albo podpisu.
 - Zmiana ustawień: Settings → Desktop app → Extensions (Manage) → GalaxyMCP. Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
   wyłącz przełącznik Enabled, zrestartuj komputer i włącz Enabled. Sprawdzenie: `galaxy_status`.
@@ -214,6 +216,13 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
   Przy błędzie pobranie jest cofane (UndoCheckOut).
 - Błędy przy ustawianiu opisu, wartości domyślnej, obszaru (Area), grupy bezpieczeństwa (SecurityGroup)
   i toolsetu są tylko ostrzeżeniami. Wszystkie zapisy trafiają do `GalaxyMcp.log` (poziom `ZAPIS`).
+- `import_csv`: GRAccess zgłasza sukces całej operacji, nawet gdy pojedynczy obiekt się nie zaimportował. Serwer liczy
+  więc wynik także z komunikatów dla obiektów: gdy którykolwiek ma błąd, odpowiedź zaczyna się od `BŁĄD:`, linia `Wynik:`
+  pokazuje `BŁĄD (błędy dla obiektów: N)`, a każdy komunikat z błędem trafia do `GalaxyMcp.log` (poziom `ERROR`).
+- Atrybut `MxTime` bez wartości początkowej dostaje od GRAccess czas utworzenia szablonu (np. `11/23/2026 3:07:15 PM`).
+  Przy atrybutach I/O wartość i tak przychodzi ze sterownika.
+- Zmiana kierunku I/O atrybutu w IDE (np. Read/Write → Write) usuwa adresy tego atrybutu w instancjach
+  (`OutputDest = ---`). Po takiej zmianie wczytaj ponownie `Instances_<UDT>.csv` (Galaxy Load albo `import_csv`).
 - Przed zapisem zamknij w IDE edytory obiektów, których dotyczy zmiana, bo IDE i GRAccess
   korzystają z tych samych blokad obiektów.
 
@@ -225,6 +234,11 @@ Claude Desktop instaluje ją dwuklikiem i sam pokazuje formularz ustawień – b
   ma 5 s; potem proces kończy się bez niego. W `GalaxyMcp.log`: „nadzór rodzica: …” przy starcie i „GalaxyMCP stop: …”.
 - `build.bat` odmawia budowania tylko wtedy, gdy działa `GalaxyMcp.exe` z tego samego folderu. Kopia z folderu rozszerzeń
   Claude (wtyczka `.mcpb`) nie blokuje budowania w innym folderze.
+- Pierwsze wywołanie po starcie trwa ok. 30 s (`QueryGalaxies` i logowanie do galaktyki); kolejne są szybkie.
+- Claude Desktop może uruchomić dwa procesy serwera naraz (dwa wpisy „start” i „stop” w logu o tym samym czasie).
+  Każdy działa samodzielnie; nie jest to błąd wtyczki.
+- `GRDump` (`export_csv` z `kind=instances`) zapisuje liczby z separatorem dziesiętnym z ustawień regionalnych Windows
+  (np. `"0,0"`), a eksport szablonu i pliki generatora używają kropki. Przy porównywaniu plików trzeba to uwzględnić.
 - `GalaxyMcp.exe --selftest` – ładowanie GRAccess, lista galaktyk, logowanie (kroki 1–4 w `GalaxyMcp.log`).
 - `GalaxyMcp.exe --dump-api` – zapisuje pełny opis API biblioteki GRAccess do `GRAccess_API.txt`
   (interfejsy, metody, właściwości, wartości enumeracji). Przydatne przy błędzie „brak metody/właściwości”
