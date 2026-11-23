@@ -64,6 +64,7 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 ```
 README.md
 Pliki_projektu/            ← pliki projektu Claude (to samo co Context.zip)
+  Wzorce_SCL/              wzorcowe pliki .udt/.db z opisem składni i źródłami
   Tools/                   generator, reguły, pełna instrukcja dla Claude, źródła wtyczki GalaxyMCP
     scl_to_aveva.py        TIA (.udt/.scl/.db) → Spec_<UDT>.json i pliki CSV
     Metoda_Generowania.md  reguły wypełniania kolumn i format specyfikacji

@@ -138,5 +138,27 @@ class Generator(unittest.TestCase):
             self.assertNotEqual(code, 0)                                   # brak --plc i --no-address
 
 
+class Wzorce(unittest.TestCase):
+    """Wzorcowe pliki Pliki_projektu/Wzorce_SCL/ muszą być czytane przez generator bez błędów składni."""
+
+    def test_wzorce_scl(self):
+        wz = os.path.join(ROOT, "Pliki_projektu", "Wzorce_SCL")
+        with tempfile.TemporaryDirectory() as t:
+            out = os.path.join(t, "o")
+            code, log = run(os.path.join(wz, "UDT_Wzorzec.udt"), "--db", os.path.join(wz, "DB_Wzorzec_Globalny.db"),
+                            os.path.join(wz, "DB_Wzorzec_Typu_UDT.db"), "--plc", "PLC1", "--scan-group", "SG1",
+                            "--out", out)
+            self.assertEqual(code, 0, log)
+            self.assertNotIn("nie rozpoznano", log)
+            with open(os.path.join(out, "Spec_UDT_Wz_Naped.json"), encoding="utf-8") as f:
+                spec = json.load(f)
+            self.assertEqual(len(spec["template"]["attributes"]), 28)
+            self.assertEqual(sorted(i["name"] for i in spec["instances"]),
+                             ["DB_Wz_Napedy_Pompa_01", "DB_Wz_Napedy_Pompa_02", "DB_Wz_Napedy_Sekcja_B_Mieszadlo",
+                              "DB_Wz_Napedy_Wentylatory_1", "DB_Wz_Napedy_Wentylatory_2",
+                              "DB_Wz_Napedy_Wentylatory_3", "DB_Wz_Pompa_03"])
+            self.assertEqual(server_errors(spec), [])
+
+
 if __name__ == "__main__":
     unittest.main()
