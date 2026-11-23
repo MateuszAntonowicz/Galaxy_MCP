@@ -159,6 +159,15 @@ class Wzorce(unittest.TestCase):
                               "DB_Wz_Napedy_Wentylatory_3", "DB_Wz_Pompa_03"])
             self.assertEqual(server_errors(spec), [])
 
+    def test_zrodla_sew(self):
+        sew = os.path.join(ROOT, "Pliki_projektu", "Wzorce_SCL", "SEW_ECDriveS")
+        with tempfile.TemporaryDirectory() as t:
+            code, log = run(os.path.join(sew, "ECCDFC_ALL_UDTs_rev1.7.udt"), "--db", os.path.join(sew, "IO_data.db"),
+                            "--all-types", "--no-address", "--out", os.path.join(t, "o"))
+            self.assertEqual(code, 0, log)
+            self.assertNotIn("nie rozpoznano", log)
+            self.assertEqual(len([n for n in os.listdir(os.path.join(t, "o")) if n.startswith("Spec_")]), 10)
+
 
 if __name__ == "__main__":
     unittest.main()

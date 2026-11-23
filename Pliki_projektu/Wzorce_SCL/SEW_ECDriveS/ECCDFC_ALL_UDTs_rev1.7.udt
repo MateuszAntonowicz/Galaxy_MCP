@@ -1,0 +1,711 @@
+TYPE "ECCDFCZPA_IN"
+VERSION : 0.1
+   STRUCT
+      StateUpstreamZoneInverce { S7_HMI_Visible := 'False'} : Byte;   // Zone status when the conveyor is running in opposite to configured direction .The values have the same meaning as in "StateUpstreamZone" field
+      StateUpstreamZone { S7_HMI_Visible := 'False'} : Byte;   // Empty =1 /Empty Motor Run = 2 /Empty Sending = 3 / Full Running = 4 / Full Stopped = 5 / Empty but Accumulate = 6
+      StateDownstreamZoneInverce { S7_HMI_Visible := 'False'} : Byte;   // Zone status when the conveyor is running in opposite to configured direction  .The values have the same meaning as in "StateDownstreamZone" field
+      StateDownstreamZone { S7_HMI_Visible := 'False'} : Byte;   // Empty =1 /Empty Motor Run = 2 /Empty Sending = 3 / Full Running = 4 / Full Stopped = 5 / Empty but Accumulate = 6
+      ArrivalCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product arrives on the Upstream zone this counter is incremented
+      DisarrivalCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product leaves the Upstream zone this counter is incremented
+      ArrivalCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product arrives on the Downstream zone this counter is incremented
+      DisarrivalCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product leaves the Downstream zone this counter is incremented
+      Diagnostic { S7_HMI_Visible := 'False'} : Struct   // 32 bit diagnostic field . When bits are set the error is active .
+         LeftMDR_Overheat { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR temperature has exceeded 105 degrees Celsius
+         LeftMDR_MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR is running with maximum torque output
+         LeftMDR_Short { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the Left MDR
+         LeftMDR_NotConn { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR  is not connected
+         LeftMDR_Overload { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR  has been overloaded - this means its speed is less than 10% of the selected speed
+         LeftMDR_Stalled { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR  has stalled
+         LeftMDR_BadHall { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR  has a Hall Efect Sensor error
+         LeftMDR_NotUsed { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR  is not used
+         Reserved_for_Modbus { S7_HMI_Visible := 'False'} : Bool;
+         Reserved_1 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR -generated voltage has exceeded 30 volts
+         LeftMDR_AnyErr { S7_HMI_Visible := 'False'} : Bool;   // A general error on the Left MDR.
+         ConnectionsNotOK { S7_HMI_Visible := 'False'} : Bool;   // The Ethernet connections are not ok .
+         UpstreamJamErr { S7_HMI_Visible := 'False'} : Bool;   // Jam error is present on Upstream zone
+         LeftSensLowGain { S7_HMI_Visible := 'False'} : Bool;   // Left sensor error
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+         RightMDR_Overheat { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  temperature has exceeded 105 degrees Celsius
+         RightMDR_MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR is running with maximum torque output
+         RightMDR_Short { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the Right MDR
+         RightMDR_NotConn { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  is not connected
+         RightMDR_Overload { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  has been overloaded - this means its speed is less than 10% of the selected speed
+         RightMDR_Stalled { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  has stalled
+         RightMDR_BadHall { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  has a Hall Efect Sensor error
+         RightMDR_NotUsed { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR  is not used
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved_2 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage1 { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR -generated voltage has exceeded 30 volts
+         RightMDR_AnyErr { S7_HMI_Visible := 'False'} : Bool;   // A general error on the Right MDR.
+         Reserved_3 { S7_HMI_Visible := 'False'} : Bool;
+         DownstreamJamErr { S7_HMI_Visible := 'False'} : Bool;   // Jam error is present on Downstream zone
+         RightSensLowGain { S7_HMI_Visible := 'False'} : Bool;   // Right sensor error
+         LowVoltage1 { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      TrackingUpstreamZone { S7_HMI_Visible := 'False'} : DWord;   // The Tracking data of the product currently on this zone
+      TrackingDownstreamZone { S7_HMI_Visible := 'False'} : DWord;   // The Tracking data of the product currently on this zone
+      ReleaseCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Same register as is read in the ECCDFCZPA_OUT instance .Used to confirm the ReleaseCounter
+      ReleaseCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Same register as is read in the ECCDFCZPA_OUT instance .Used to confirm the ReleaseCounter
+      ModuleDischargeTracking { S7_HMI_Visible := 'False'} : DWord;   // Tracking data of a product that has just been discharged to a non-ECC-DFC-24-00 part of a conveyor , when the module is operating in default direction
+      ModuleDischargeTrackingInverce { S7_HMI_Visible := 'False'} : DWord;   // Tracking data of a product that has just been discharged to a non-ECC-DFC-24-00 part of a conveyor , when the module is operating in opposite to default direction
+      AllSensors { S7_HMI_Visible := 'False'} : Struct   // All sensor inputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin2 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         LeftSensor { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         RightSensor { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      Reserved { S7_HMI_Visible := 'False'} : Word;
+      Convey_stop_status { S7_HMI_Visible := 'False'} : Struct   // Status of ConveyStop
+         Reserved0 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         StopActiveCommandPLC { S7_HMI_Visible := 'False'} : Bool;   // Stop active due to stop command from the PLC
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved4 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved5 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved6 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved7 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved8 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved9 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved10 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved11 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved12 { S7_HMI_Visible := 'False'} : Bool;
+         StopActiveOtherModule { S7_HMI_Visible := 'False'} : Bool;   // Stop condition is active on a module in the Stop group
+         StopActiveLostConn { S7_HMI_Visible := 'False'} : Bool;   // Stop is active due to a loss of communication connection
+         StopActiveLostPLC { S7_HMI_Visible := 'False'} : Bool;   // Stop active due to a loss of connection with the PLC
+      END_STRUCT;
+      Future { S7_HMI_Visible := 'False'} : Array[21..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLCmini_OUT"
+VERSION : 0.1
+   STRUCT
+      Reserved : Word;
+      Reserved_1 : Word;
+      SensorPortsDO { S7_HMI_Visible := 'False'} : Struct   // The Sensor ports PIN2 as  digital outputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         DriveLeftPIN2 { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit drives the Left PIN2 to logical 1
+         DriveRightPIN2 { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit drives the Right PIN2 to logical 1
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         SetLeftPIN2asDO { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit sets the Left PIN2 to be used as Digital Output / 0 = Digital input
+         SetRightPIN2asDO { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit sets the Right PIN2 to be used as Digital Output/ 0 = Digital input
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRControl { S7_HMI_Visible := 'False'} : Struct   // Run/Stop and Direction control of the Left MDR
+         MDR_Direction { S7_HMI_Visible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Run_MDR { S7_HMI_Visible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      RightMDRControl { S7_HMI_Visible := 'False'} : Struct   // Run/Stop and Direction control of the Right MDR
+         MDR_Direction { S7_HMI_Visible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Run_MDR { S7_HMI_Visible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRSpeed { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      RightMDRSpeed { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      ClearMDRError { S7_HMI_Visible := 'False'} : Word;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCZPA_OUT"
+VERSION : 0.1
+   STRUCT
+      InductTrackingOnUpstreamZone { S7_HMI_Visible := 'False'} : DWord;   // Writes the tracking data of the product currently on the zone .The Release counter of the zone must be incremented by 1.
+      InductTrackingOnDownstreamZone { S7_HMI_Visible := 'False'} : DWord;   // Writes the tracking data of the product currently on the zone .The Release counter of the zone must be incremented by 1.
+      AccumulateControlUpstream { S7_HMI_Visible := 'False'} : Struct
+         AccumUpstreamToThisZone { S7_HMI_Visible := 'False'} : Bool;   // Accumulates the Upstream zone relative to this zone .Useful in Merge/Divert operations
+         FakeConfirm { S7_HMI_Visible := 'False'} : Bool;   // Fake confirmation bit . Useful for Divert operations . Please check documentation for more information .
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Accumulate { S7_HMI_Visible := 'False'} : Bool;   // Accumulates this zone of this ECC-DFC-24-00 module
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      AccumulateControlDownstream { S7_HMI_Visible := 'False'} : Struct
+         AccumUpstreamToThisZone { S7_HMI_Visible := 'False'} : Bool;   // Accumulates the Upstream zone relative to this zone .Useful in Merge/Divert operations
+         FakeConfirm { S7_HMI_Visible := 'False'} : Bool;   // Fake confirmation bit . Useful for Divert operations . Please check documentation for more information .
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Accumulate { S7_HMI_Visible := 'False'} : Bool;   // Accumulates this zone of this ECC-DFC-24-00 module
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      SpeedLeftMDR { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      SpeedRightMDR { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      ReleaseControlUpstream { S7_HMI_Visible := 'False'} : Int;   // Changing the value causes the Upstream zone to release the current product . Even if  Accumulation is set for this zone , the current product is released
+      ReleaseControlDownstream { S7_HMI_Visible := 'False'} : Int;   // Changing the value causes the Downstream zone to release the current product . Even if  Accumulation is set for this zone , the current product is released
+      InductControlState { S7_HMI_Visible := 'False'} : Word;   // Used as a "Wake up" signal . If '4' is written the Zone will attempt to accept product . If 1 is written the zone will stop accepting .
+      DishargeControlState { S7_HMI_Visible := 'False'} : Word;   // Used as a "Lane full" signal .Set 5 to cause the zone to accumulate product here . Set 1 to allow the zone to release the product .
+      ModuleInductTrackingOnInductSide { S7_HMI_Visible := 'False'} : DWord;   // When the conveyor is running in configured direction ,writing Tracking data here will cause the next product to appear on the zone to have this tracking data assigned .
+      ModuleInductTrackingOnDishargeSide { S7_HMI_Visible := 'False'} : DWord;   // When the conveyor is running in opposite to configured direction ,writing Tracking data here will cause the next product to appear on the zone to have this tracking data assigned .
+      ClearMotorError { S7_HMI_Visible := 'False'} : Word;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+      Reserved { S7_HMI_Visible := 'False'} : Word;
+      Reserved_1 { S7_HMI_Visible := 'False'} : Word;
+      Convey_stop_control { S7_HMI_Visible := 'False'} : Word;   // Writing '1' causes the Stop group to go into STOP state . Writing '2' clears the STOP state. Transition 0 - 2 is needed to clear the Stop
+      JamClearUpstream { S7_HMI_Visible := 'False'} : Word;   // Transition of this value from '0' to '1' clears the JAM condition on the zone
+      JamClearDownstream { S7_HMI_Visible := 'False'} : Word;   // Transition of this value from '0' to '1' clears the JAM condition on the zone
+      GlobalDirectionControlUpstream { S7_HMI_Visible := 'False'} : Word;   // Used to change direction of flow or accumulation mode for a continuous group of zones beginning with the local zone .
+      GlobalDirectionControlDownstream { S7_HMI_Visible := 'False'} : Word;   // Used to change direction of flow or accumulation mode for a continuous group of zones beginning with the local zone .
+      Future { S7_HMI_Visible := 'False'} : Array[24..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCZPAmini_OUT"
+VERSION : 0.1
+   STRUCT
+      AccumulateControlUpstream { S7_HMI_Visible := 'False'} : Struct
+         AccumUpstreamToThisZone { S7_HMI_Visible := 'False'} : Bool;   // Accumulates the Upstream zone relative to this zone .Useful in Merge/Divert operations
+         FakeConfirm { S7_HMI_Visible := 'False'} : Bool;   // Fake confirmation bit . Useful for Divert operations . Please check documentation for more information .
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Accumulate { S7_HMI_Visible := 'False'} : Bool;   // Accumulates this zone of this ECC-DFC-24-00 module
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      AccumulateControlDownstream { S7_HMI_Visible := 'False'} : Struct
+         AccumUpstreamToThisZone { S7_HMI_Visible := 'False'} : Bool;   // Accumulates the Upstream zone relative to this zone .Useful in Merge/Divert operations
+         FakeConfirm { S7_HMI_Visible := 'False'} : Bool;   // Fake confirmation bit . Useful for Divert operations . Please check documentation for more information .
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Accumulate { S7_HMI_Visible := 'False'} : Bool;   // Accumulates this zone of this ECC-DFC-24-00 module
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      SpeedLeftMDR { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      SpeedRightMDR { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG). The allowed values depend on the Speed code of the MDR .
+      ReleaseControlUpstream { S7_HMI_Visible := 'False'} : Int;   // Changing the value causes the Upstream zone to release the current product . Even if  Accumulation is set for this zone , the current product is released
+      ReleaseControlDownstream { S7_HMI_Visible := 'False'} : Int;   // Changing the value causes the Downstream zone to release the current product . Even if  Accumulation is set for this zone , the current product is released
+      InductControlState { S7_HMI_Visible := 'False'} : Word;   // Used as a "Wake up" signal . If '4' is written the Zone will attempt to accept product . If 1 is written the zone will stop accepting .
+      DishargeControlState { S7_HMI_Visible := 'False'} : Word;   // Used as a "Lane full" signal .Set 5 to cause the zone to accumulate product here . Set 1 to allow the zone to release the product .
+      ClearMotorError { S7_HMI_Visible := 'False'} : Word;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+      Reserved { S7_HMI_Visible := 'False'} : Word;
+      Reserved_1 { S7_HMI_Visible := 'False'} : Word;
+      JamClearUpstream { S7_HMI_Visible := 'False'} : Word;   // Transition of this value from '0' to '1' clears the JAM condition on the zone
+      JamClearDownstream { S7_HMI_Visible := 'False'} : Word;   // Transition of this value from '0' to '1' clears the JAM condition on the zone
+      GlobalDirectionControlUpstream { S7_HMI_Visible := 'False'} : Word;   // Used to change direction of flow or accumulation mode for a continuous group of zones beginning with the local zone .
+      GlobalDirectionControlDownstream { S7_HMI_Visible := 'False'} : Word;   // Used to change direction of flow or accumulation mode for a continuous group of zones beginning with the local zone .
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCZPAmini_IN"
+VERSION : 0.1
+   STRUCT
+      StateUpstreamZoneInverce { S7_HMI_Visible := 'False'} : Byte;   // Zone status when the conveyor is running in opposite to configured direction .The values have the same meaning as in "StateUpstreamZone" field
+      StateUpstreamZone { S7_HMI_Visible := 'False'} : Byte;   // Empty =1 /Empty Motor Run = 2 /Empty Sending = 3 / Full Running = 4 / Full Stopped = 5 / Empty but Accumulate = 6
+      StateDownstreamZoneInverce { S7_HMI_Visible := 'False'} : Byte;   // Zone status when the conveyor is running in opposite to configured direction  .The values have the same meaning as in "StateDownstreamZone" field
+      StateDownstreamZone { S7_HMI_Visible := 'False'} : Byte;   // Empty =1 /Empty Motor Run = 2 /Empty Sending = 3 / Full Running = 4 / Full Stopped = 5 / Empty but Accumulate = 6
+      ArrivalCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product arrives on the Upstream zone this counter is incremented
+      DisarrivalCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product leaves the Upstream zone this counter is incremented
+      ArrivalCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product arrives on the Downstream zone this counter is incremented
+      DisarrivalCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Every time a product leaves the Downstream zone this counter is incremented
+      Diagnostic { S7_HMI_Visible := 'False'} : Struct   // 32 bit diagnostic field . When bits are set the error is active .
+         LeftMDR_Overheat { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR temperature has exceeded 105 degrees Celsius
+         LeftMDR_MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR is running with maximum torque output
+         LeftMDR_Short { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the Left MDR
+         LeftMDR_NotConn { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR is not connected
+         LeftMDR_Overload { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         LeftMDR_Stalled { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR has stalled
+         LeftMDR_BadHall { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR has a Hall Efect Sensor error
+         LeftMDR_NotUsed { S7_HMI_Visible := 'False'} : Bool;   // The Left MDR is not used
+         Reserved_for_Modbus { S7_HMI_Visible := 'False'} : Bool;
+         Reserved_1 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LeftMDR_AnyErr { S7_HMI_Visible := 'False'} : Bool;   // A general error on the Left MDR.
+         ConnectionsNotOK { S7_HMI_Visible := 'False'} : Bool;   // The Ethernet connections are not ok .
+         UpstreamJamErr { S7_HMI_Visible := 'False'} : Bool;   // Jam error is present on Upstream zone
+         LeftSensLowGain { S7_HMI_Visible := 'False'} : Bool;   // Left sensor error
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+         RightMDR_Overheat { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR temperature has exceeded 105 degrees Celsius
+         RightMDR_MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR is running with maximum torque output
+         RightMDR_Short { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the Right MDR
+         RightMDR_NotConn { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR is not connected
+         RightMDR_Overload { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         RightMDR_Stalled { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR has stalled
+         RightMDR_BadHall { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR has a Hall Efect Sensor error
+         RightMDR_NotUsed { S7_HMI_Visible := 'False'} : Bool;   // The Right MDR is not used
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved_2 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage1 { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         RightMDR_AnyErr { S7_HMI_Visible := 'False'} : Bool;   // A general error on the Right MDR.
+         Reserved_3 { S7_HMI_Visible := 'False'} : Bool;
+         DownstreamJamErr { S7_HMI_Visible := 'False'} : Bool;   // Jam error is present on Downstream zone
+         RightSensLowGain { S7_HMI_Visible := 'False'} : Bool;   // Right sensor error
+         LowVoltage1 { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      ReleaseCounterUpstreamZone { S7_HMI_Visible := 'False'} : Int;   // Same register as is read in the ECCDFCZPA_OUT instance .Used to confirm the ReleaseCounter
+      ReleaseCounterDownstreamZone { S7_HMI_Visible := 'False'} : Int;   // Same register as is read in the ECCDFCZPA_OUT instance .Used to confirm the ReleaseCounter
+      AllSensors { S7_HMI_Visible := 'False'} : Struct   // All sensor inputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin2 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         LeftSensor { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         RightSensor { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      Future { S7_HMI_Visible := 'False'} : Array[11..14] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLC4PD_OUT"
+VERSION : 0.1
+   STRUCT
+      Control : Struct
+         LeftMDRRun : Bool;   // Left MDR Run = 1 / MDR Stop = 0
+         LeftMDRDirection : Bool;   // Left MDR: 0 = Configured direction /1 = opposite to configured direction
+         RightMDRRun : Bool;   // Right MDR Run = 1 / MDR Stop = 0
+         RightMDRDirection : Bool;   // Right MDR: 0 = Configured direction /1 = opposite to configured direction
+         LeftPin2SetOutput : Bool;   // Setting this bit sets the Left PIN2 to be used as Digital Output / 0 = Digital input
+         LeftPin2Drive : Bool;   // Setting this bit drives the Left PIN2 to logical 1
+         RightPin2SetOutput : Bool;   // Setting this bit sets the Right PIN2 to be used as Digital Output/ 0 = Digital input
+         RightPin2Drive : Bool;   // Setting this bit drives the Right PIN2 to logical 1
+         ClearMDRError : Bool;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+         LeftPin2Polarity : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         RightPin2Polarity : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         LeftPin4Polarity : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         RightPin4Polarity : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         reserved1 : Bool;
+         reserved2 : Bool;
+         reserved3 : Bool;
+      END_STRUCT;
+      LeftMDRSpeed : Word;   // The speed of the MDR in m/s*1000 or in shaft RPM*10 for ECG.
+      RightMDRSpeed : Word;   // The speed of the MDR in m/s*1000 or in shaft RPM*10 for ECG.
+      OutputWord : Word;   // Selectable Output WORD
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLC4PD_IN"
+VERSION : 0.1
+   STRUCT
+      LeftSideStatus { S7_HMI_Visible := 'False'} : Struct   // Left Side Status.
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         LeftMDRAnyError { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles when any of the motor errors is active
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         LeftPin4 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         LeftSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // Device is connected to Left Sensor Port
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      RightSideStatus { S7_HMI_Visible := 'False'} : Struct   // Right Side Status.
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The motor has a Hall Efect Sensor error
+         RightMDRAnyError { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles when any of the motor errors is active
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the motor. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         RightPin2 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         RightPin4 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         RightSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // Device is connected to Right Sensor Port
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      InputWord : Word;   // Selectable Input WORD
+      InputWord2 : Word;   // Selectable Input WORD 2
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLC_IN"
+VERSION : 0.1
+   STRUCT
+      Convey_stop_status { S7_HMI_Visible := 'False'} : Struct   // Status of ConveyStop
+         Reserved0 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         StopActiveCommandPLC { S7_HMI_Visible := 'False'} : Bool;   // Stop active due to stop command from the PLC
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved4 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved5 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved6 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved7 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved8 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved9 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved10 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved11 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved12 { S7_HMI_Visible := 'False'} : Bool;
+         StopActiveOtherModule { S7_HMI_Visible := 'False'} : Bool;   // Stop condition is active on a module in the Stop group
+         StopActiveLostConn { S7_HMI_Visible := 'False'} : Bool;   // Stop is active due to a loss of communication connection
+         StopActiveLostPLC { S7_HMI_Visible := 'False'} : Bool;   // Stop active due to a loss of connection with the PLC
+      END_STRUCT;
+      AllSensors { S7_HMI_Visible := 'False'} : Struct   // All sensor inputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin2 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         LeftPin4 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin4 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      SensorDetect { S7_HMI_Visible := 'False'} : Struct   // Sensor detection
+         Reserved { S7_HMI_Visible := 'False'} : Byte;
+         RightSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Right sensor port
+         LeftSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Left sensor port
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      Voltage { S7_HMI_Visible := 'False'} : Int;   // The Voltage applied to the module in milivolts
+      LeftCurrent { S7_HMI_Visible := 'False'} : Int;   // The current consumed by the Left MDR in miliamperes
+      LeftFreq { S7_HMI_Visible := 'False'} : Int;   // MDR frequency in Hz  as measured by the Hall effect sensors
+      LeftCalcTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the Left MDR in  degrees Celsius
+      ModuleTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      LeftMDRDiagnostic { S7_HMI_Visible := 'False'} : Struct   // Left MDR diagnostics .
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      RightCurrent { S7_HMI_Visible := 'False'} : Int;   // The current consumed by the Right motor in miliamperes
+      RightFreq { S7_HMI_Visible := 'False'} : Int;   // MDR frequency in Hz  as measured by the Hall effect sensors
+      RightCalcTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the Right MDR in degrees Celsius
+      ModuleTemp_1 { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      RightMDRDiagnostic { S7_HMI_Visible := 'False'} : Struct   // Right MDR diagnostics .
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      Reserved_1 : Word;
+      Reserved_2 : Word;
+      UpstreamModuleStatus { S7_HMI_Visible := 'False'} : Word;   // The ZPA status from the Upstream ECC-DFC-24-00 module
+      DownstreamModuleStatus { S7_HMI_Visible := 'False'} : Word;   // The ZPA status from the Downstream ECC-DFC-24-00 module
+      TrackingFromUpstream { S7_HMI_Visible := 'False'} : DWord;   // Tracking data from the Upstream ECC-DFC-24-00 module
+      Reserved { S7_HMI_Visible := 'False'} : Word;
+      DistanceLeft { S7_HMI_Visible := 'False'} : DInt;   // Distance traveled by the Left MDR in 'mm' or in Pulses for ECG. For all Servo commands and statuses , please refer to documentation
+      DistanceRight { S7_HMI_Visible := 'False'} : DInt;   // Distance traveled by the Right MDR in 'mm'
+      ServoStatusLeft { S7_HMI_Visible := 'False'} : Word;   // Status Word for Servo commands for Left MDR
+      ServoStatusRight { S7_HMI_Visible := 'False'} : Word;   // Status Word for Servo commands for Right MDR
+      LeftMDRRealSpeed { S7_HMI_Visible := 'False'} : Word;   // The Real Speed of the MDR in m/sec*1000 (or in shaft RPM*10 for ECG) . Also two status bits are included . Please refer to documentation
+      RightMDRRealSpeed { S7_HMI_Visible := 'False'} : Word;   // The Real Speed of the MDR in m/sec*1000 (or in shaft RPM*10 for ECG)  . Also two status bits are included . Please refer to documentation
+      Future { S7_HMI_Visible := 'False'} : Array[27..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLCmini_IN"
+VERSION : 0.1
+   STRUCT
+      AllSensors { S7_HMI_Visible := 'False'} : Struct   // All sensor inputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         Heartbeat { S7_HMI_Visible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin2 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         LeftPin4 { S7_HMI_Visible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         RightPin4 { S7_HMI_Visible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      SensorDetect { S7_HMI_Visible := 'False'} : Struct   // Sensor detection
+         Reserved { S7_HMI_Visible := 'False'} : Byte;
+         RightSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Right sensor port
+         LeftSensorDetect { S7_HMI_Visible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Left sensor port
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      LeftCalcTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the Left MDR in  degrees Celsius
+      ModuleTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      LeftMDRDiagnostic { S7_HMI_Visible := 'False'} : Struct   // Left MDR diagnostics .
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      RightCalcTemp { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the Right MDR in degrees Celsius
+      ModuleTemp_1 { S7_HMI_Visible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      RightMDRDiagnostic { S7_HMI_Visible := 'False'} : Struct   // Right MDR diagnostics .
+         Overheat { S7_HMI_Visible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { S7_HMI_Visible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { S7_HMI_Visible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not connected
+         Overload { S7_HMI_Visible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { S7_HMI_Visible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { S7_HMI_Visible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { S7_HMI_Visible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { S7_HMI_Visible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved { S7_HMI_Visible := 'False'} : Bool;
+         Reserved1 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved2 { S7_HMI_Visible := 'False'} : Bool;
+         Reserved3 { S7_HMI_Visible := 'False'} : Bool;
+         OverVoltage { S7_HMI_Visible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { S7_HMI_Visible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      Reserved : Word;
+      Reserved_1 : Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLC_OUT"
+VERSION : 0.1
+   STRUCT
+      ConveyStopControl { S7_HMI_Visible := 'False'} : Word;   // Writing '1' causes the Stop group to go into STOP state . Writing '2' clears the STOP state. Transition 0 - 2 is needed to clear the Stop
+      Reserved_3 : Word;
+      Reserved_4 : Word;
+      SensorPortsDO { S7_HMI_Visible := 'False'} : Struct   // The Sensor ports PIN2 as  digital outputs
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         DriveLeftPIN2 { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit drives the Left PIN2 to logical 1
+         DriveRightPIN2 { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit drives the Right PIN2 to logical 1
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         SetLeftPIN2asDO { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit sets the Left PIN2 to be used as Digital Output / 0 = Digital input
+         SetRightPIN2asDO { S7_HMI_Visible := 'False'} : Bool;   // Setting this bit sets the Right PIN2 to be used as Digital Output/ 0 = Digital input
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRControl { S7_HMI_Visible := 'False'} : Struct   // Run/Stop and Direction control of the Left MDR
+         MDR_Direction { S7_HMI_Visible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Run_MDR { S7_HMI_Visible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRBrakeMode { S7_HMI_Visible := 'False'} : Word;   // The Break mode of the Left MDR . 1 = "Normal" / 2 = "Free" / 3 ="Servo break"
+      Reserved_1 { S7_HMI_Visible := 'False'} : Word;
+      RightMDRControl { S7_HMI_Visible := 'False'} : Struct   // Run/Stop and Direction control of the Right MDR
+         MDR_Direction { S7_HMI_Visible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Run_MDR { S7_HMI_Visible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[10]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[12]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[14]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[15]" { S7_HMI_Visible := 'False'} : Bool;
+      END_STRUCT;
+      RightMDRBrakeMode { S7_HMI_Visible := 'False'} : Word;   // The Break mode of the Right MDR . 1 = "Normal" / 2 = "Free" / 3 ="Servo break"
+      Reserved_2 { S7_HMI_Visible := 'False'} : Word;
+      LeftMDRSpeed { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000 (or in shaft RPM*10 for ECG) . The allowed values depend on the Speed code of the MDR .
+      RightMDRSpeed { S7_HMI_Visible := 'False'} : Int;   // The speed of the MDR in m/s*1000(or in shaft RPM*10 for ECG) . The allowed values depend on the Speed code of the MDR .
+      LeftMDRAccel { S7_HMI_Visible := 'False'} : Int;   // The Acceleration of the left MDR given in "mm" (or in pulses for ECG)
+      LeftMDRDeccel { S7_HMI_Visible := 'False'} : Int;   // The Deceleration of the left MDR given in "mm" (or in pulses for ECG)
+      RightMDRAccel { S7_HMI_Visible := 'False'} : Int;   // The Acceleration of the right MDR given in "mm" (or in pulses for ECG)
+      RightMDRDeccel { S7_HMI_Visible := 'False'} : Int;   // The Deceleration of the right MDR given in "mm" (or in pulses for ECG)
+      ClearMDRError { S7_HMI_Visible := 'False'} : Word;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+      StatusToDownstream { S7_HMI_Visible := 'False'} : Word;   // The ZPA status of our Downstream zone can be written here . A ECC-DFC-24-00 module in ZPA mode can read this and "Wake up " to accept product
+      StatusToUpstream { S7_HMI_Visible := 'False'} : Word;   // The ZPA status of our Upstream zone can be written here . A ECC-DFC-24-00 module in ZPA mode can read this know we have received the product
+      SensorPolarity { S7_HMI_Visible := 'False'} : Struct   // From here the polarity of our Left/Right PIN2/PIN4 can be set
+         "Reserved[0]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[1]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[2]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[3]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[4]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[5]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[6]" { S7_HMI_Visible := 'False'} : Bool;
+         "Reserved[7]" { S7_HMI_Visible := 'False'} : Bool;
+         Left_Pin2 { S7_HMI_Visible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[9]" { S7_HMI_Visible := 'False'} : Bool;
+         Right_Pin2 { S7_HMI_Visible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[11]" { S7_HMI_Visible := 'False'} : Bool;
+         Left_Pin4 { S7_HMI_Visible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[13]" { S7_HMI_Visible := 'False'} : Bool;
+         Right_Pin4 { S7_HMI_Visible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+      END_STRUCT;
+      TrackingToDownstream { S7_HMI_Visible := 'False'} : DWord;   // This field can be used to send Tracking data to a downstream ZPA mode ECC-DFC-24-00
+      Reserved { S7_HMI_Visible := 'False'} : Word;
+      ServoControlDistanceLeft { S7_HMI_Visible := 'False'} : DInt;   // New MDR distance to be traveled in 'mm' (or in pulses for ECG)
+      ServoControlCommandLeft { S7_HMI_Visible := 'False'} : Word;   // Left MDR servo command
+      ServoControlDistanceRight { S7_HMI_Visible := 'False'} : DInt;   // New MDR distance to be traveled in 'mm' (or in pulses for ECG)
+      ServoControlCommandRight { S7_HMI_Visible := 'False'} : Word;   // Right MDR servo command
+      Future { S7_HMI_Visible := 'False'} : Array[29..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+

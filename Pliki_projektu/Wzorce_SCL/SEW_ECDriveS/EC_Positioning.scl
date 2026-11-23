@@ -1,0 +1,517 @@
+TYPE "ECCDFCPLC_IN"
+VERSION : 0.1
+   STRUCT
+      Convey_stop_status { ExternalVisible := 'False'} : Struct   // Status of ConveyStop
+         Reserved0 { ExternalVisible := 'False'} : Bool;
+         Reserved1 { ExternalVisible := 'False'} : Bool;
+         StopActiveCommandPLC { ExternalVisible := 'False'} : Bool;   // Stop active due to stop command from the PLC
+         Reserved3 { ExternalVisible := 'False'} : Bool;
+         Reserved4 { ExternalVisible := 'False'} : Bool;
+         Reserved5 { ExternalVisible := 'False'} : Bool;
+         Reserved6 { ExternalVisible := 'False'} : Bool;
+         Reserved7 { ExternalVisible := 'False'} : Bool;
+         Reserved8 { ExternalVisible := 'False'} : Bool;
+         Reserved9 { ExternalVisible := 'False'} : Bool;
+         Reserved10 { ExternalVisible := 'False'} : Bool;
+         Reserved11 { ExternalVisible := 'False'} : Bool;
+         Reserved12 { ExternalVisible := 'False'} : Bool;
+         StopActiveOtherModule { ExternalVisible := 'False'} : Bool;   // Stop condition is active on a module in the Stop group
+         StopActiveLostConn { ExternalVisible := 'False'} : Bool;   // Stop is active due to a loss of communication connection
+         StopActiveLostPLC { ExternalVisible := 'False'} : Bool;   // Stop active due to a loss of connection with the PLC
+      END_STRUCT;
+      AllSensors { ExternalVisible := 'False'} : Struct   // All sensor inputs
+         "Reserved[0]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[1]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[2]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[3]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[4]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[5]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[6]" { ExternalVisible := 'False'} : Bool;
+         Heartbeat { ExternalVisible := 'False'} : Bool;   // This bit toggles every 2 seconds .
+         LeftPin2 { ExternalVisible := 'False'} : Bool;   // Left sensor port state (Pin2)
+         "Reserved[9]" { ExternalVisible := 'False'} : Bool;
+         RightPin2 { ExternalVisible := 'False'} : Bool;   // Right sensor port state (Pin2)
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         LeftPin4 { ExternalVisible := 'False'} : Bool;   // Left sensor port state (Pin4)
+         "Reserved[13]" { ExternalVisible := 'False'} : Bool;
+         RightPin4 { ExternalVisible := 'False'} : Bool;   // Right sensor port state (Pin4)
+         "Reserved[15]" { ExternalVisible := 'False'} : Bool;
+      END_STRUCT;
+      SensorDetect { ExternalVisible := 'False'} : Struct   // Sensor detection
+         Reserved { ExternalVisible := 'False'} : Byte;
+         RightSensorDetect { ExternalVisible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Right sensor port
+         LeftSensorDetect { ExternalVisible := 'False'} : Bool;   // If this bit is TRUE a sensor has been detected on the Left sensor port
+         "Reserved[10]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[12]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[13]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[14]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[15]" { ExternalVisible := 'False'} : Bool;
+      END_STRUCT;
+      Voltage { ExternalVisible := 'False'} : Int;   // The Voltage applied to the module in milivolts
+      LeftCurrent { ExternalVisible := 'False'} : Int;   // The current consumed by the Left MDR in miliamperes
+      LeftFreq { ExternalVisible := 'False'} : Int;   // MDR frequency in Hz  as measured by the Hall effect sensors
+      LeftCalcTemp { ExternalVisible := 'False'} : Byte;   // The temperature of the Left MDR in  degrees Celsius
+      ModuleTemp { ExternalVisible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      LeftMDRDiagnostic { ExternalVisible := 'False'} : Struct   // Left MDR diagnostics .
+         Overheat { ExternalVisible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { ExternalVisible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { ExternalVisible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { ExternalVisible := 'False'} : Bool;   // The MDR is not connected
+         Overload { ExternalVisible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { ExternalVisible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { ExternalVisible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { ExternalVisible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { ExternalVisible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { ExternalVisible := 'False'} : Bool;
+         MDRinDOmode { ExternalVisible := 'False'} : Bool;   // The MDR is in digital Output mode .
+         Reserved1 { ExternalVisible := 'False'} : Bool;
+         Reserved2 { ExternalVisible := 'False'} : Bool;
+         Reserved3 { ExternalVisible := 'False'} : Bool;
+         OverVoltage { ExternalVisible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { ExternalVisible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      RightCurrent { ExternalVisible := 'False'} : Int;   // The current consumed by the Right motor in miliamperes
+      RightFreq { ExternalVisible := 'False'} : Int;   // MDR frequency in Hz  as measured by the Hall effect sensors
+      RightCalcTemp { ExternalVisible := 'False'} : Byte;   // The temperature of the Right MDR in degrees Celsius
+      ModuleTemp_1 { ExternalVisible := 'False'} : Byte;   // The temperature of the module in degrees Celsius
+      RightMDRDiagnostic { ExternalVisible := 'False'} : Struct   // Right MDR diagnostics .
+         Overheat { ExternalVisible := 'False'} : Bool;   // The MDR 's temperature has exceeded 105 degrees Celsius
+         MaxTorque { ExternalVisible := 'False'} : Bool;   // The MDR is running with maximum torque output
+         ShortCircuit { ExternalVisible := 'False'} : Bool;   // There is a short circuit on the MDR
+         MDRNotConnected { ExternalVisible := 'False'} : Bool;   // The MDR is not connected
+         Overload { ExternalVisible := 'False'} : Bool;   // The MDR has been overloaded - this means its speed is less than 10% of the selected speed
+         Stalled { ExternalVisible := 'False'} : Bool;   // The MDR has stalled
+         MDRBadHall { ExternalVisible := 'False'} : Bool;   // The MDR has a Hall Efect Sensor error
+         MDRNotUsed { ExternalVisible := 'False'} : Bool;   // The MDR is not used
+         MDRStatus1 { ExternalVisible := 'False'} : Bool;   // This field and the next are used together by the module to indicate the status of the MDR. Please refer to documentation
+         MDRStatus2 { ExternalVisible := 'False'} : Bool;
+         MDRinDOmode { ExternalVisible := 'False'} : Bool;   // The MDR is in digital Output mode .
+         Reserved1 { ExternalVisible := 'False'} : Bool;
+         Reserved2 { ExternalVisible := 'False'} : Bool;
+         Reserved3 { ExternalVisible := 'False'} : Bool;
+         OverVoltage { ExternalVisible := 'False'} : Bool;   // The sum of the module power supply voltage + the MDR-generated voltage has exceeded 30 volts
+         LowVoltage { ExternalVisible := 'False'} : Bool;   // Module power supply is less than 18 Volts
+      END_STRUCT;
+      LeftMDR_DIOstatus : Struct   // This is the status when the MDR is used as a digital IO
+         Reserved0 : Bool;
+         Reserved1 : Bool;
+         Reserved2 : Bool;
+         Reserved3 : Bool;
+         ShortCircuit : Bool;   // When this bit is '1' , there is a short circuit between +24V and Pin2/3/4
+         Reserved5 : Bool;
+         Reserved6 : Bool;
+         Reserved7 : Bool;
+         Reserved : Byte;
+      END_STRUCT;
+      RightMDR_DIOstatus : Struct   // This is the status when the MDR is used as a digital IO
+         Reserved0 : Bool;
+         Reserved1 : Bool;
+         Reserved2 : Bool;
+         Reserved3 : Bool;
+         ShortCircuit : Bool;   // When this bit is '1' , there is a short circuit between +24V and Pin2/3/4
+         Reserved5 : Bool;
+         Reserved6 : Bool;
+         Reserved7 : Bool;
+         Reserved : Byte;
+      END_STRUCT;
+      UpstreamModuleStatus { ExternalVisible := 'False'} : Word;   // The ZPA status from the Upstream ECC-DFC-24-00 module
+      DownstreamModuleStatus { ExternalVisible := 'False'} : Word;   // The ZPA status from the Downstream ECC-DFC-24-00 module
+      TrackingFromUpstream { ExternalVisible := 'False'} : DWord;   // Tracking data from the Upstream ECC-DFC-24-00 module
+      Reserved { ExternalVisible := 'False'} : Word;
+      DistanceLeft { ExternalVisible := 'False'} : DInt;   // Distance traveled by the Left MDR in 'mm'. For all Servo commands and statuses , please refer to documentation
+      DistanceRight { ExternalVisible := 'False'} : DInt;   // Distance traveled by the Right MDR in 'mm'
+      ServoStatusLeft { ExternalVisible := 'False'} : Word;   // Status Word for Servo commands for Left MDR
+      ServoStatusRight { ExternalVisible := 'False'} : Word;   // Status Word for Servo commands for Right MDR
+      LeftMDRRealSpeed { ExternalVisible := 'False'} : Word;   // The Real Speed of the MDR in m/sec*1000 . Also two status bits are included . Please refer to documentation
+      RightMDRRealSpeed { ExternalVisible := 'False'} : Word;   // The Real Speed of the MDR in m/sec*1000 . Also two status bits are included . Please refer to documentation
+      Future { ExternalVisible := 'False'} : Array[27..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "ECCDFCPLC_OUT"
+VERSION : 0.1
+   STRUCT
+      ConveyStopControl { ExternalVisible := 'False'} : Word;   // Writing '1' causes the Stop group to go into STOP state . Writing '2' clears the STOP state
+      LeftMDRasDIO : Struct   // Use the MDR as a digital IO
+         Reserved0 : Bool;
+         Reserved1 : Bool;
+         Reserved2 : Bool;
+         Reserved3 : Bool;
+         Reserved4 : Bool;
+         Reserved5 : Bool;
+         Reserved6 : Bool;
+         SetMotDIO : Bool;   // Write'1' to set the MDR in Digital IO mode
+         Reserved8 : Bool;
+         DrivePIN4 : Bool;   // Drive the NMOS Transistor of PIN4 on the motor port
+         DrivePIN3 : Bool;   // Drive the NMOS Transistor of PIN3 on the motor port
+         Reserved11 : Bool;
+         Reserved12 : Bool;
+         Reserved13 : Bool;
+         Reserved14 : Bool;
+         Reserved15 : Bool;
+      END_STRUCT;
+      RightMDRasDIO : Struct   // Use the MDR as a digital IO
+         Reserved0 : Bool;
+         Reserved1 : Bool;
+         Reserved2 : Bool;
+         Reserved3 : Bool;
+         Reserved4 : Bool;
+         Reserved5 : Bool;
+         Reserved6 : Bool;
+         SetMotDIO : Bool;   // Write'1' to set the MDR in Digital IO mode
+         DrivePIN2 : Bool;   // Drive the NMOS Transistor of PIN2 on the motor port
+         Reserved9 : Bool;
+         DrivePIN3 : Bool;   // Drive the NMOS Transistor of PIN3 on the motor port
+         Reserved11 : Bool;
+         Reserved12 : Bool;
+         Reserved13 : Bool;
+         Reserved14 : Bool;
+         Reserved15 : Bool;
+      END_STRUCT;
+      SensorPortsDO { ExternalVisible := 'False'} : Struct   // The Sensor ports PIN2 as  digital outputs
+         "Reserved[0]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[1]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[2]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[3]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[4]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[5]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[6]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[7]" { ExternalVisible := 'False'} : Bool;
+         DriveLeftPIN2 { ExternalVisible := 'False'} : Bool;   // Setting this bit drives the Left PIN2 to logical 1
+         DriveRightPIN2 { ExternalVisible := 'False'} : Bool;   // Setting this bit drives the Right PIN2 to logical 1
+         "Reserved[10]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[12]" { ExternalVisible := 'False'} : Bool;
+         SetLeftPIN2asDO { ExternalVisible := 'False'} : Bool;   // Setting this bit sets the Left PIN2 to be used as Digital Output / 0 = Digital input
+         SetRightPIN2asDO { ExternalVisible := 'False'} : Bool;   // Setting this bit sets the Right PIN2 to be used as Digital Output/ 0 = Digital input
+         "Reserved[15]" { ExternalVisible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRControl { ExternalVisible := 'False'} : Struct   // Run/Stop and Direction control of the Left MDR
+         MDR_Direction { ExternalVisible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[2]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[3]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[4]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[5]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[6]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[7]" { ExternalVisible := 'False'} : Bool;
+         Run_MDR { ExternalVisible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[10]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[12]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[13]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[14]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[15]" { ExternalVisible := 'False'} : Bool;
+      END_STRUCT;
+      LeftMDRBrakeMode { ExternalVisible := 'False'} : Word;   // The Break mode of the Left MDR . 1 = "Normal" / 2 = "Free" / 3 ="Servo break"
+      Reserved_1 { ExternalVisible := 'False'} : Word;
+      RightMDRControl { ExternalVisible := 'False'} : Struct   // Run/Stop and Direction control of the Right MDR
+         MDR_Direction { ExternalVisible := 'False'} : Bool;   // 0 = Configured direction /1 = opposite to configured direction
+         "Reserved[1]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[2]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[3]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[4]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[5]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[6]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[7]" { ExternalVisible := 'False'} : Bool;
+         Run_MDR { ExternalVisible := 'False'} : Bool;   // MDR Run = 1 / MDR Stop = 0
+         "Reserved[9]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[10]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[12]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[13]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[14]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[15]" { ExternalVisible := 'False'} : Bool;
+      END_STRUCT;
+      RightMDRBrakeMode { ExternalVisible := 'False'} : Word;   // The Break mode of the Right MDR . 1 = "Normal" / 2 = "Free" / 3 ="Servo break"
+      Reserved_2 { ExternalVisible := 'False'} : Word;
+      LeftMDRSpeed { ExternalVisible := 'False'} : Int;   // The speed of the MDR in m/s*1000 .The allowed values depend on the Speed code of the MDR .
+      RightMDRSpeed { ExternalVisible := 'False'} : Int;   // The speed of the MDR in m/s*1000 .The allowed values depend on the Speed code of the MDR .
+      LeftMDRAccel { ExternalVisible := 'False'} : Int;   // The Acceleration of the left MDR given in "mm"
+      LeftMDRDeccel { ExternalVisible := 'False'} : Int;   // The Deceleration of the left MDR given in "mm"
+      RightMDRAccel { ExternalVisible := 'False'} : Int;   // The Acceleration of the right MDR given in "mm"
+      RightMDRDeccel { ExternalVisible := 'False'} : Int;   // The Deceleration of the right MDR given in "mm"
+      ClearMDRError { ExternalVisible := 'False'} : Word;   // Writing '1' to this field clears the MDR error .There needs to be a transition from 0 to 1 in order to clear the error .
+      StatusToDownstream { ExternalVisible := 'False'} : Word;   // The ZPA status of our Downstream zone can be written here . A ECC-DFC-24-00 module in ZPA mode can read this and "Wake up " to accept product
+      StatusToUpstream { ExternalVisible := 'False'} : Word;   // The ZPA status of our Upstream zone can be written here . A ECC-DFC-24-00 module in ZPA mode can read this know we have received the product
+      SensorPolarity { ExternalVisible := 'False'} : Struct   // From here the polarity of our Left/Right PIN2/PIN4 can be set
+         "Reserved[0]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[1]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[2]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[3]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[4]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[5]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[6]" { ExternalVisible := 'False'} : Bool;
+         "Reserved[7]" { ExternalVisible := 'False'} : Bool;
+         Left_Pin2 { ExternalVisible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[9]" { ExternalVisible := 'False'} : Bool;
+         Right_Pin2 { ExternalVisible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[11]" { ExternalVisible := 'False'} : Bool;
+         Left_Pin4 { ExternalVisible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+         "Reserved[13]" { ExternalVisible := 'False'} : Bool;
+         Right_Pin4 { ExternalVisible := 'False'} : Bool;   // Normal polarity = 0 / Inverted polarity = 1
+      END_STRUCT;
+      TrackingToDownstream { ExternalVisible := 'False'} : DWord;   // This field can be used to send Tracking data to a downstream ZPA mode ECC-DFC-24-00
+      Reserved { ExternalVisible := 'False'} : Word;
+      ServoControlDistanceLeft { ExternalVisible := 'False'} : DInt;   // New MDR distance to be traveled in 'mm'
+      ServoControlCommandLeft { ExternalVisible := 'False'} : Word;   // Left MDR servo command
+      ServoControlDistanceRight { ExternalVisible := 'False'} : DInt;   // New MDR distance to be traveled in 'mm'
+      ServoControlCommandRight { ExternalVisible := 'False'} : Word;   // Right MDR servo command
+      Future { ExternalVisible := 'False'} : Array[29..31] of Word;
+   END_STRUCT;
+
+END_TYPE
+
+FUNCTION_BLOCK "EC_Positioning"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   VAR_INPUT 
+      HW_Identifier_Input { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : HW_IO;   // S73xx/4xx: Assign Peripheral Address; S7 1x00: assign HW_Identifier
+      HW_Identifier_Output { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : HW_IO;   // S73xx/4xx: Assign Peripheral Address; S7 1x00: assign HW_Identifier
+      L_JOG_PLUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_JOG_MINUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_REF_TRAVEL_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_POS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_SETPOINT_POS { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      L_SETPOINT_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      L_ACCELERATION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      L_DECELERATION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_JOG_PLUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_JOG_MINUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_REF_TRAVEL_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_POS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_SETPOINT_POS { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      R_SETPOINT_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_ACCELERATION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_DECELERATION : Int;
+   END_VAR
+
+   VAR_OUTPUT 
+      COMMUNICATION_OK { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;   // no error occurs WHILE the instruction DPRD_DAT and DPWR_DAT is being executed
+      L_REFERENCED_PULSE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_TARGET_POS_REACHED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_AXIS_INTERLOCKED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;   // no or more than 1 mode is selected
+      L_OVERHEAT : Bool;
+      L_MAXTORQUE : Bool;
+      L_SHORTCIRCUIT : Bool;
+      L_MDRNOTCONNECTED : Bool;
+      L_OVERLOAD : Bool;
+      L_STALLED : Bool;
+      L_MDRBADHALL : Bool;
+      L_OVERVOLTAGE : Bool;
+      L_LOWVOLTAGE : Bool;
+      L_ACTUAL_POSITION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      L_ACTUAL_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Word;
+      L_ACTUAL_CURRENT { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_REFERENCED_PULSE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_TARGET_POS_REACHED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_AXIS_INTERLOCKED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;   // no or more than 1 mode is selected
+      R_OVERHEAT : Bool;
+      R_MAXTORQUE : Bool;
+      R_SHORTCIRCUIT : Bool;
+      R_MDRNOTCONNECTED : Bool;
+      R_OVERLOAD : Bool;
+      R_STALLED : Bool;
+      R_MDRBADHALL : Bool;
+      R_OVERVOLTAGE : Bool;
+      R_LOWVOLTAGE : Bool;
+      R_ACTUAL_POSITION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      R_ACTUAL_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Word;
+      R_ACTUAL_CURRENT { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+   END_VAR
+
+   VAR 
+      PI : "ECCDFCPLC_IN";
+      PO : "ECCDFCPLC_OUT";
+   END_VAR
+
+   VAR_TEMP 
+      DPRD_RET_VAL : Int;   // Return Value DPRD_DAT; <> 0 => error
+      DPWR_RET_VAL : Int;   // Return Valoe: DPWR_DAT; <> 0 => error
+      L_Jogplus : Bool;
+      L_Jogminus : Bool;
+      L_Ref : Bool;
+      L_Pos : Bool;
+      R_Jogplus : Bool;
+      R_Jogminus : Bool;
+      R_Ref : Bool;
+      R_Pos : Bool;
+   END_VAR
+
+
+BEGIN
+	//This sample program shows the basic approach only.
+	//We do not accept legal or other liability for
+	//incorrect program functions and their consequences!
+	
+	#DPRD_RET_VAL := DPRD_DAT(LADDR := #HW_Identifier_Input, RECORD => #PI);//DPRD_DAT: Read consistent data of a DP standard slave
+	
+	IF #DPRD_RET_VAL = 0 THEN
+	    #COMMUNICATION_OK := true;
+	    
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Mapping of the process input data:    
+	//Left roller   
+	    //target position reached:
+	    IF #PI.ServoStatusLeft = 5 THEN
+	        #L_TARGET_POS_REACHED := true;
+	    ELSE
+	        #L_TARGET_POS_REACHED := false;
+	    END_IF;
+	    
+	    //actually referenced
+	    IF #PI.ServoStatusLeft = 2  THEN
+	        #L_REFERENCED_PULSE := true;
+	    ELSE
+	         #L_REFERENCED_PULSE:= false;
+	    END_IF;
+	        
+	    #L_OVERHEAT:=#PI.LeftMDRDiagnostic.Overheat;
+	    #L_MAXTORQUE:=#PI.LeftMDRDiagnostic.MaxTorque;
+	    #L_SHORTCIRCUIT:=#PI.LeftMDRDiagnostic.ShortCircuit;
+	    #L_MDRNOTCONNECTED:=#PI.LeftMDRDiagnostic.MDRNotConnected;
+	    #L_OVERLOAD:=#PI.LeftMDRDiagnostic.Overload;
+	    #L_STALLED:= #PI.LeftMDRDiagnostic.Stalled;
+	    #L_MDRBADHALL:=#PI.LeftMDRDiagnostic.MDRBadHall;
+	    #L_OVERVOLTAGE:=#PI.LeftMDRDiagnostic.OverVoltage;
+	    #L_LOWVOLTAGE := #PI.LeftMDRDiagnostic.LowVoltage;
+	    
+	    #L_ACTUAL_POSITION := -#PI.DistanceLeft;
+	    #L_ACTUAL_SPEED := (#PI.LeftMDRRealSpeed AND w#16#3fff);
+	    #L_ACTUAL_CURRENT := #PI.LeftCurrent;
+	    
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//right roller   
+	//target position reached:
+	    IF #PI.ServoStatusRight = 5 THEN
+	    #R_TARGET_POS_REACHED := true;
+	ELSE
+	    #R_TARGET_POS_REACHED := false;
+	END_IF;
+	
+	//actually referenced
+	IF #PI.ServoStatusRight = 2 THEN
+	    #R_REFERENCED_PULSE := true;
+	ELSE
+	    #R_REFERENCED_PULSE := false;
+	END_IF;
+	
+	#R_OVERHEAT := #PI.RightMDRDiagnostic.Overheat;
+	#R_MAXTORQUE := #PI.RightMDRDiagnostic.MaxTorque;
+	#R_SHORTCIRCUIT := #PI.RightMDRDiagnostic.ShortCircuit;
+	#R_MDRNOTCONNECTED := #PI.RightMDRDiagnostic.MDRNotConnected;
+	#R_OVERLOAD := #PI.RightMDRDiagnostic.Overload;
+	#R_STALLED := #PI.RightMDRDiagnostic.Stalled;
+	#R_MDRBADHALL := #PI.RightMDRDiagnostic.MDRBadHall;
+	#R_OVERVOLTAGE := #PI.RightMDRDiagnostic.OverVoltage;
+	#R_LOWVOLTAGE := #PI.RightMDRDiagnostic.LowVoltage;
+	
+	#R_ACTUAL_POSITION := -#PI.DistanceRight;
+	#R_ACTUAL_SPEED := (#PI.RightMDRRealSpeed AND w#16#3fff);
+	#R_ACTUAL_CURRENT := #PI.RightCurrent;
+	
+	//Mapping of the process output data: 
+	//left roller:    
+	    //Definition of modes: 
+	    //Jog+ selected
+	    #L_Jogplus:=(#L_JOG_PLUS_MODE AND NOT #L_JOG_MINUS_MODE AND NOT #L_REF_TRAVEL_MODE AND NOT #L_POS_MODE);
+	    //Jog- selected
+	    #L_Jogminus:=(NOT #L_JOG_PLUS_MODE AND #L_JOG_MINUS_MODE AND NOT #L_REF_TRAVEL_MODE AND NOT #L_POS_MODE);
+	    //ref. selected
+	    #L_Ref := (NOT #L_JOG_PLUS_MODE AND NOT #L_JOG_MINUS_MODE AND #L_REF_TRAVEL_MODE AND NOT #L_POS_MODE);
+	    //pos. selected
+	    #L_Pos:=(NOT #L_JOG_PLUS_MODE AND NOT #L_JOG_MINUS_MODE AND NOT #L_REF_TRAVEL_MODE AND #L_POS_MODE); 
+	    
+	    #L_AXIS_INTERLOCKED := NOT(#L_Jogplus XOR #L_Jogminus XOR #L_Ref XOR #L_Pos); //no or more than 1 mode is selected
+	    
+	    
+	    //Initialization:
+	    #PO.LeftMDRControl.Run_MDR:=false;
+	    #PO.ServoControlCommandLeft := 0;
+	    
+	   // L_JOGPLUS:
+	    IF  #L_Jogplus THEN
+	            #PO.LeftMDRControl.Run_MDR := #L_Jogplus;
+	            #PO.LeftMDRControl.MDR_Direction := false;
+	        END_IF;
+	        
+	    //L_JOGMINUS:
+	        IF #L_Jogminus THEN
+	            #PO.LeftMDRControl.Run_MDR := #L_Jogminus;
+	            #PO.LeftMDRControl.MDR_Direction := true;
+	        END_IF;
+	
+	    //_L_REF:
+	        IF #L_Ref THEN
+	            #PO.ServoControlCommandLeft := 1; //start Ref.-travel
+	        END_IF;
+	        
+	    //L_POS:
+	        IF  #L_Pos THEN
+	                #PO.ServoControlDistanceLeft := -#L_SETPOINT_POS;
+	                #PO.ServoControlCommandLeft := 2;
+	            END_IF;
+	            
+	            #PO.LeftMDRSpeed:=#L_SETPOINT_SPEED;
+	            #PO.LeftMDRAccel:=#L_ACCELERATION;
+	            #PO.LeftMDRDeccel :=#L_DECELERATION;
+	            
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//right roller:
+	            //Definition of modes: 
+	            //Jog+ selected
+	            #R_Jogplus := (#R_JOG_PLUS_MODE AND NOT #R_JOG_MINUS_MODE AND NOT #R_REF_TRAVEL_MODE AND NOT #R_POS_MODE);
+	            //Jog- selected
+	            #R_Jogminus := (NOT #R_JOG_PLUS_MODE AND #R_JOG_MINUS_MODE AND NOT #R_REF_TRAVEL_MODE AND NOT #R_POS_MODE);
+	            //ref. selected
+	            #R_Ref := (NOT #R_JOG_PLUS_MODE AND NOT #R_JOG_MINUS_MODE AND #R_REF_TRAVEL_MODE AND NOT #R_POS_MODE);
+	            //pos. selected
+	            #R_Pos := (NOT #R_JOG_PLUS_MODE AND NOT #R_JOG_MINUS_MODE AND NOT #R_REF_TRAVEL_MODE AND #R_POS_MODE);
+	            
+	            #R_AXIS_INTERLOCKED := NOT (#R_Jogplus XOR #R_Jogminus XOR #R_Ref XOR #R_Pos); //no or more than 1 mode is selected
+	            
+	            
+	            //Initialization:
+	            #PO.RightMDRControl.Run_MDR := false;
+	            #PO.ServoControlCommandRight := 0;
+	            
+	   //     R_JOGPLUS:
+	            IF #R_Jogplus THEN
+	                #PO.RightMDRControl.Run_MDR := #R_Jogplus;
+	                #PO.RightMDRControl.MDR_Direction := false;
+	            END_IF;
+	            
+	   //     R_JOGMINUS:
+	            IF #R_Jogminus THEN
+	                #PO.RightMDRControl.Run_MDR := #R_Jogminus;
+	                #PO.RightMDRControl.MDR_Direction := true;
+	            END_IF;
+	            
+	   //     R_REF:
+	            IF #R_Ref THEN
+	                #PO.ServoControlCommandRight := 1; //start Ref.-travel
+	            END_IF;
+	            
+	  //      R_POS:
+	            IF #R_Pos THEN
+	                #PO.ServoControlDistanceRight := -#R_SETPOINT_POS;
+	                #PO.ServoControlCommandRight := 2;
+	            END_IF;
+	            
+	            #PO.RightMDRSpeed := #R_SETPOINT_SPEED;
+	            #PO.RightMDRAccel := #R_ACCELERATION;
+	            #PO.RightMDRDeccel := #R_DECELERATION;
+	            
+	END_IF;
+	
+	Ende:#DPWR_RET_VAL := DPWR_DAT(LADDR := #HW_Identifier_Output, RECORD := #PO);//DPWR_DAT: Write consistent data of a DP standard slave 
+	
+	IF #DPRD_RET_VAL <> 0 OR #DPWR_RET_VAL <> 0 THEN
+	    #COMMUNICATION_OK := false; //all outputs will be deleted, if processing of the DPRD_DAT or DPWR_DA-function is faulty
+	
+	END_IF;
+END_FUNCTION_BLOCK
+

@@ -10,8 +10,9 @@ generatora `Tools/scl_to_aveva.py` (UDT → CSV dla AVEVA), co sprawdza test `te
 | `UDT_Wzorzec.udt` | dwa typy PLC: prosty `UDT_Wz_Alarm` i `UDT_Wz_Naped` z wartościami startowymi, komentarzami, atrybutami członków, tablicą, zagnieżdżonym UDT, tablicą UDT i strukturą anonimową |
 | `DB_Wzorzec_Globalny.db` | globalny DB z sekcją `VAR`, instancjami UDT (pojedynczo, w tablicy, w strukturze) i wartościami startowymi w `BEGIN` |
 | `DB_Wzorzec_Typu_UDT.db` | DB utworzony wprost z typu UDT (bez `VAR`, sama nazwa typu) |
+| `SEW_ECDriveS/` | prawdziwe źródła UDT/DB/FB z przykładowego projektu SEW (opis w `SEW_ECDriveS/README.md`) |
 
-Pliki napisano samodzielnie na podstawie źródeł z sekcji [Źródła](#źródła-ocena-z-2026-11-23); nie są kopią cudzych przykładów.
+Pliki `*_Wzorzec*` napisano samodzielnie na podstawie źródeł z sekcji [Źródła](#źródła-ocena-z-2026-11-23); nie są kopią cudzych przykładów.
 
 ## Budowa typu UDT
 
@@ -50,6 +51,9 @@ BEGIN                               // wartości startowe, nadpisują domyślne 
 END_DATA_BLOCK
 ```
 
+DB z dostępem klasycznym (`S7_Optimized_Access := 'FALSE'`) deklaruje członków w
+`STRUCT ... END_STRUCT;` zamiast `VAR ... END_VAR` (przykład: `SEW_ECDriveS/IO_data.db`).
+
 DB typu UDT: zamiast `VAR ... END_VAR` wpisuje się samą nazwę typu w cudzysłowie (`"UDT_Wz_Naped"`),
 a w `BEGIN` ścieżki zaczynają się od członka typu (`Nazwa := 'Pompa 03';`). Numeru DB nie podajemy,
 TIA nada go sam.
@@ -65,7 +69,7 @@ TIA nada go sam.
 - **Struktura anonimowa**: `Nazwa : Struct ... END_STRUCT;` wewnątrz `STRUCT` lub `VAR`.
 - **Atrybuty członka** (w klamrach przed dwukropkiem, kilka rozdziela się średnikiem):
   `ExternalAccessible`, `ExternalVisible`, `ExternalWritable` (dostęp z HMI/OPC UA),
-  `S7_SetPoint` (wartość zadana). Wartości w apostrofach: `'True'` / `'False'`.
+  `S7_SetPoint` (wartość zadana), `S7_HMI_Visible`. Wartości w apostrofach: `'True'` / `'False'`.
 - **Nazwy**: litery, cyfry i `_`, nie zaczynają się od cyfry. Nazwy ze spacją, myślnikiem lub cyfrą na
   początku muszą być w cudzysłowie przy deklaracji i przy każdym użyciu (`"1SM01_RPM" : Real;`).
   Bezpieczniej używać prefiksu literowego (`rSM01_RPM`). Polskie litery w nazwach są dozwolone w TIA,
@@ -116,7 +120,10 @@ TIA nada go sam.
      *External source files* > *Add new external file*; SEW dostarcza typy jako pliki `.scl`
      (wiele `TYPE` w jednym pliku), co pokazuje, że rozszerzenie `.scl` też działa dla typów.
    - Przykładowy projekt *ECDriveS_Positioning* (sew-eurodrive.com > Data & documents > Software,
-     `SEW_ECDriveS_Positioning_V1.0.zip`): binarny projekt TIA V14/V15, bez plików `.udt`/`.db`.
+     `SEW_ECDriveS_Positioning_V1.0.zip`): binarny projekt TIA V14/V15 bez plików `.udt`/`.db` na
+     wierzchu, ale z dołączonymi źródłami zewnętrznymi zapisanymi wewnątrz `System/PEData.plf`.
+     Wyciągnięte źródła (5 plików) są w `SEW_ECDriveS/`. Najcenniejsze źródło: prawdziwe pliki
+     z TIA, m.in. DB z dostępem klasycznym i atrybuty członków.
 4. **[Speedstuff/TiaExportBlocks](https://github.com/Speedstuff/TiaExportBlocks)** (GitHub, fork
    cezar1/TiaExportBlocks): narzędzie C# na TIA Openness (testowane z V15.1), które hurtowo eksportuje
    z projektu funkcje SCL do `.scl`, DB do `.db`, UDT do `.udt` i tabele zmiennych do `.xml`.
