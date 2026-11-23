@@ -1,0 +1,12 @@
+// Dane do testów poprawek 0.2.5: nazwa typu ze spacją i polską literą, nazwy różniące się
+// tylko wielkością liter, polskie litery w nazwach zmiennych.
+TYPE "UDT Mój typ"
+VERSION : 0.1
+   STRUCT
+      Stan_X : Bool;   // stan
+      stan_x : Bool;   // ta sama nazwa dla AVEVA (wielkość liter)
+      "Prędkość zadana" : Real;   // polskie litery
+      Cmd_Start : Bool;
+   END_STRUCT;
+
+END_TYPE

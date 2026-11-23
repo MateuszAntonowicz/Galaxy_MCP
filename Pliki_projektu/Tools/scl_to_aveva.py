@@ -33,16 +33,19 @@ Zasady:
   * Tablice: Temp[1..2] -> Temp_1, Temp_2 (adres Temp[1]); indeks ujemny -> Neg_m1 (adres Neg[-1]).
     Tablice wielowymiarowe też: Siatka[1..2, 0..1] -> Siatka_1_0 (adres Siatka[1,0]).
     Tablice UDT i STRUCT są rozwijane (Zawory[1].stan -> Zawory_1_stan).
-  * Nazwy z TIA są czyszczone do wymagań AVEVA: spacje są usuwane, a pozostałe znaki inne niż
-    litera, cyfra i "_" zamieniane na "_" ("Komenda_HMI_ Aktywuj" -> Komenda_HMI_Aktywuj,
-    Temp-1 -> Temp_1); adres w PLC zachowuje oryginalną nazwę.
+  * Nazwy z TIA są czyszczone do wymagań AVEVA: spacje są usuwane, polskie litery zamieniane na
+    litery bez ogonków (Prędkość -> Predkosc), a pozostałe znaki inne niż litera, cyfra i "_" na "_"
+    ("Komenda_HMI_ Aktywuj" -> Komenda_HMI_Aktywuj, Temp-1 -> Temp_1); adres w PLC zachowuje
+    oryginalną nazwę. Tak samo czyszczone są nazwy obiektów z --instances i nazwa szablonu.
+  * Kolizje nazw są wykrywane bez rozróżniania wielkości liter (Stan_X i stan_x to dla AVEVA
+    ta sama nazwa) - druga dostaje licznik _1, _2...
   * Nazwy NIE są skracane - atrybuty, szablony i instancje mają pełne nazwy, bez limitu 32 znaków
     (decyzja użytkownika 2026-09-18). Licznik dostaje tylko nazwa, która koliduje z inną.
   * Opisy (komentarze // z TIA) też NIE są skracane - trafiają do Description w pełnej długości.
   * Kierunek I/O: prefiks dopasowywany do nazwy zmiennej w SCL (liścia), nie do nazwy spłaszczonej.
     Input = Read (ReadOnly), InputOutput = Read/Write (ReadWrite), Output = Write (WriteOnly: SCADA tylko
     zapisuje, adres w OutputDest zamiast InputSource; format niepotwierdzony eksportem z IDE, tryb Auto
-    - GalaxyMCP 0.2.2 - go nie obsługuje).
+    - GalaxyMCP - go nie obsługuje).
   * Adres (InputSource / OutputDest) wg dokumentacji drivera OI SIDirect (adresowanie symboliczne):
     <obiekt DI>.<grupa skanowania>.<item>, item = [DB].[Tag]<[i]>.[Member]; nazwy ze spacją lub kropką
     w cudzysłowie (indeks poza nim), a cały item w attribute(...). Obiekt DI (--plc) jest wymagany,
@@ -139,8 +142,8 @@ MAX_ARRAY_DIMS = 6          # limit wymiarów tablicy (driver SIDirect, s. 87)
 MAX_NESTING = 8             # limit zagnieżdżenia struktury (driver SIDirect, s. 87)
 MAX_MEMBERS = 252           # limit składowych struktury (driver SIDirect, s. 87)
 
-RE_TYPE = re.compile(r'^\s*TYPE\s+"?([^"\s]+)"?', re.I)
-RE_DB = re.compile(r'^\s*DATA_BLOCK\s+"?([^"\s]+)"?', re.I)
+RE_TYPE = re.compile(r'^\s*TYPE\s+(?:"([^"]+)"|([^"\s]+))', re.I)       # nazwa w cudzysłowie może mieć spacje
+RE_DB = re.compile(r'^\s*DATA_BLOCK\s+(?:"([^"]+)"|([^"\s]+))', re.I)
 RE_OPEN = re.compile(r'^(STRUCT|VAR(\s+\w+)?)$', re.I)
 RE_END = re.compile(r'^(END_TYPE|END_DATA_BLOCK)\b', re.I)
 RE_NOISE = re.compile(r'^(VERSION|NON_RETAIN|RETAIN|END_VAR|FAMILY|AUTHOR|TITLE|NAME|\{|\})', re.I)
@@ -169,7 +172,7 @@ def parse_source(text, warn, types=None, dbs=None):
         if kind is None:
             m = RE_TYPE.match(line)
             if m:
-                name = m.group(1)
+                name = (m.group(1) or m.group(2)).strip()
                 if name in types:
                     warn.append("typ '%s' występuje więcej niż raz - użyto pierwszej definicji" % name)
                     types.setdefault(name, [])
@@ -179,7 +182,7 @@ def parse_source(text, warn, types=None, dbs=None):
                 continue
             m = RE_DB.match(line)
             if m:
-                name = m.group(1)
+                name = (m.group(1) or m.group(2)).strip()
                 if name in dbs:
                     warn.append("blok danych '%s' występuje więcej niż raz - użyto pierwszej definicji" % name)
                 dbs.setdefault(name, [])
@@ -234,11 +237,15 @@ def parse_source(text, warn, types=None, dbs=None):
 
 
 # ---------------------------------------------------------------- nazwy
+PL_TRANS = str.maketrans("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", "acelnoszzACELNOSZZ")
+
+
 def clean_name(raw, warn=None):
-    """Nazwa zgodna z AVEVA: spacje usuwane, pozostałe znaki inne niż litera, cyfra i '_'
-    zamieniane na '_' ("Komenda_HMI_ Aktywuj" -> Komenda_HMI_Aktywuj, Temp-1 -> Temp_1).
+    """Nazwa zgodna z AVEVA: spacje usuwane, polskie litery bez ogonków (Prędkość -> Predkosc),
+    pozostałe znaki inne niż litera, cyfra i '_' zamieniane na '_'
+    ("Komenda_HMI_ Aktywuj" -> Komenda_HMI_Aktywuj, Temp-1 -> Temp_1).
     Adres w PLC zostaje bez zmian (oryginalna nazwa w cudzysłowie)."""
-    n = re.sub(r'[^A-Za-z0-9_]', '_', re.sub(r'\s+', '', raw.strip()))
+    n = re.sub(r'[^A-Za-z0-9_]', '_', re.sub(r'\s+', '', raw.strip().translate(PL_TRANS)))
     if not n or not re.match(r'^[A-Za-z_]', n):
         n = "A_" + n
     if warn is not None and n != raw.strip():
@@ -275,14 +282,16 @@ def address(plc, scan_group, parts, suffix=""):
 
 def fit(name, used, warn, what="atrybut"):
     """Nazwa unikalna w obrębie `used`, bez skracania (brak limitu długości - decyzja 2026-09-18).
-    Przy kolizji (np. "Temp-1" i Temp[1] dają to samo Temp_1) dostaje licznik _1, _2..."""
+    Przy kolizji (np. "Temp-1" i Temp[1] dają to samo Temp_1) dostaje licznik _1, _2...
+    Porównanie bez rozróżniania wielkości liter - AVEVA (i serwer GalaxyMCP) traktuje Stan_X
+    i stan_x jako tę samą nazwę; `used` przechowuje nazwy zapisane małymi literami."""
     new, k = name, 1
-    while new in used:
+    while new.lower() in used:
         new = "%s_%d" % (name, k)
         k += 1
     if new != name:
         warn.append("%s '%s' koliduje z inną nazwą - zmieniony na '%s'" % (what, name, new))
-    used.add(new)
+    used.add(new.lower())
     return new
 
 
@@ -432,6 +441,9 @@ def load_rules(path, manual, warn):
             sys.exit("W pliku %s nie ma reguł (potrzebne kolumny Prefix_or_Keyword i Access_Mode - "
                      "nie zmieniaj nazw kolumn)." % path)
         return rules
+    if path:
+        warn.append("nie znaleziono pliku uprawnień '%s' - kierunek I/O wg reguł awaryjnych (%s); "
+                    "dodaj Permissions.csv albo podaj --rules" % (path, ", ".join(p for p, _ in DEFAULT_RULES) + " = InputOutput, reszta Input"))
     return DEFAULT_RULES
 
 
@@ -471,8 +483,8 @@ def build_spec(udt, attrs, instances, plc, scan_group, source, warn, no_address=
         out.append(entry)
     if any(a["io"] == "Output" for a in attrs):
         warn.append("atrybuty Output (Write, #IO.Mode=WriteOnly, adres w OutputDest): format niepotwierdzony "
-                    "eksportem z IDE; tryb Auto (GalaxyMCP 0.2.2) ich nie obsługuje - użyj trybu Manual")
-    tpl = fit("$" + template_prefix + udt, set(), warn, "szablon")
+                    "eksportem z IDE; tryb Auto (GalaxyMCP) ich nie obsługuje - użyj trybu Manual")
+    tpl = "$" + template_prefix + clean_name(udt, warn)
     return {
         "spec_version": SPEC_VERSION,
         "generator": "scl_to_aveva.py",
@@ -631,7 +643,7 @@ def main():
         udt = spec["template"]["udt"]
         write(os.path.join(a.out, "%s.csv" % spec["template"]["name"]), build_template(spec))
         if spec["instances"]:
-            write(os.path.join(a.out, "Instances_%s.csv" % udt), build_instances(spec))
+            write(os.path.join(a.out, "Instances_%s.csv" % clean_name(udt)), build_instances(spec))
         print("UDT\t%s\t%d\t%d" % (udt, len(spec["template"]["attributes"]), len(spec["instances"])))
         return
     if not a.src:
@@ -657,7 +669,12 @@ def main():
         warn.append("nie podano --scan-group: adresy nie mają grupy skanowania obiektu DI "
                     "(driver SIDirect oczekuje <obiekt DI>.<grupa>.<item>) - uzupełnij przed importem")
     inst_per_type = db_instances(dbs, types, warn) if dbs else {}
-    manual = [tuple(s.split("=", 1)) for s in a.instances]
+    manual = []
+    for s in a.instances:
+        obj, sep, db = (x.strip() for x in s.partition("="))
+        if not sep or not obj or not db:
+            sys.exit("Niepoprawne --instances '%s' (format Obiekt=DB)" % s)
+        manual.append((clean_name(obj, warn), db))
     if manual:
         if dbs:
             warn.append("podano --instances i plik .db - użyto tylko bloków danych z pliku")
@@ -685,11 +702,11 @@ def main():
             continue
         spec = build_spec(udt, attrs, inst_per_type.get(udt, []), a.plc, a.scan_group, source, tw,
                           a.no_address, a.template_prefix)
-        with open(os.path.join(a.out, "Spec_%s.json" % udt), "w", encoding="utf-8") as f:
+        with open(os.path.join(a.out, "Spec_%s.json" % clean_name(udt)), "w", encoding="utf-8") as f:
             json.dump(spec, f, ensure_ascii=False, indent=2)
         write(os.path.join(a.out, "%s.csv" % spec["template"]["name"]), build_template(spec))
         if spec["instances"]:
-            write(os.path.join(a.out, "Instances_%s.csv" % udt), build_instances(spec))
+            write(os.path.join(a.out, "Instances_%s.csv" % clean_name(udt)), build_instances(spec))
         print("UDT\t%s\t%d\t%d" % (udt, len(attrs), len(spec["instances"])))
         for at in attrs:
             print("%s\t%s\t%s" % (at["name"], at["type"], IO_SHORT[at["io"]]))

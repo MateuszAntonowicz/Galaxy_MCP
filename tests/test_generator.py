@@ -2,7 +2,8 @@
 
 Uruchomienie z katalogu repozytorium:  python -m unittest discover -s tests -v
 Pliki wejściowe: tests/dane/ (typy.udt - typy z zagnieżdżeniami, tablicami, nazwami do czyszczenia i elementami
-do pominięcia; napedy.db - DB z instancjami w różnych układach; Permissions.csv - reguły ze średnikiem).
+do pominięcia; napedy.db - DB z instancjami w różnych układach; Permissions.csv - reguły ze średnikiem;
+poprawki_025.udt/.db - nazwy ze spacjami, polskimi literami i różniące się tylko wielkością liter).
 """
 import json, os, re, subprocess, sys, tempfile, unittest
 
@@ -138,6 +139,75 @@ class Generator(unittest.TestCase):
             self.assertNotEqual(code, 0)                                   # brak --plc i --no-address
 
 
+
+class Poprawki025(unittest.TestCase):
+    """Błędy znalezione w teście z 2026-11-18, poprawione w GalaxyMCP 0.2.5 (generator)."""
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.out = os.path.join(cls.tmp.name, "Out")
+        cls.code, cls.log = run(os.path.join(DANE, "poprawki_025.udt"), "--db", os.path.join(DANE, "poprawki_025.db"),
+                                "--plc", "S7C_01", "--scan-group", "SG1",
+                                "--permissions", os.path.join(DANE, "Permissions.csv"), "--out", cls.out)
+        with open(os.path.join(cls.out, "Spec_UDTMojtyp.json"), encoding="utf-8") as f:
+            cls.spec = json.load(f)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_typ_ze_spacja_w_nazwie(self):                       # błąd 3: TYPE "UDT Mój typ" czytany jako UDT
+        self.assertEqual(self.code, 0, self.log)
+        self.assertEqual(self.spec["template"]["udt"], "UDT Mój typ")
+        self.assertEqual(self.spec["template"]["name"], "$t_UDTMojtyp")
+        self.assertEqual(sorted(os.listdir(self.out)),
+                         ["$t_UDTMojtyp.csv", "Instances_UDTMojtyp.csv", "Spec_UDTMojtyp.json"])
+        self.assertEqual(self.spec["instances"][0]["db"], "DB Napęd 1")   # DB ze spacją też w całości
+
+    def test_kolizje_bez_wielkosci_liter(self):                  # błąd 1: Stan_X i stan_x to ta sama nazwa
+        names = [a["name"] for a in self.spec["template"]["attributes"]]
+        self.assertEqual(names[:2], ["Stan_X", "stan_x_1"])
+        self.assertEqual(len({n.lower() for n in names}), len(names))
+        inst = [i["name"] for i in self.spec["instances"]]
+        self.assertEqual(inst, ["DBNaped1_Silnik", "DBNaped1_SILNIK_1"])
+        self.assertEqual(server_errors(self.spec), [])
+        # adres zostaje przy oryginalnej nazwie z PLC
+        self.assertEqual(self.spec["instances"][0]["input_source"]["stan_x_1"],
+                         'S7C_01.SG1.attribute("DB Napęd 1".Silnik.stan_x)')
+
+    def test_polskie_litery(self):                                # błąd 4: transliteracja zamiast '_'
+        names = [a["name"] for a in self.spec["template"]["attributes"]]
+        self.assertIn("Predkosczadana", names)
+        self.assertIn('"Prędkość zadana"', self.spec["instances"][0]["input_source"]["Predkosczadana"])
+
+    def test_nazwy_z_instances(self):                             # błąd 2: --instances bez czyszczenia nazw
+        with tempfile.TemporaryDirectory() as t:
+            code, log = run(os.path.join(DANE, "poprawki_025.udt"), "--plc", "S7", "--scan-group", "SG",
+                            "--permissions", os.path.join(DANE, "Permissions.csv"),
+                            "--instances", "Z 2=DB1", "Żuraw-1=DB2", "z2=DB3", "--out", t)
+            self.assertEqual(code, 0, log)
+            with open(os.path.join(t, "Spec_UDTMojtyp.json"), encoding="utf-8") as f:
+                spec = json.load(f)
+            self.assertEqual([i["name"] for i in spec["instances"]], ["Z2", "Zuraw_1", "z2_1"])
+            self.assertEqual(server_errors(spec), [])
+            code, log = run(os.path.join(DANE, "poprawki_025.udt"), "--plc", "S7", "--instances", "BezDB",
+                            "--out", t)
+            self.assertNotEqual(code, 0)
+            self.assertIn("Obiekt=DB", log)
+
+    def test_brak_pliku_uprawnien(self):                          # błąd 5: brak ostrzeżenia o --permissions
+        with tempfile.TemporaryDirectory() as t:
+            code, log = run(os.path.join(DANE, "poprawki_025.udt"), "--plc", "S7", "--instances", "A=DB1",
+                            "--permissions", os.path.join(t, "brak.csv"), "--out", t)
+            self.assertEqual(code, 0, log)
+            self.assertIn("nie znaleziono pliku uprawnień", log)
+            self.assertIn("brak.csv", log)
+
+    def test_bez_starych_wersji_w_tekstach(self):                  # błąd 8: „GalaxyMCP 0.2.2” w ostrzeżeniu
+        with open(GEN, encoding="utf-8") as f:
+            self.assertNotIn("GalaxyMCP 0.2.2", f.read())
+
+
 class Wzorce(unittest.TestCase):
     """Wzorcowe pliki Pliki_projektu/Wzorce_SCL/ muszą być czytane przez generator bez błędów składni."""
 
@@ -167,6 +237,27 @@ class Wzorce(unittest.TestCase):
             self.assertEqual(code, 0, log)
             self.assertNotIn("nie rozpoznano", log)
             self.assertEqual(len([n for n in os.listdir(os.path.join(t, "o")) if n.startswith("Spec_")]), 10)
+
+
+class Repozytorium(unittest.TestCase):
+    """Pliki serwera w Pliki_projektu/Tools muszą być takie same jak w najnowszym GalaxyMcp/GalaxyMcp_<wersja>."""
+
+    def test_tools_zgodne_z_najnowsza_wersja(self):
+        base = os.path.join(ROOT, "GalaxyMcp")
+        vers = [d for d in os.listdir(base) if re.fullmatch(r"GalaxyMcp_\d+\.\d+\.\d+", d)]
+        newest = max(vers, key=lambda d: tuple(int(x) for x in d.split("_")[1].split(".")))
+        tools = os.path.join(ROOT, "Pliki_projektu", "Tools")
+        pairs = {"GalaxyMcp.cs": "GalaxyMcp.cs", "manifest.json": "GalaxyMcp_manifest.json",
+                 "README.md": "GalaxyMcp_README.md", "build.bat": "GalaxyMcp_build.bat",
+                 "pack_mcpb.bat": "GalaxyMcp_pack_mcpb.bat"}
+        for src, dst in pairs.items():
+            with open(os.path.join(base, newest, src), "rb") as a, open(os.path.join(tools, dst), "rb") as b:
+                self.assertEqual(a.read(), b.read(), "%s/%s różni się od Tools/%s" % (newest, src, dst))
+        with open(os.path.join(tools, "GalaxyMcp_manifest.json"), encoding="utf-8") as f:
+            version = json.load(f)["version"]
+        self.assertEqual(newest, "GalaxyMcp_" + version)
+        with open(os.path.join(tools, "GalaxyMcp.cs"), encoding="utf-8") as f:
+            self.assertIn('Version = "%s"' % version, f.read())
 
 
 if __name__ == "__main__":

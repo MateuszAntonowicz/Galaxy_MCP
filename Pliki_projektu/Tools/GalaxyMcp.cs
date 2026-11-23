@@ -39,7 +39,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.4";
+        public const string Version = "0.2.5";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -299,7 +299,7 @@ namespace GalaxyMcp
                     { "spec_path", Prop("string", "Alternatywnie: ścieżka do pliku Spec_<UDT>.json na tym komputerze") },
                     { "dry_run", Prop("boolean", "true = tylko plan (domyślnie), false = zapis do galaktyki") },
                     { "scope", Prop("string", "all (domyślnie), template albo instances", "enum", new[] { "all", "template", "instances" }) },
-                    { "galaxy", Prop("string", "Przy zapisie: nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } }));
+                    { "galaxy", Prop("string", "Wymagane przy zapisie (dry_run=false): nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } }));
             t.Add(Tool("import_csv",
                 "Importuje do galaktyki plik CSV wygenerowany w trybie Manual: kind=template -> ImportTemplateFromText " +
                 "($t_<UDT>.csv), kind=instances -> GRLoad (Instances_<UDT>.csv). Zapisuje do galaktyki - tylko po potwierdzeniu użytkownika.",
@@ -309,8 +309,8 @@ namespace GalaxyMcp
                     { "path", Prop("string", "Alternatywnie: ścieżka do pliku CSV na tym komputerze") },
                     { "mode", Prop("string", "Co z obiektami, które już istnieją: ignore (domyślnie - pomiń), update, replace, terminate",
                                    "enum", new[] { "ignore", "update", "replace", "terminate" }) },
-                    { "galaxy", Prop("string", "Nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } },
-                "kind"));
+                    { "galaxy", Prop("string", "Wymagane: nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } },
+                "kind", "galaxy"));
             t.Add(Tool("export_csv",
                 "Eksportuje obiekty do CSV (kind=template -> ExportTemplateToText, kind=instances -> GRDump) i zwraca treść pliku. " +
                 "Tylko odczyt. Służy do porównania z plikami generowanymi przez skrypt i do poznania formatu IDE.",
@@ -322,8 +322,8 @@ namespace GalaxyMcp
                 "Wdraża wskazane instancje (wymaga GALAXY_ALLOW_DEPLOY=1). Używać tylko na wyraźne polecenie użytkownika.",
                 new Dictionary<string, object> {
                     { "names", Prop("array", "Tagname instancji do wdrożenia", "items", new Dictionary<string, object> { { "type", "string" } }) },
-                    { "galaxy", Prop("string", "Nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } },
-                "names"));
+                    { "galaxy", Prop("string", "Wymagane: nazwa galaktyki potwierdzona przez użytkownika; musi być równa aktywnej") } },
+                "names", "galaxy"));
             return t;
         }
 
@@ -1077,8 +1077,14 @@ namespace GalaxyMcp
         // Każdy zapis: aktywna galaktyka musi mieć prawo zapisu, a jeśli agent podał nazwę - musi się zgadzać.
         public void RequireWrite(string expected, string what)
         {
+            // Od 0.2.5 parametr galaxy jest obowiązkowy przy każdym zapisie: model musi podać nazwę
+            // galaktyki potwierdzoną przez użytkownika, a nie polegać na tym, która jest aktywna.
+            expected = (expected ?? "").Trim();
+            if (expected == "")
+                throw new GrException(what + ": brak parametru galaxy. Zapis wymaga nazwy galaktyki potwierdzonej przez " +
+                                      "użytkownika (równej aktywnej" + (Name == "" ? "" : ": '" + Name + "'") + "). Nic nie zapisano.");
             if (Name == "") throw new GrException("Nie wybrano galaktyki (select_galaxy).");
-            if (expected != "" && !string.Equals(expected, Name, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(expected, Name, StringComparison.OrdinalIgnoreCase))
                 throw new GrException(what + ": podano galaktykę '" + expected + "', a aktywna jest '" + Name +
                                       "'. Nic nie zapisano - najpierw select_galaxy albo popraw nazwę.");
             if (!CanWrite(Name))

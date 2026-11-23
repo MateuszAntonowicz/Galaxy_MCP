@@ -21,6 +21,8 @@ $req = @(
   ('{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"apply_spec","arguments":{"spec":' + $specJson + ',"dry_run":false,"galaxy":"test"}}}'),
   ('{"jsonrpc":"2.0","id":5,"method":"tools/call","params":{"name":"apply_spec","arguments":{"spec":' + $specJson + ',"dry_run":true}}}'),
   '{"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"deploy","arguments":{"names":["X"]}}}',
+  ('{"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"apply_spec","arguments":{"spec":' + $specJson + ',"dry_run":false}}}'),
+  '{"jsonrpc":"2.0","id":8,"method":"tools/call","params":{"name":"import_csv","arguments":{"kind":"template","content":"x"}}}',
   'to nie jest JSON'
 )
 $env:GALAXY_NAME = ''; $env:GALAXY_WRITABLE = ''
@@ -37,7 +39,11 @@ Check ($resp['3'].result.isError -and $t3 -match 'niepoprawna' -and $t3 -match '
 Check ($resp['4'].result.isError -and (Text 4) -match 'Nie wybrano galaktyki') "apply_spec dry_run=false bez wybranej galaktyki: zapis zablokowany"
 $t5 = Text 5
 Check ($t5 -notmatch 'niepoprawna') "apply_spec dry_run: specyfikacja z generatora przechodzi walidację serwera (dalej brak GRAccess/galaktyki: $(($t5 -split "`n")[0]))"
-Check ($resp['6'].result.isError) "deploy bez galaktyki i bez zgody: zablokowany"
+Check ($resp['6'].result.isError -and (Text 6) -match 'brak parametru galaxy') "deploy bez parametru galaxy: zablokowany"
+Check ($resp['7'].result.isError -and (Text 7) -match 'brak parametru galaxy') "apply_spec dry_run=false bez parametru galaxy: zapis zablokowany (0.2.5)"
+Check ($resp['8'].result.isError -and (Text 8) -match 'brak parametru galaxy') "import_csv bez parametru galaxy: zapis zablokowany (0.2.5)"
+$req2 = @($resp['2'].result.tools | Where-Object { $_.name -in 'import_csv', 'deploy' } | ForEach-Object { $_.inputSchema.required -contains 'galaxy' })
+Check (($req2 | Where-Object { $_ }).Count -eq 2) "tools/list: galaxy wymagane w import_csv i deploy"
 Check ($resp.ContainsKey('') -or ($out -match '-32700')) "zła linia JSON: błąd Parse error, serwer działa dalej"
 
 if ($fail) { Write-Host "Nieudane testy: $fail"; exit 1 } else { Write-Host 'Wszystkie testy serwera OK' }

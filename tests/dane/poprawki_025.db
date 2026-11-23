@@ -1,0 +1,12 @@
+DATA_BLOCK "DB Napęd 1"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR
+      Silnik : "UDT Mój typ";
+      SILNIK : "UDT Mój typ";
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK

@@ -141,7 +141,8 @@ Typy czasowe: z sufiksem driver pozwala tylko czytać. Atrybut, który ma być z
  
 - STRUCT w STRUCT oraz zagnieżdżone UDT → nazwy spłaszczone przez `_` (`Header.Status` → `Header_Status`, `stan.Stan_Aktywny` → `stan_Stan_Aktywny`); adres zachowuje ścieżkę w PLC.
 - Tablice UDT i STRUCT są rozwijane: `Subs : Array[1..3] of "UDT_Sub"` → `Subs_1_Val` (adres `Subs[1].Val`).
-- Nazwy z TIA są czyszczone: spacje są usuwane, a pozostałe znaki inne niż litera, cyfra i `_` zamieniane na `_` (`"Komenda_HMI_ Aktywuj"` → `Komenda_HMI_Aktywuj`, `Temp-1` → `Temp_1`). Adres zachowuje oryginalną nazwę w cudzysłowie. Gdy po czyszczeniu wyjdzie nazwa, która już istnieje (`Temp-1` i `Temp[1]`), druga dostaje licznik (`Temp_1_1`) z ostrzeżeniem o kolizji.
+- Nazwy z TIA są czyszczone: spacje są usuwane, polskie litery zamieniane na litery bez ogonków (`Prędkość` → `Predkosc`), a pozostałe znaki inne niż litera, cyfra i `_` na `_` (`"Komenda_HMI_ Aktywuj"` → `Komenda_HMI_Aktywuj`, `Temp-1` → `Temp_1`). Tak samo nazwa szablonu (`TYPE "UDT Mój typ"` → `$t_UDTMojtyp`) i nazwy obiektów z `--instances`. Adres zachowuje oryginalną nazwę w cudzysłowie. Gdy po czyszczeniu wyjdzie nazwa, która już istnieje (`Temp-1` i `Temp[1]`, także `Stan_X` i `stan_x` – wielkość liter się nie liczy), druga dostaje licznik (`Temp_1_1`, `stan_x_1`) z ostrzeżeniem o kolizji.
+- Gdy nie ma pliku `--permissions` (domyślnie `Permissions.csv`), generator ostrzega i używa reguł awaryjnych (`Cmd_`, `Set_`, `Cfg_`, `Par_` = InputOutput, reszta Input) – przekaż to ostrzeżenie użytkownikowi.
 - **Nazwy atrybutów (zmiennych) nie mają limitu 32 znaków i nie są skracane** – zostaje pełna spłaszczona nazwa, taka sama w szablonie, w kolumnach `{Attr}.InputSource` pliku instancji i w specyfikacji. Nie skracaj ich ręcznie w CSV.
 - `Array[1..3] of X` → `Data_1`, `Data_2`, `Data_3`. Indeks ujemny: `Array[-1..1]` → `Data_m1`, `Data_0`, `Data_1`.
 - Tablice wielowymiarowe też są rozwijane: `Siatka : Array[1..2, 0..1] of Real` → `Siatka_1_0` … (adres `Siatka[1,0]`, indeksy w jednym nawiasie).
@@ -163,7 +164,7 @@ Typy czasowe: z sufiksem driver pozwala tylko czytać. Atrybut, który ma być z
 | Input (Read) | `ReadOnly` | `Input` | `InputSource` |
 | Output (Write) | `WriteOnly` | `Output` | `OutputDest` |
  
-- Output = SCADA tylko zapisuje do PLC i nie widzi wartości ze sterownika – odradzaj go dla alarmów i stanów. Wiersz Output nie jest jeszcze potwierdzony eksportem z IDE – wspominaj o tym w „Do sprawdzenia”. Tryb Auto (GalaxyMCP 0.2.3) nie obsługuje Output – przy takich regułach pracuj w trybie Manual.
+- Output = SCADA tylko zapisuje do PLC i nie widzi wartości ze sterownika – odradzaj go dla alarmów i stanów. Wiersz Output nie jest jeszcze potwierdzony eksportem z IDE – wspominaj o tym w „Do sprawdzenia”. Tryb Auto (GalaxyMCP) nie obsługuje Output – przy takich regułach pracuj w trybie Manual.
 Category zawsze: `MxCategoryWriteable_USC_Lockable`.
  
 ---
@@ -249,7 +250,7 @@ Reguły składni, cudzysłowów i limity drivera: `ITERACJE/tmp_OI_SIDirect_adre
  
 ## 6. Tryb Auto – serwer `galaxy` (GalaxyMCP)
  
-Serwer działa na komputerze użytkownika w Claude Desktop jako rozszerzenie „GalaxyMCP” z paczki `GalaxyMcp.mcpb` (aktualna wersja 0.2.4; `Tools/GalaxyMcp_README.md` sekcja 4). Awaryjnie: ręczny wpis `C:\Tools\GalaxyMcp\GalaxyMcp.exe` w konfiguracji (gotowy fragment JSON jest w README, sekcja 3) – nigdy oba naraz. W sesji narzędzia mają nazwy `mcp__remote-devices__GalaxyMCP__*` (rozszerzenie) albo `mcp__remote-devices__galaxy__*` (ręczny wpis) – szukaj przez ToolSearch „galaxy_status”.
+Serwer działa na komputerze użytkownika w Claude Desktop jako rozszerzenie „GalaxyMCP” z paczki `GalaxyMcp.mcpb` (aktualna wersja 0.2.5; `Tools/GalaxyMcp_README.md` sekcja 4). Awaryjnie: ręczny wpis `C:\Tools\GalaxyMcp\GalaxyMcp.exe` w konfiguracji (gotowy fragment JSON jest w README, sekcja 3) – nigdy oba naraz. W sesji narzędzia mają nazwy `mcp__remote-devices__GalaxyMCP__*` (rozszerzenie) albo `mcp__remote-devices__galaxy__*` (ręczny wpis) – szukaj przez ToolSearch „galaxy_status”.
  
 Wątek pracuje w chmurze i widzi te narzędzia tylko wtedy, gdy jest **połączony z komputerem użytkownika**, na którym działa Claude Desktop z włączonym rozszerzeniem. Gdy narzędzi nie ma: poproś użytkownika o połączenie wątku z komputerem (karta połączenia urządzenia, jeśli jest dostępna – np. `connect_device`), a po połączeniu poszukaj narzędzi jeszcze raz. Claude Desktop musi być uruchomiony, a komputer nie może spać przez cały czas pracy z galaktyką.
  
@@ -270,7 +271,7 @@ Procedura:
  
 1. `galaxy_status` – pokaż użytkownikowi aktywną galaktykę i czy zapis jest dozwolony. Jeśli użytkownik chce pracować na innej: `list_galaxies`, potem `select_galaxy`.
 2. `apply_spec` z `spec` = treść `Output/Spec_{UDT}.json` i `dry_run=true`. Pokaż plan (sekcja 8) razem z nazwą galaktyki.
-3. Zapis (`dry_run=false`) dopiero po wyraźnym „tak” użytkownika dla **tej konkretnej galaktyki**. Przy każdym zapisie podawaj `galaxy` = nazwa potwierdzonej galaktyki. Najpierw `scope=template`, potem `scope=instances`.
+3. Zapis (`dry_run=false`) dopiero po wyraźnym „tak” użytkownika dla **tej konkretnej galaktyki**. Przy każdym zapisie podawaj `galaxy` = nazwa potwierdzonej galaktyki (od 0.2.5 bez tego parametru serwer odmawia zapisu). Najpierw `scope=template`, potem `scope=instances`.
 4. Po zapisie: `get_object` dla jednej instancji (filtr `InputSource`) i ponowny plan – powinien pokazać same „bez zmian”.
 5. `deploy` tylko na wyraźne polecenie użytkownika (też z parametrem `galaxy`).
 Zasady bezpieczeństwa:
@@ -292,7 +293,7 @@ Problemy:
 - Brak narzędzi mimo włączonego rozszerzenia → wątek nie jest połączony z komputerem albo Claude Desktop jest zamknięty / komputer uśpiony; poproś o połączenie (wyżej). Jeśli połączenie się nie udaje, użytkownik sprawdza w Claude Desktop Ustawienia → Code (Claude Code), czy włączone jest „Use this computer from your phone and claude.ai”.
 - Serwer znika bez komunikatu → najczęściej Securden zablokował nową wersję `GalaxyMcp.exe` (każde przebudowanie wymaga zgody, jeśli IT nie dało reguły na folder).
 - Błąd „brak metody/właściwości” → `GalaxyMcp.exe --dump-api` i porównanie z `GRAccess_API.txt`.
-- „io musi być Input albo InputOutput” → specyfikacja ma atrybuty Output, których serwer (także 0.2.3) celowo nie obsługuje; wygeneruj pliki w trybie Manual.
+- „io musi być Input albo InputOutput” → specyfikacja ma atrybuty Output, których serwer celowo nie obsługuje; wygeneruj pliki w trybie Manual.
 ---
  
 ## 7. Pamięć projektu

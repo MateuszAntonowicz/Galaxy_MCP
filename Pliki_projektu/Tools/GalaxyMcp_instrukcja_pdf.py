@@ -3,7 +3,7 @@
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
 Stan na 2026-11: nowe projekty Claude (zakładka Code → Projects: rozmowa projektu + wątki, Biblioteka plików,
-połączenie wątku z komputerem) i wtyczka 0.2.4.
+połączenie wątku z komputerem) i wtyczka 0.2.5.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -23,7 +23,7 @@ from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, Simpl
                                 Spacer, Table, TableStyle)
 from reportlab.platypus.tableofcontents import TableOfContents
 
-VERSION = "0.2.4"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
+VERSION = "0.2.5"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
@@ -304,7 +304,7 @@ def build(icon_bytes):
     ])
     s.append(box("<b>Aktualizacja do nowej wersji:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastąpi "
                  "poprzednią wersję, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
-                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.4.", "info"))
+                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.5.", "info"))
     s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń. Tam znajdziesz też plik "
                  f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów).", "info"))
 
@@ -354,7 +354,7 @@ def build(icon_bytes):
     s.append(P("Prawidłowy wynik (przykład dla ustawień z rozdziału 3):"))
     s.append(table([
         ["Pozycja w statusie", "Oczekiwana wartość"],
-        ["Wersja", "0.2.4"],
+        ["Wersja", "0.2.5"],
         ["Galaktyka (aktywna)", "Galaktyka_Test"],
         ["Zapis w aktywnej galaktyce", "DOZWOLONY"],
         ["Dozwolone galaktyki", "Galaktyka_Test, Galaktyka_Dev, Galaktyka_Prod"],
@@ -454,7 +454,7 @@ def build(icon_bytes):
         ["Błąd przy tworzeniu obiektu lub atrybutu o długiej nazwie", "Galaktyka nie przyjęła nazwy dłuższej niż 32 znaki",
          "Zgłoś to osobie utrzymującej projekt; do tego czasu skróć nazwę w programie sterownika"],
         ["„nieobsługiwany typ 'MxDouble'” (albo InternationalizedString, BigString)",
-         "Stara wersja wtyczki (0.2.2 lub starsza)", "Zainstaluj wersję 0.2.4 (rozdział 2) i sprawdź status"],
+         "Stara wersja wtyczki (0.2.2 lub starsza)", "Zainstaluj wersję 0.2.5 (rozdział 2) i sprawdź status"],
         ["„wartość początkowa … nie pasuje do typu …”", "Initial value niezgodna z typem (np. tekst w Integer)",
          "Popraw wartość (Dodatek B) – nic nie zostało zapisane"],
         ["„io musi być Input albo InputOutput”", "Zmienne tylko do zapisu (Write) – celowo wyłączone w trybie Auto "

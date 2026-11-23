@@ -314,3 +314,19 @@ i poprosić o wyniki kroków 1, 3 i 5:
 - PDF: potwierdzenie działania na AVEVA System Platform 2026; w instrukcji użytkownika pogrubione
   „ręcznego zamknięcia procesów GalaxyMcp.exe”. `GalaxyMcp_Jak_to_dziala.pdf` poprawiony skryptem
   `Dokumentacja/zrodla/GalaxyMcp_Jak_to_dziala_galaxy_mcp.py` (PyMuPDF).
+
+## 2026-11-23 – wersja 0.2.5: poprawki z testu projektu (2026-11-18)
+- Generator `scl_to_aveva.py`:
+  - kolizje nazw wykrywane bez rozróżniania wielkości liter (`Stan_X` i `stan_x` → `Stan_X`, `stan_x_1`) – jak w AVEVA i w serwerze;
+  - nazwy obiektów z `--instances` czyszczone jak pozostałe (`"Z 2"` → `Z2`); zły format `Obiekt=DB` przerywa pracę;
+  - `TYPE "UDT Mój typ"` i `DATA_BLOCK "DB Napęd 1"` czytane w całości (wcześniej ucinane na spacji); nazwa szablonu
+    i plików wynikowych czyszczona (`$t_UDTMojtyp`, `Spec_UDTMojtyp.json`), pole `udt` w specyfikacji zachowuje nazwę z TIA;
+  - polskie litery zamieniane na litery bez ogonków (`Prędkość zadana` → `Predkosczadana`) zamiast `_`;
+  - ostrzeżenie, gdy nie ma pliku `--permissions` (wcześniej cicho reguły awaryjne);
+  - usunięte nieaktualne „GalaxyMCP 0.2.2” z ostrzeżeń i opisów.
+- Serwer `GalaxyMcp.cs`: parametr `galaxy` obowiązkowy przy każdym zapisie (`apply_spec` z `dry_run=false`, `import_csv`,
+  `deploy`; w `import_csv` i `deploy` także w `required` schematu). Wcześniej zapis bez `galaxy` przechodził na aktywnej galaktyce.
+- Testy: `tests/test_generator.py` klasa `Poprawki025` (dane `tests/dane/poprawki_025.*`) i `Repozytorium` (Tools = najnowszy
+  `GalaxyMcp/GalaxyMcp_<wersja>`); `tests/test_serwer.ps1` sprawdza odmowę zapisu bez `galaxy`.
+- Nie sprawdzone w galaktyce (brak dostępu do AVEVA w sesji) – do potwierdzenia po instalacji 0.2.5: zapis z `galaxy` działa
+  jak w 0.2.4, a bez `galaxy` serwer odmawia.
