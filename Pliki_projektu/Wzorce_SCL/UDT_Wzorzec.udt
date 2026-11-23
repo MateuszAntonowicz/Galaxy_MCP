@@ -1,0 +1,48 @@
+// Wzorzec źródła typu danych PLC (UDT) do importu w TIA Portal:
+// External source files > Add new external source file > Generate blocks from source.
+// Kolejność: najpierw typy podrzędne (tu "UDT_Wz_Alarm"), potem typy, które ich używają.
+// Plik zapisany jako UTF-8 bez BOM, zakończony pustą linią.
+// Źródła: Pliki_projektu/Wzorce_SCL/README.md, sekcja „Źródła”, m.in.
+//   https://industrialmonitordirect.com/blogs/knowledgebase/s7-1500-db-creation-from-scl-external-source-files-in-tia-v151
+//   https://download.sew-eurodrive.com/download/html/25938266/en-EN/25461686283.html (import źródeł)
+
+TYPE "UDT_Wz_Alarm"
+TITLE = Alarm z kodem
+AUTHOR : MA
+FAMILY : Wzorce
+VERSION : 0.1
+//Pojedynczy alarm: flaga aktywności, kod i potwierdzenie
+   STRUCT
+      Aktywny : Bool;   // alarm aktywny
+      Kod : Int := 0;   // kod błędu, 0 = brak
+      Potwierdz { ExternalWritable := 'True'} : Bool;   // potwierdzenie z HMI/SCADA
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "UDT_Wz_Naped"
+TITLE = Napęd z komendami i statusami
+AUTHOR : MA
+FAMILY : Wzorce
+VERSION : 1.0
+//Wzorcowy napęd: komendy (Cmd_), statusy (Sts_), parametry (Cfg_)
+   STRUCT
+      Cmd_Start : Bool;   // komenda startu
+      Cmd_Stop : Bool := TRUE;   // komenda stopu, domyślnie TRUE
+      Sts_Praca : Bool;   // napęd pracuje
+      Sts_Awaria : Bool;   // awaria napędu
+      Cfg_Predkosc { S7_SetPoint := 'True'} : Real := 1450.0;   // zadana prędkość [obr/min]
+      Cfg_Czas_Rozbiegu : Time := T#5S;   // czas rozbiegu
+      Licznik_Startow : DInt;   // liczba startów
+      Nazwa : String[20] := 'Pompa';   // nazwa wyświetlana
+      Temp_Uzwojen : Array[1..3] of Real;   // temperatury faz U, V, W
+      Alarm : "UDT_Wz_Alarm";   // zagnieżdżony UDT
+      Alarmy_Dod : Array[1..4] of "UDT_Wz_Alarm";   // tablica UDT
+      Serwis : Struct   // struktura anonimowa
+         Data_Przegladu : Date := D#2026-01-01;
+         Godziny_Pracy : Real;
+      END_STRUCT;
+   END_STRUCT;
+
+END_TYPE
+

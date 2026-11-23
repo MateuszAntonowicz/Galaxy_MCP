@@ -1,0 +1,21 @@
+// Wzorzec bloku danych utworzonego wprost z typu UDT (DB "typu" UDT_Wz_Naped).
+// Zamiast sekcji VAR ... END_VAR podaje się samą nazwę typu.
+// Cały DB = jedna instancja; w BEGIN można nadpisać wartości startowe członków.
+// Źródła: Pliki_projektu/Wzorce_SCL/README.md, sekcja „Źródła”, m.in.
+//   https://industrialmonitordirect.com/blogs/knowledgebase/s7-1500-db-creation-from-scl-external-source-files-in-tia-v151
+//   https://download.sew-eurodrive.com/download/html/25938266/en-EN/25461686283.html (import źródeł)
+
+DATA_BLOCK "DB_Wz_Pompa_03"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : MA
+FAMILY : Wzorce
+VERSION : 0.1
+NON_RETAIN
+"UDT_Wz_Naped"
+
+BEGIN
+   Nazwa := 'Pompa 03';
+   Cfg_Predkosc := 900.0;
+
+END_DATA_BLOCK
+

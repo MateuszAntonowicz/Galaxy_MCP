@@ -1,0 +1,36 @@
+// Wzorzec globalnego bloku danych z instancjami UDT.
+// Typy "UDT_Wz_Naped" i "UDT_Wz_Alarm" muszą już istnieć w PLC data types
+// (najpierw import UDT_Wzorzec.udt, kompilacja, dopiero potem ten plik).
+// Numer DB TIA nada sam (nie podajemy go w źródle).
+// Źródła: Pliki_projektu/Wzorce_SCL/README.md, sekcja „Źródła”, m.in.
+//   https://industrialmonitordirect.com/blogs/knowledgebase/s7-1500-db-creation-from-scl-external-source-files-in-tia-v151
+//   https://download.sew-eurodrive.com/download/html/25938266/en-EN/25461686283.html (import źródeł)
+
+DATA_BLOCK "DB_Wz_Napedy"
+TITLE = Napędy linii A
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : MA
+FAMILY : Wzorce
+VERSION : 0.1
+NON_RETAIN
+//Każdy członek typu UDT = jedna instancja obiektu w AVEVA (generator UDT->CSV)
+   VAR 
+      Pompa_01 : "UDT_Wz_Naped";   // pompa wody surowej
+      Pompa_02 : "UDT_Wz_Naped";   // pompa rezerwowa
+      Wentylatory : Array[1..3] of "UDT_Wz_Naped";   // wentylatory hali
+      Sekcja_B : Struct   // grupowanie członków
+         Mieszadlo : "UDT_Wz_Naped";
+      END_STRUCT;
+      Liczba_Napedow : Int := 6;   // zwykła zmienna, nie instancja
+   END_VAR
+
+
+BEGIN
+   Pompa_01.Nazwa := 'Pompa 01';
+   Pompa_02.Nazwa := 'Pompa 02';
+   Pompa_02.Cfg_Predkosc := 1200.0;
+   Wentylatory[1].Cfg_Czas_Rozbiegu := T#10S;
+   Sekcja_B.Mieszadlo.Cmd_Stop := FALSE;
+
+END_DATA_BLOCK
+

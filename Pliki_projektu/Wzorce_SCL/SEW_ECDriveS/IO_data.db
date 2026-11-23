@@ -1,0 +1,65 @@
+DATA_BLOCK "IO_data"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+NON_RETAIN
+   STRUCT 
+      COMM_OK { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_JOG_PLUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_JOG_MINUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_REF_TRAVEL_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_POSITIONING_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_SETPOINT_POS { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      L_SETPOINT_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      L_ACC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;   // Vorsicht: Rampe = 0 unbedingt vermeiden
+      L_DEC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;   // Vorsicht: Rampe = 0 unbedingt vermeiden
+      L_REFERENCED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_TARGET_POS_REACHED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_AXIS_INTERLOCKED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      L_OVERHEAT : Bool;
+      L_MAXTORQUE : Bool;
+      L_SHORTCIRCUIT : Bool;
+      L_MDRNOTCONNECTED : Bool;
+      L_OVERLOAD : Bool;
+      L_STALLED : Bool;
+      L_MDRBADHALL : Bool;
+      L_OVERVOLTAGE : Bool;
+      L_LOWVOLTAGE : Bool;
+      L_ACTUAL_POSITION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      L_ACTUAL_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      L_ACTUAL_CURRENT { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_JOG_PLUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_JOG_MINUS_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_REF_TRAVEL_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_POSITIONING_MODE { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_SETPOINT_POS { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      R_SETPOINT_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_ACC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;   // Vorsicht: Rampe = 0 unbedingt vermeiden
+      R_DEC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;   // Vorsicht: Rampe = 0 unbedingt vermeiden
+      R_REFERENCED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_TARGET_POS_REACHED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_AXIS_INTERLOCKED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      R_OVERHEAT : Bool;
+      R_MAXTORQUE : Bool;
+      R_SHORTCIRCUIT : Bool;
+      R_MDRNOTCONNECTED : Bool;
+      R_OVERLOAD : Bool;
+      R_STALLED : Bool;
+      R_MDRBADHALL : Bool;
+      R_OVERVOLTAGE : Bool;
+      R_LOWVOLTAGE : Bool;
+      R_ACTUAL_POSITION { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      R_ACTUAL_SPEED { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      R_ACTUAL_CURRENT { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+   END_STRUCT;
+
+
+BEGIN
+   L_SETPOINT_SPEED := 23;
+   L_ACC := 101;
+   L_DEC := 102;
+   R_SETPOINT_SPEED := 23;
+   R_ACC := 101;
+   R_DEC := 102;
+
+END_DATA_BLOCK
+

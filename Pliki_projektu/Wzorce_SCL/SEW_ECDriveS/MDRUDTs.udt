@@ -1,0 +1,33 @@
+TYPE "MDR_PM_Data"
+VERSION : 0.1
+   STRUCT
+      ProductionID : Word;   // Motor production ID
+      Roller_type : Byte;   // Roller type (ASCII code) : 'A' - standard / 'T'- tapered
+      CustomerID : Byte;   // Customer ID
+      Diameter_code : Byte;   // Tube diameter in millimeters
+      Motor_type : Byte;   // 0 = PR (standard) / 1 = PGD
+      Inter_lock : Byte;   // ASCII code : 'A' - straight / 'G' - grooved / 'H' - mictor-V pulley
+      Speed_code : Byte;   // The speed code of the motor
+      Manufacture_year : Byte;   // The year in which the motor has been manufactured
+      Manufacture_month : Byte;   // The month in which the motor has been manufactured
+      Tube : Byte;   // Type of tube(ASCII) : 'Z'-zinc
+      Custom_option : Byte;
+      Motor_length : Word;   // The motor length in millimeters
+      Assembly_country : Byte;   // The country in which the motor has been assembled. 0 = EU/ 1 = Japan/ 2 = USA
+      Manufacture_day : Byte;   // The day, in which the motor has been manufactured
+      OperatingTimeLow : Word;   // This is the operating time of the MDR in minutes. Low Word
+      OperatingTimeHigh : Word;   // This is the operating time of the MDR in minutes. High Word
+      Time_in_Curr_LimitLow : Word;   // This is the time, the motor spent in its current limit in minutes.Low Word
+      Time_in_Curr_LimitHigh : Word;   // This is the time, the motor spent in its current limit in minutes.High Word
+      Timer_OverheatedLow : Word;   // This is the time, the motor spent working with temperature above 90 degrees Celsius. Measured in minutes.Low Word
+      Timer_OverheatedHigh : Word;   // This is the time, the motor spent working with temperature above 90 degrees Celsius. Measured in minutes.High Word
+      OnOff_CyclesLow : Word;   // This is the counter for the On/Off cycles of the motor.Low Word
+      OnOff_CyclesHigh : Word;   // This is the counter for the On/Off cycles of the motor.High Word
+      OvervoltageCounterLow : Word;   // This is the counter for the overvoltage events of the motor.Low Word
+      OvervoltageCounterHigh : Word;   // This is the counter for the overvoltage events of the motor.High Word
+      UndervoltageCounterLow : Word;   // This is the counter for the undervoltage events of the motor.Low Word
+      UndervoltageCounterHigh : Word;   // This is the counter for the undervoltage events of the motor.High Word
+   END_STRUCT;
+
+END_TYPE
+
