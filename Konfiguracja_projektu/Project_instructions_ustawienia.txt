@@ -188,7 +188,7 @@ Zasady: najpierw galaktyka testowa; blokad serwera (galaktyka spoza listy zapisu
 
 Gdy coś nie działa:
 
-- „Zapis zablokowany” / galaktyki brak na liście → użytkownik w Ustawienia → Extensions → GalaxyMCP uzupełnia „Dozwolone galaktyki”, „Galaktyki z prawem zapisu”, odznacza „Tylko odczyt”, potem: Enabled wył., restart komputera (albo zakończenie procesów `GalaxyMcp.exe`), Enabled wł.
+- „Zapis zablokowany” / galaktyki brak na liście → użytkownik w Settings → Desktop app → Extensions (Manage) → GalaxyMCP uzupełnia „Dozwolone galaktyki”, „Galaktyki z prawem zapisu”, odznacza „Tylko odczyt”, potem: Enabled wył., restart komputera (albo zakończenie procesów `GalaxyMcp.exe`), Enabled wł.
 - Status pokazuje stare ustawienia → jak wyżej (ponowne uruchomienie wtyczki).
 - Brak narzędzi → Claude Desktop uruchomiony, rozszerzenie włączone, wątek połączony z komputerem; w Claude Desktop Ustawienia → Code włączone „Use this computer from your phone and claude.ai”; nowa wersja wtyczki → nowy wątek.
 - Serwer znika bez komunikatu → program ochronny (np. Securden) zablokował `GalaxyMcp.exe` – użytkownik zatwierdza aplikację lub prosi IT o regułę.

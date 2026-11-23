@@ -462,7 +462,7 @@ def build():
         ["Zmienne Komenda_… są tylko do odczytu",
          "Nie dołączono Permissions.csv ani reguł – działają reguły domyślne. Dołącz plik albo podaj reguły w wątku."],
         ["Brak trybu Auto / narzędzi galaxy",
-         "Na komputerze z AVEVA uruchom Claude Desktop i sprawdź w Ustawienia → Extensions, czy rozszerzenie jest "
+         "Na komputerze z AVEVA uruchom Claude Desktop i sprawdź w Settings → Desktop app → Extensions (Manage), czy rozszerzenie jest "
          "włączone. W wątku napisz „Połącz się z moim komputerem” i zatwierdź kartę. Jeśli nadal brak – sprawdź w "
          "Ustawienia → Code (Claude Code), czy włączone jest „Use this computer from your phone and claude.ai”, "
          "i poproś w rozmowie projektu o nowy wątek."],

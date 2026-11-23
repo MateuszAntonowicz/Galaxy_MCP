@@ -294,8 +294,10 @@ def build(icon_bytes):
     s.append(H1("2. Instalacja wtyczki"))
     s += steps([
         f"Zapisz plik {code('GalaxyMcp.mcpb')} na dysku.",
-        "W Claude Desktop otwórz <b>Ustawienia → Extensions → Advanced settings</b> i kliknij "
-        f"<b>Install Extension…</b>, a następnie wskaż plik {code('GalaxyMcp.mcpb')}.",
+        "W Claude Desktop otwórz <b>Settings → Desktop app</b> i przy <b>Extensions</b> kliknij <b>Manage</b>.",
+        "Kliknij <b>Advanced settings</b>, w sekcji <b>Extension Developer</b> kliknij <b>Install Extension…</b> "
+        f"i wskaż plik {code('GalaxyMcp.mcpb')}. Pliku .mcpb nie dodajesz w <b>Settings → Plugins</b> – "
+        "„Upload a plugin” przyjmuje tylko paczki pluginów i skille.",
         "W oknie instalacji sprawdź nazwę <b>GalaxyMCP</b> i listę 9 narzędzi, potwierdź instalację.",
         "Wypełnij formularz ustawień (rozdział 3) i zapisz.",
         "Upewnij się, że przełącznik <b>Enabled</b> jest włączony. Jeśli na tym komputerze wtyczka była już "
@@ -309,7 +311,7 @@ def build(icon_bytes):
 
     # ---- 3. Ustawienia
     s.append(H1("3. Ustawienia wtyczki"))
-    s.append(P("Ustawienia otwierasz w <b>Ustawienia → Extensions → GalaxyMCP</b>."))
+    s.append(P("Ustawienia otwierasz w <b>Settings → Desktop app → Extensions (Manage) → GalaxyMCP</b>."))
     s.append(table([
         ["Pole", "Co wpisać", "Przykład"],
         ["Węzeł GR (Galaxy Repository)", "Nazwa komputera z serwerem galaktyk. <b>Puste = ten komputer.</b> "
@@ -425,7 +427,7 @@ def build(icon_bytes):
                  f"{code('GalaxyMcp.log')} z folderu rozszerzenia.", "info"))
     s.append(table([
         ["Objaw", "Przyczyna", "Co zrobić"],
-        ["Dwuklik na .mcpb nic nie robi", "Skojarzenie pliku", "Ustawienia → Extensions → Advanced settings → Install Extension…"],
+        ["„Upload a plugin” nie przyjmuje .mcpb", "To okno jest dla pluginów i skilli, nie rozszerzeń", "Settings → Desktop app → Extensions (Manage) → Advanced settings → Install Extension… (rozdział 2)"],
         ["Komunikat o blokadzie przez organizację", "Administrator ogranicza własne rozszerzenia",
          "Poproś administratora konta o dopuszczenie wtyczki"],
         ["Claude nie widzi narzędzi galaktyki", "Wątek nie jest połączony z Twoim komputerem, Claude Desktop jest "
