@@ -5,7 +5,7 @@
 Konwertujesz pliki z Siemens TIA Portal na obiekty AVEVA System Platform:
  
 - **`*.udt` / `*.scl`** – jeden lub wiele bloków `TYPE "<UDT>" ... STRUCT ... END_TYPE`. Każdy typ = jeden szablon. Zagnieżdżone UDT i STRUCT są rozwijane.
-- **`*.db`** – jeden lub wiele bloków `DATA_BLOCK "<DB>" ... VAR ... END_VAR`. Każdy element typu UDT = jedna instancja tego szablonu – także w tablicy i wewnątrz STRUCT (dowolnie głęboko). DB utworzony wprost z typu UDT (`DATA_BLOCK "X"` … `"UDT_Y"` … `BEGIN`, bez `VAR`) = jedna instancja o nazwie DB. Sekcja `BEGIN` (wartości startowe) jest pomijana.
+- **`*.db`** – jeden lub wiele bloków `DATA_BLOCK "<DB>" ... VAR ... END_VAR` (DB z dostępem klasycznym, `S7_Optimized_Access := 'FALSE'`, ma zamiast tego `STRUCT ... END_STRUCT;` – obsługiwane tak samo). Każdy element typu UDT = jedna instancja tego szablonu – także w tablicy i wewnątrz STRUCT (dowolnie głęboko). DB utworzony wprost z typu UDT (`DATA_BLOCK "X"` … `"UDT_Y"` … `BEGIN`, bez `VAR`) = jedna instancja o nazwie DB. Sekcja `BEGIN` (wartości startowe) jest pomijana.
 Dostępne są dwa tryby:
  
 - **Manual** – pliki CSV do importu w ArchestrA IDE:
@@ -24,6 +24,7 @@ Pliki w projekcie i ich priorytet (przy sprzeczności wygrywa wyższy):
 6. `Tools/GalaxyMcp_README.md` – serwer MCP (narzędzia, zmienne środowiskowe, instalacja `.mcpb`, diagnostyka); pozostałe pliki serwera: `Tools/GalaxyMcp*` (`GalaxyMcp.cs`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`, `GalaxyMcp_manifest.json`, `GalaxyMcp_icon.png.b64`); instrukcja dla użytkowników wtyczki powstaje ze skryptu `Tools/GalaxyMcp_instrukcja_pdf.py` (autor: Mateusz Antonowicz, z pomocą Claude AI) – gotowego PDF nie trzymamy w projekcie.
 7. `OISIDIR.pdf` – dokumentacja drivera OI SIDirect (źródło), a wnioski z niej: `ITERACJE/tmp_OI_SIDirect_adresowanie.md` – składnia adresów, limity, typy, sufiksy.
 8. `ITERACJE/tmp_GRAccessMCP_wdrozenie.md` – historia wdrożenia i znane problemy (notatki, nie reguły).
+9. `Wzorce_SCL/README.md` – składnia źródeł `.udt`/`.db` (TYPE, DATA_BLOCK, atrybuty, wartości startowe, import do TIA) i ocena źródeł; obok wzorce `UDT_Wzorzec.udt`, `DB_Wzorzec_Globalny.db`, `DB_Wzorzec_Typu_UDT.db` oraz prawdziwe pliki z projektu SEW w `Wzorce_SCL/SEW_ECDriveS/`. Używaj ich, gdy użytkownik chce napisać lub poprawić `.udt`/`.db` bez TIA Portal, albo gdy potrzebujesz przykładowych danych wejściowych do testu generatora.
 Kilka typów w pliku to normalna sytuacja – generator obsłuży wszystkie. Jeśli w żadnym z podanych plików nie ma `TYPE ... STRUCT` (np. dostałeś tylko `.db` albo FB z `VAR_INPUT`) – powiedz to użytkownikowi i poproś o plik z definicjami typów, zamiast zgadywać.
  
 ### 0.1. Praca w projekcie (wątki)
