@@ -34,7 +34,7 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 |---|---|
 | `Dokumentacja/*.pdf` | instrukcje z kroku 1 |
 | `Konfiguracja_projektu/Context.zip` | pliki projektu do dodania w Library (zawiera to samo co folder `Pliki_projektu/`) |
-| `Konfiguracja_projektu/Project_instructions_ustawienia.txt` | tekst do wklejenia w Project settings → Memory → Project instructions |
+| `Konfiguracja_projektu/Project_instructions_ustawienia.txt` | instrukcja projektu do wklejenia w całości w Project settings → Memory → Project instructions (ta sama treść co `Pliki_projektu/Tools/Instrukcja_projektu.md`) |
 | `Konfiguracja_projektu/prompt.txt` | opcjonalnie: polecenie, którym Claude sam rozpakuje i sprawdzi pliki projektu |
 
 **B. Wtyczka GalaxyMCP (tylko tryb Auto, na komputerze z AVEVA System Platform 2026)**
@@ -55,7 +55,8 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 ### Aktualizacja do nowej wersji
 
 1. Pobierz ponownie repozytorium (Download ZIP albo `git pull`) i w Library projektu podmień pliki z nowego `Context.zip` (przy istniejącej nazwie wybierz **Replace**).
-2. Jeśli w Releases jest nowsza wersja wtyczki, pobierz nowy `GalaxyMcp.mcpb` i zainstaluj go w miejsce starego (Ustawienia → Extensions). Wersję sprawdzisz poleceniem „pokaż status galaktyki” – pozycja „Wersja”.
+2. W Project settings → Memory → Project instructions zastąp tekst całą treścią nowego `Project_instructions_ustawienia.txt` i kliknij **Save changes**.
+3. Jeśli w Releases jest nowsza wersja wtyczki, pobierz nowy `GalaxyMcp.mcpb` i zainstaluj go w miejsce starego (Ustawienia → Extensions). Wersję sprawdzisz poleceniem „pokaż status galaktyki” – pozycja „Wersja”.
 
 ---
 
@@ -75,14 +76,13 @@ Pliki_projektu/            ← pliki projektu Claude (to samo co Context.zip)
   OISIDIR_tekst.txt        tekst dokumentacji drivera OI SIDirect (zamiennik OISIDIR.pdf)
 Konfiguracja_projektu/     założenie / odtworzenie projektu w Claude
   Context.zip              Pliki_projektu spakowane do dodania w Library
-  Project_instructions_ustawienia.txt   tekst do pola Project instructions (limit 16 000 znaków)
+  Project_instructions_ustawienia.txt   instrukcja projektu do wklejenia w pole Project instructions
   prompt.txt               polecenie odtworzenia projektu z kopii
 Dokumentacja/              trzy instrukcje PDF (patrz „Jak zacząć”)
   zrodla/                  skrypty generujące / poprawiające PDF
 GalaxyMcp/                 źródła kolejnych wersji wtyczki
-  GalaxyMcp_0.2.5/         aktualna wersja (obowiązkowy parametr galaxy przy zapisie)
-  GalaxyMcp_0.2.4/         poprzednia wersja (nowa nazwa GalaxyMCP)
-  GalaxyMcp_0.2.3/         wersja z nazwą „AVEVA Galaxy (GalaxyMcp)”
+  GalaxyMcp_0.2.5/         aktualna wersja – z niej powstaje wydanie
+  GalaxyMcp_0.2.3/, 0.2.4/ archiwum źródeł wydań v0.2.3 i v0.2.4
 .github/workflows/         automatyczne budowanie wtyczki i tworzenie wydania
 ```
 

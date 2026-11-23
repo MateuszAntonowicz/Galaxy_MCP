@@ -259,6 +259,14 @@ class Repozytorium(unittest.TestCase):
         with open(os.path.join(tools, "GalaxyMcp.cs"), encoding="utf-8") as f:
             self.assertIn('Version = "%s"' % version, f.read())
 
+    def test_instrukcja_projektu_miesci_sie_w_ustawieniach(self):
+        """Instrukcja projektu jest wklejana w całości w Project instructions (limit pola: 16 000 znaków)."""
+        with open(os.path.join(ROOT, "Pliki_projektu", "Tools", "Instrukcja_projektu.md"), encoding="utf-8") as f:
+            instr = f.read()
+        with open(os.path.join(ROOT, "Konfiguracja_projektu", "Project_instructions_ustawienia.txt"), encoding="utf-8") as f:
+            self.assertEqual(f.read(), instr, "Project_instructions_ustawienia.txt różni się od Tools/Instrukcja_projektu.md")
+        self.assertLess(len(instr), 16000, "Instrukcja_projektu.md ma %d znaków – skróć ją poniżej 16 000" % len(instr))
+
 
 if __name__ == "__main__":
     unittest.main()

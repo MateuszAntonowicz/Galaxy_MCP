@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generuje Instrukcja_UDT_CSV.pdf - instrukcję działania projektu UDT->CSV (TIA Portal -> AVEVA System Platform)
-dla nowych projektów Claude (stan 2026-11: Claude Desktop, zakładka Code -> Projects; rozmowa projektu + wątki).
+w projektach Claude (Claude Desktop, zakładka Code -> Projects; rozmowa projektu + wątki).
 
 Użycie:  python Instrukcja_UDT_CSV_pdf.py [--out Instrukcja_UDT_CSV.pdf]
 Wymaga:  reportlab; czcionki z polskimi znakami (Carlito/Liberation/DejaVu albo Calibri/Arial/Consolas na Windows).
@@ -46,7 +46,7 @@ for fs in FONT_SETS:
 else:
     sys.exit("Brak czcionek TTF z polskimi znakami (Carlito/Calibri/DejaVu).")
 
-# ------------------------------------------------------------------ kolory i style (jak w wersji z 2026-09)
+# ------------------------------------------------------------------ kolory i style
 HEAD = colors.HexColor("#1F4E79")
 GREY = colors.HexColor("#808080")
 LINE = colors.HexColor("#A6A6A6")
@@ -156,7 +156,7 @@ def note(content, kind="info", title=None):
     return KeepTogether([t, Spacer(1, 7)])
 
 
-W = A4[0] - 2 * 72  # szerokość tekstu (marginesy 2,54 cm jak w wersji z Writer)
+W = A4[0] - 2 * 72  # szerokość tekstu (marginesy 2,54 cm)
 
 
 def on_page(cv, doc):
@@ -174,20 +174,6 @@ def on_page(cv, doc):
     cv.restoreState()
 
 
-SHORT_INSTRUCTION = [
-    'Pełna instrukcja tego projektu jest w pliku Tools/Instrukcja_projektu.md w',
-    'plikach projektu: /mnt/project-files/Tools/Instrukcja_projektu.md.',
-    'Na początku każdego wątku przeczytaj ją w całości i stosuj jako instrukcję',
-    'projektu (kolejność ważności plików – jej sekcja 0, sposób pracy w wątkach –',
-    'sekcja 0.1). Pliki projektu czytasz i zapisujesz bezpośrednio w /mnt/project-',
-    'files/. Narzędzia z instrukcji, których nie ma w wątku (project_read,',
-    'project_write, TaskCreate, AskUserQuestion), zastępuj odpowiednikami: pliki w',
-    '/mnt/project-files, lista kroków wątku i karty z pytaniem do kliknięcia.',
-    'Jeśli pliku nie ma, powiedz to i poproś o dodanie Tools/Instrukcja_projektu.md',
-    '(albo Context.zip) do Library projektu – nie zgaduj reguł.',
-]
-
-
 # ------------------------------------------------------------------ treść
 def build():
     s = []
@@ -195,8 +181,8 @@ def build():
     s.append(Spacer(1, 4))
     s.append(P("Instrukcja działania projektu UDT->CSV", "title"))
     s.append(P("Jak zamienić typy i bloki danych ze sterownika na szablony i instancje AVEVA – "
-               "w nowych projektach Claude Desktop", "subtitle"))
-    s.append(P(f"Autor: {AUTHOR}<br/>{AUTHOR_NOTE} · stan: listopad {DOC_YEAR}", "small"))
+               "w projektach Claude Desktop", "subtitle"))
+    s.append(P(f"Autor: {AUTHOR}<br/>{AUTHOR_NOTE} · wtyczka GalaxyMCP {PLUGIN_VERSION}", "small"))
     t = Table([[""]], colWidths=[W], rowHeights=[2])
     t.setStyle(TableStyle([("LINEBELOW", (0, 0), (-1, -1), 1.2, HEAD)]))
     s.append(t)
@@ -224,19 +210,19 @@ def build():
          "Masz zainstalowane rozszerzenie „GalaxyMCP” i galaktykę z prawem zapisu."],
     ], [W * 0.13, W * 0.47, W * 0.40]))
     s.append(Spacer(1, 6))
-    s.append(note("<b>Co się zmieniło od września 2026.</b> Projekt nie jest już folderem rozmów. To jedna "
-                  "<b>rozmowa projektu</b>, w której Claude (koordynator) przyjmuje zlecenia i dla każdego zadania "
-                  "zakłada osobny <b>wątek</b>. Wątek pracuje w chmurze, zadaje pytania i oddaje wyniki. Pliki "
-                  "projektu są w <b>Library</b>, a instrukcja projektu ma limit 16 000 znaków (rozdział 3.3)."))
+    s.append(note("<b>Jak działa projekt w Claude.</b> Projekt to jedna <b>rozmowa projektu</b>, w której Claude "
+                  "(koordynator) przyjmuje zlecenia i dla każdego zadania zakłada osobny <b>wątek</b>. Wątek pracuje "
+                  "w chmurze, zadaje pytania i oddaje wyniki. Pliki projektu są w <b>Library</b>, a instrukcja "
+                  "projektu – w ustawieniach projektu (rozdział 3.3)."))
 
     # ---- 2
     s.append(H1("2. Wymagania"))
     s += bullets([
         "Aktualny <b>Claude Desktop</b> (albo przeglądarka: claude.ai/code). Projekty są w zakładce "
         f"{ui('Code')} → {ui('Projects')} w lewym pasku (albo pod {ui('More')}).",
-        "Plan <b>Pro, Max lub Ultra</b>. Nowe projekty są w becie: nie ma ich jeszcze w planach Team i Enterprise, "
+        "Plan <b>Pro, Max lub Ultra</b>. Projekty są w becie: nie ma ich jeszcze w planach Team i Enterprise, "
         "a dostęp włączany jest stopniowo.",
-        "Pliki projektu: zawartość archiwum <b>Context.zip</b> (foldery Tools i ITERACJE, t_SampleUDT.csv, "
+        "Pliki projektu: zawartość archiwum <b>Context.zip</b> (foldery Tools, ITERACJE i Wzorce_SCL, t_SampleUDT.csv, "
         "OISIDIR_tekst.txt) i opcjonalnie OISIDIR.pdf oraz Permissions.csv.",
         f"Tryb Auto: komputer z <b>AVEVA System Platform 2026</b> (lub dostęp do węzła GR), rozszerzenie "
         f"<b>GalaxyMCP</b> w wersji {PLUGIN_VERSION} oraz <b>uruchomiony Claude Desktop</b> na tym komputerze "
@@ -253,8 +239,8 @@ def build():
     s += steps([
         f"Otwórz Claude Desktop, przejdź do zakładki {ui('Code')} i w lewym pasku wybierz {ui('Projects')} "
         f"(jeśli go nie widać – rozwiń {ui('More')}).",
-        f"Kliknij {ui('New project')}. Jeśli zamiast niego jest {ui('Get started')}, aplikacja najpierw poprosi "
-        "o przeniesienie albo archiwizację starych projektów z czatu – zrób to i wróć do tego kroku.",
+        f"Kliknij {ui('New project')}. Jeśli zamiast niego jest {ui('Get started')}, kliknij go i wykonaj kroki, "
+        "które pokaże aplikacja (przeniesienie albo archiwizacja projektów z czatu), potem wróć do tego kroku.",
         f"W oknie {ui('New project')} wypełnij: {ui('Name')} – np. <b>UDT->CSV</b>; "
         f"{ui('What do you want to work on?')} (opcjonalnie) – jedno zdanie celu, np. „Konwersja typów i bloków "
         "danych z TIA Portal na szablony i instancje AVEVA (pliki CSV albo zapis przez GalaxyMCP)”.",
@@ -271,7 +257,8 @@ def build():
         ["Co dodać", "Uwagi"],
         [f"folder {c('Tools')}", "skrypt scl_to_aveva.py, Metoda_Generowania.md, Instrukcja_projektu.md, pliki "
                                  "GalaxyMcp* – dodaj <b>cały folder</b>, żeby zachować ścieżki Tools/…"],
-        [f"folder {c('ITERACJE')}", "notatki o adresowaniu SIDirect i historii wdrożenia"],
+        [f"folder {c('ITERACJE')}", "notatki o adresowaniu SIDirect i z testów wtyczki"],
+        [f"folder {c('Wzorce_SCL')}", "wzorcowe pliki .udt/.db z opisem składni (do pisania plików bez TIA i do testów)"],
         [f"{c('t_SampleUDT.csv')}, {c('OISIDIR_tekst.txt')}", "wzorzec eksportu z IDE i tekst dokumentacji drivera"],
         [f"{c('OISIDIR.pdf')} (opcjonalnie)", "oryginał dokumentacji drivera OI SIDirect"],
         [f"{c('Permissions.csv')} (opcjonalnie)", "reguły zapisu – możesz go też dołączać do pojedynczego zlecenia"],
@@ -279,24 +266,23 @@ def build():
     s.append(Spacer(1, 6))
     s.append(note([
         P("<b>Szybciej z kopii zapasowej:</b> dodaj do Library sam plik Context.zip i napisz w rozmowie projektu: "
-          "„Rozpakuj Context.zip do plików projektu z zachowaniem folderów Tools i ITERACJE, potem sprawdź "
+          "„Rozpakuj Context.zip do plików projektu z zachowaniem folderów Tools, ITERACJE i Wzorce_SCL, potem sprawdź "
           "kompletność plików”. Claude zrobi to w wątku."),
         P(f"<b>Aktualizacja pliku:</b> pliki w projekcie są kopiami. Po zmianie pliku na dysku dodaj go ponownie "
           f"({ui('Library')} → {ui('Add')}) i przy pytaniu o istniejącą nazwę wybierz {ui('Replace')}. "
-          "Inaczej wątki dalej czytają starą wersję."),
+          "Wątki czytają zawsze tę wersję pliku, która jest w Library."),
     ]))
     s.append(H2("3.3. Instrukcja projektu"))
     s += steps([
         f"W nagłówku projektu kliknij menu <font name=\"Mono\"><b>⋯</b></font> (trzy kropki) → {ui('Settings')}. Otworzy się {ui('Project settings')}.",
         f"Wejdź w {ui('Memory')} → {ui('Project instructions')}.",
-        f"Wklej tekst instrukcji i kliknij {ui('Save changes')}.",
+        f"Otwórz w Notatniku plik {c('Tools/Instrukcja_projektu.md')} z rozpakowanego Context.zip (tę samą treść ma "
+        f"{c('Konfiguracja_projektu/Project_instructions_ustawienia.txt')} w repozytorium). Zaznacz całość "
+        f"({ui('Ctrl+A')}), skopiuj ({ui('Ctrl+C')}) i wklej w pole ({ui('Ctrl+V')}).",
+        f"Kliknij {ui('Save changes')}.",
     ])
-    s.append(note("Pole <b>Project instructions</b> mieści najwyżej <b>16 000 znaków</b>, a pełna instrukcja "
-                  "(Tools/Instrukcja_projektu.md) ma ok. 33 000 – <b>nie zmieści się</b>. Wklej w pole krótki tekst "
-                  "poniżej (jest też w pliku Project_instructions_ustawienia.txt): odsyła on każdy wątek do pełnej instrukcji w plikach projektu.", "warn"))
-    s.append(codeblock(SHORT_INSTRUCTION))
-    s.append(P("Zmiana instrukcji albo plików działa w <b>nowych</b> wątkach – wątki już uruchomione pracują na "
-               "starej wersji."))
+    s.append(P("Instrukcja działa w każdym nowym wątku. Po aktualizacji projektu wklej w to pole nową treść "
+               "pliku tak samo (zaznacz w polu całość i wklej) i zlecaj pracę w nowym wątku."))
     s.append(H2("3.4. Ustawienia i sprawdzenie"))
     s += bullets([
         f"{ui('Project settings')} → {ui('General')}: {ui('Thread model')} i {ui('Thread effort')} – domyślnie "
@@ -455,16 +441,14 @@ def build():
     s.append(table([
         ["Objaw", "Rozwiązanie"],
         [f"Brak {ui('Projects')} w zakładce Code",
-         f"Sprawdź pod {ui('More')} i zaktualizuj Claude Desktop. Nowe projekty wymagają planu Pro, Max lub Ultra "
+         f"Sprawdź pod {ui('More')} i zaktualizuj Claude Desktop. Projekty wymagają planu Pro, Max lub Ultra "
          "(beta, włączana stopniowo; brak w Team i Enterprise)."],
         [f"{ui('Get started')} zamiast {ui('New project')}",
-         "Najpierw przenieś albo zarchiwizuj stare projekty z czatu, które pokazuje aplikacja."],
-        ["Nie da się zapisać instrukcji projektu",
-         "Pole ma limit 16 000 znaków – wklej krótki tekst z rozdziału 3.3, a pełna instrukcja zostaje w plikach."],
+         "Kliknij go i wykonaj kroki, które pokazuje aplikacja (przeniesienie albo archiwizacja projektów z czatu)."],
         ["Claude nie zna reguł projektu / pracuje „po swojemu”",
-         "Sprawdź Project instructions (rozdział 3.3) i czy w Library jest Tools/Instrukcja_projektu.md. Zmiany "
-         "działają w nowych wątkach – poproś o nowy wątek."],
-        ["Wątek używa starej wersji pliku",
+         "Sprawdź, czy w Project instructions jest wklejona cała treść Tools/Instrukcja_projektu.md (rozdział 3.3) "
+         "i czy w Library są pliki z Context.zip. Instrukcja działa w nowych wątkach – zleć zadanie ponownie."],
+        ["Wątek czyta nieaktualną treść pliku",
          f"Dodaj plik ponownie w {ui('Library')} i wybierz {ui('Replace')}; potem nowy wątek."],
         ["Wątek czeka i nic się nie dzieje",
          f"Otwórz {ui('Threads')} → grupa {ui('Waiting on you')}: wątek czeka na odpowiedź albo zatwierdzenie "

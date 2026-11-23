@@ -1,4 +1,4 @@
-"""Poprawki GalaxyMcp_Jak_to_dziala.pdf (2026-11-18): nazwa wtyczki „GalaxyMCP” zamiast „AVEVA Galaxy (GalaxyMcp)”/„GalaxyMcp”
+"""Poprawki GalaxyMcp_Jak_to_dziala.pdf: nazwa wtyczki „GalaxyMCP” zamiast „AVEVA Galaxy (GalaxyMcp)”/„GalaxyMcp”
 (nazwy plików GalaxyMcp.exe/.log/.mcpb bez zmian) oraz potwierdzenie działania na AVEVA System Platform 2026.
 PDF nie ma źródła reportlab - zmiany nakładane PyMuPDF (redakcja spanu + wstawienie tekstu tą samą czcionką).
 Użycie: python GalaxyMcp_Jak_to_dziala_galaxy_mcp.py WEJSCIE.pdf WYJSCIE.pdf"""
