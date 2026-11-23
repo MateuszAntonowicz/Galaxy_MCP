@@ -35,7 +35,7 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 | `Dokumentacja/*.pdf` | instrukcje z kroku 1 |
 | `Konfiguracja_projektu/Context.zip` | pliki projektu do dodania w Library (zawiera to samo co folder `Pliki_projektu/`) |
 | `Konfiguracja_projektu/Project_instructions_ustawienia.txt` | instrukcja projektu do wklejenia w całości w Project settings → Memory → Project instructions (ta sama treść co `Pliki_projektu/Tools/Instrukcja_projektu.md`) |
-| `Konfiguracja_projektu/prompt.txt` | opcjonalnie: polecenie, którym Claude sam rozpakuje i sprawdzi pliki projektu |
+| `Konfiguracja_projektu/prompt.txt` | pierwszy prompt do wklejenia w rozmowie projektu po jego założeniu – Claude rozpakuje `Context.zip` i sprawdzi projekt |
 
 **B. Wtyczka GalaxyMCP (tylko tryb Auto, na komputerze z AVEVA System Platform 2026)**
 
@@ -48,13 +48,13 @@ Repozytorium jest prywatne – musisz być zalogowany na GitHubie na konto z dos
 
 ### Krok 3. Załóż projekt i pracuj
 
-1. Załóż projekt w Claude i dodaj pliki z `Context.zip` – `Instrukcja_UDT_CSV.pdf`, rozdział 3 (3.1 projekt, 3.2 pliki, 3.3 instrukcja projektu, 3.4 sprawdzenie).
-2. Tylko tryb Auto: zainstaluj `GalaxyMcp.mcpb` i ustaw dozwolone galaktyki – `GalaxyMcp_Instrukcja_uzytkownika.pdf`, rozdziały 2–4.
+1. Załóż projekt w Claude – `Instrukcja_UDT_CSV.pdf`, rozdział 3: 3.1 projekt, 3.2 `Context.zip` do Library, 3.3 instrukcja projektu, 3.4 modele (effort wątków Medium/High), 3.5 wtyczka GalaxyMCP (tylko tryb Auto), 3.6 pierwszy prompt z `prompt.txt`.
+2. Tylko tryb Auto: szczegóły ustawień wtyczki i pierwszy test – `GalaxyMcp_Instrukcja_uzytkownika.pdf`, rozdziały 2–4.
 3. Przygotuj pliki `.udt`/`.scl` i `.db` z TIA Portal i wyślij zlecenie w rozmowie projektu – `Instrukcja_UDT_CSV.pdf`, rozdziały 4 i 5.
 
 ### Aktualizacja do nowej wersji
 
-1. Pobierz ponownie repozytorium (Download ZIP albo `git pull`) i w Library projektu podmień pliki z nowego `Context.zip` (przy istniejącej nazwie wybierz **Replace**).
+1. Pobierz ponownie repozytorium (Download ZIP albo `git pull`), w Library projektu podmień `Context.zip` na nowy (przy istniejącej nazwie wybierz **Replace**) i wyślij w rozmowie projektu ponownie treść `prompt.txt`.
 2. W Project settings → Memory → Project instructions zastąp tekst całą treścią nowego `Project_instructions_ustawienia.txt` i kliknij **Save changes**.
 3. Jeśli w Releases jest nowsza wersja wtyczki, pobierz nowy `GalaxyMcp.mcpb` i zainstaluj go w miejsce zainstalowanego (Settings → Desktop app → Extensions (Manage) → Advanced settings → Install Extension…). Wersję sprawdzisz poleceniem „pokaż status galaktyki” – pozycja „Wersja”.
 
