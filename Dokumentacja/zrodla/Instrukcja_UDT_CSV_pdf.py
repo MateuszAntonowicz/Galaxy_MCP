@@ -324,9 +324,9 @@ def build():
         f"Zapisz i upewnij się, że przełącznik {ui('Enabled')} jest włączony.",
     ])
     s.append(note([
-        P("<b>Zmiana ustawień wtyczki:</b> wtyczka czyta ustawienia tylko przy starcie, a samo przełączenie "
-          f"{ui('Enabled')} nie zamyka działającego procesu. Po zmianie wyłącz {ui('Enabled')}, zrestartuj komputer "
-          f"(albo zakończ wszystkie procesy {c('GalaxyMcp.exe')} w Menedżerze zadań) i włącz {ui('Enabled')}."),
+        P("<b>Zmiana ustawień wtyczki:</b> wtyczka czyta ustawienia przy starcie. Po zapisaniu zmian wyłącz "
+          f"{ui('Enabled')}, odczekaj kilka sekund i włącz {ui('Enabled')}. Po wyłączeniu proces "
+          f"{c('GalaxyMcp.exe')} wylogowuje się z galaktyki i kończy sam – restart komputera nie jest potrzebny."),
         P(f"<b>Aktualizacja:</b> nowy {c('GalaxyMcp.mcpb')} z {ui('Releases')} instalujesz tak samo – zastępuje "
           "zainstalowaną wtyczkę, ustawienia zostają. Wersję pokazuje status galaktyki (pozycja „Wersja”)."),
         P(f"<b>Dziennik GalaxyMcp.log</b> jest w folderze rozszerzeń Claude Desktop ({c('Claude Extensions')}, "
@@ -531,7 +531,7 @@ def build():
          "i poproś w rozmowie projektu o nowy wątek."],
         ["„Zapis zablokowany”",
          "Dopisz galaktykę do „Galaktyki z prawem zapisu”, odznacz „Tylko odczyt”, potem uruchom wtyczkę ponownie "
-         "(wyłącz Enabled, restart komputera lub zamknięcie procesów GalaxyMcp.exe, włącz Enabled)."],
+         "(wyłącz Enabled, odczekaj kilka sekund, włącz Enabled)."],
         ["Zapis odrzucony – obiekt wyewidencjonowany", "Zamknij edytor obiektu w IDE (check in) i powtórz."],
         ["Serwer znika bez komunikatu", "Securden zablokował GalaxyMcp.exe – zatwierdź aplikację albo poproś IT o regułę."],
         ["Plan pokazuje „POMINIĘTE atrybuty Write”", "Reguły zawierają Output – tryb Auto ich nie tworzy; dodaj je w IDE albo użyj trybu Manual."],

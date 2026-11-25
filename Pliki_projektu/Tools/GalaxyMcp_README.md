@@ -150,8 +150,9 @@ Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam po
   Claude Desktop (np. `%APPDATA%\Claude\` albo folder pakietu w `%LOCALAPPDATA%\Packages\`). Plik znajdzie polecenie PowerShell:
   `Get-ChildItem $env:LOCALAPPDATA, $env:APPDATA -Recurse -Filter GalaxyMcp.log -ErrorAction SilentlyContinue | Select-Object FullName`.
 - Securden widzi exe w folderze rozszerzeń, a nie w `C:\Tools\GalaxyMcp\` – reguła IT powinna dotyczyć skrótu (hash) pliku albo podpisu.
-- Zmiana ustawień: Settings → Desktop app → Extensions (Manage) → GalaxyMCP. Nowe wartości działają dopiero po ponownym uruchomieniu serwera:
-  wyłącz przełącznik Enabled, zrestartuj komputer i włącz Enabled. Sprawdzenie: `galaxy_status`.
+- Zmiana ustawień: Settings → Desktop app → Extensions (Manage) → GalaxyMCP. Nowe wartości działają po ponownym uruchomieniu serwera:
+  wyłącz przełącznik Enabled, odczekaj kilka sekund (serwer sam się wylogowuje i kończy) i włącz Enabled. Restart komputera
+  ani zamykanie procesów w Menedżerze zadań nie są potrzebne. Sprawdzenie: `galaxy_status`.
 - Nowa wersja serwera = nowy `build.bat` + `pack_mcpb.bat` + podniesienie `version` w `manifest.json`; instalacja nadpisuje poprzednią.
 - W firmowym koncie administrator może ograniczyć instalowanie własnych rozszerzeń – wtedy potrzebna jest jego zgoda.
 - Puste pola docierają do serwera jako pusty tekst (manifest ma wartości domyślne), a pola typu przełącznik jako `true`/`false`.
