@@ -9,7 +9,7 @@ SCL ──scl_to_aveva.py──► Spec_<UDT>.json ──► CSV (Manual)
                                             └──► GalaxyMCP ──GRAccess──► galaktyka (Auto)
 ```
 
-> **Wersja 0.2.7** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
+> **Wersja 0.2.8** – wtyczka **GalaxyMCP** dla **AVEVA System Platform 2026**. Obsługuje wiele galaktyk (`list_galaxies` /
 > `select_galaxy`, listy `GALAXY_ALLOWED` / `GALAXY_WRITABLE`), wszystkie typy UDA z okna IDE, atrybuty dodawane do pojedynczej
 > instancji i plan zmian przed zapisem. Każdy zapis (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) wymaga parametru
 > `galaxy` równego aktywnej galaktyce. Nie był testowany w galaktyce: `deploy`.
@@ -217,6 +217,10 @@ Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam po
 
 - Każdy obiekt jest pobierany do edycji (CheckOut), zapisywany (Save) i zwracany (CheckIn) z komentarzem.
   Przy błędzie pobranie jest cofane (UndoCheckOut).
+- Po zapisie serwer zwalnia zapisane obiekty ze swojej sesji GRAccess (`Unload`), a po każdym narzędziu zapisującym
+  (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) wylogowuje się z galaktyki (w logu: „sesja zamknięta po …”).
+  Dzięki temu obiekt utworzony lub zmieniony przez wtyczkę można od razu pobrać, zmienić i zwrócić (Check-in) w ArchestrA
+  IDE przy włączonej wtyczce. Następne wywołanie loguje się ponownie (ok. 10–15 s).
 - Błędy przy ustawianiu opisu, wartości domyślnej, obszaru (Area), grupy bezpieczeństwa (SecurityGroup)
   i toolsetu są tylko ostrzeżeniami. Wszystkie zapisy trafiają do `GalaxyMcp.log` (poziom `ZAPIS`).
 - `import_csv`: GRAccess zgłasza sukces całej operacji, nawet gdy pojedynczy obiekt się nie zaimportował. Serwer liczy
@@ -237,7 +241,11 @@ Claude Desktop instaluje ją przez Install Extension… (sekcja niżej) i sam po
   ma 5 s; potem proces kończy się bez niego. W `GalaxyMcp.log`: „nadzór rodzica: …” przy starcie i „GalaxyMCP stop: …”.
 - `build.bat` odmawia budowania tylko wtedy, gdy działa `GalaxyMcp.exe` z tego samego folderu. Kopia z folderu rozszerzeń
   Claude (wtyczka `.mcpb`) nie blokuje budowania w innym folderze.
-- Pierwsze wywołanie po starcie trwa ok. 30 s (`QueryGalaxies` i logowanie do galaktyki); kolejne są szybkie.
+- Pierwsze wywołanie po starcie trwa ok. 30 s (`QueryGalaxies` i logowanie do galaktyki); kolejne odczyty są szybkie.
+  Pierwsze wywołanie po zapisie trwa dłużej (ponowne logowanie).
+- `get_object` pokazuje `CheckoutStatus`, `checkedOutBy` i `EditStatus`. Gdy Check-in w IDE się nie udaje, sprawdź tam
+  stan obiektu: `checkedOutToMe` lub `editedByYouInOtherSession` po zapisie przez wtyczkę oznacza, że pobranie nie zostało
+  cofnięte (w `GalaxyMcp.log` jest wtedy `ERROR … nie cofnięto pobrania`) – cofnij je w IDE (Undo Check-Out).
 - Claude Desktop może uruchomić dwa procesy serwera naraz (dwa wpisy „start” i „stop” w logu o tym samym czasie).
   Każdy działa samodzielnie; nie jest to błąd wtyczki.
 - `GRDump` (`export_csv` z `kind=instances`) zapisuje liczby z separatorem dziesiętnym z ustawień regionalnych Windows

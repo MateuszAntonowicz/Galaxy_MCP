@@ -395,3 +395,11 @@ i poprosić o wyniki kroków 1, 3 i 5:
 - Użytkownik potwierdził: po wyłączeniu wtyczki proces `GalaxyMcp.exe` znika sam (koniec stdin → `Shutdown` z limitem 5 s,
   `ParentWatch`). Z instrukcji (PDF użytkownika, Instrukcja_UDT_CSV, README, instrukcja projektu) usunięte restart komputera
   i zamykanie procesów w Menedżerze zadań; procedura: zapisz ustawienia → Enabled wył. → kilka sekund → Enabled wł.
+
+## 2026-11-25 – wersja 0.2.8: Check-in w IDE przy włączonej wtyczce
+- Zgłoszenie: obiektu utworzonego przez wtyczkę nie dało się zwrócić (Check-in) w IDE; wyłączenie wtyczki pomogło.
+- Przyczyna: sesja GRAccess wtyczki zostawała zalogowana do końca pracy wtyczki i trzymała zapisane obiekty (bez `Unload`,
+  referencje COM niezwolnione). Galaktyka bez zabezpieczeń = ten sam użytkownik w IDE i we wtyczce, w dwóch sesjach.
+- 0.2.8: po `apply_spec` obiekty `Unload` + zwolnienie COM (pozostawione pobranie → `UndoCheckOut` + ERROR w logu);
+  po narzędziach zapisujących (`apply_spec` z `dry_run=false`, `import_csv`, `deploy`) wylogowanie z galaktyki;
+  `get_object` pokazuje `checkedOutBy` i `EditStatus`. Do potwierdzenia w SP 2026: Check-in w IDE zaraz po zapisie.

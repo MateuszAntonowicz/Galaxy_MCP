@@ -3,7 +3,7 @@
 Generuje GalaxyMcp_Instrukcja_uzytkownika.pdf - instrukcję korzystania z wtyczki
 "GalaxyMCP" w Claude Desktop (projekt UDT->CSV).
 Dotyczy projektów Claude (lewe menu → Projects: rozmowa projektu + wątki, Library,
-połączenie wątku z komputerem) i wtyczki 0.2.7.
+połączenie wątku z komputerem) i wtyczki 0.2.8.
 
 Użycie:  python GalaxyMcp_instrukcja_pdf.py [--icon icon.png] [--out GalaxyMcp_Instrukcja_uzytkownika.pdf]
 Wymaga:  reportlab; czcionka TTF z polskimi znakami (DejaVu Sans, Segoe UI, Arial - szukane automatycznie).
@@ -23,7 +23,7 @@ from reportlab.platypus import (Image, KeepTogether, PageBreak, Paragraph, Simpl
                                 Spacer, Table, TableStyle)
 from reportlab.platypus.tableofcontents import TableOfContents
 
-VERSION = "0.2.7"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
+VERSION = "0.2.8"   # wersja wtyczki, której dotyczy instrukcja (nie jest drukowana)
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
@@ -300,7 +300,7 @@ def build(icon_bytes):
     ])
     s.append(box("<b>Aktualizacja wtyczki:</b> zainstaluj nowy plik .mcpb tak samo jak pierwszy – zastępuje on "
                  "zainstalowaną wtyczkę, a ustawienia zostają. Potem uruchom wtyczkę ponownie (rozdział 3) i w nowym wątku "
-                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.7.", "info"))
+                 "projektu sprawdź status: pozycja „Wersja” ma pokazać 0.2.8.", "info"))
     s.append(box("Claude Desktop rozpakowuje wtyczkę do własnego folderu rozszerzeń "
                  f"{code('Claude Extensions')} (podfolder z „galaxy” w nazwie). Tam znajdziesz też plik "
                  f"dziennika {code('GalaxyMcp.log')} (przydatny przy zgłaszaniu problemów). Położenie folderu zależy od "
@@ -353,7 +353,7 @@ def build(icon_bytes):
     s.append(P("Prawidłowy wynik (przykład dla ustawień z rozdziału 3):"))
     s.append(table([
         ["Pozycja w statusie", "Oczekiwana wartość"],
-        ["Wersja", "0.2.7"],
+        ["Wersja", "0.2.8"],
         ["Galaktyka (aktywna)", "Galaktyka_Test"],
         ["Zapis w aktywnej galaktyce", "DOZWOLONY"],
         ["Dozwolone galaktyki", "Galaktyka_Test, Galaktyka_Dev, Galaktyka_Prod"],
@@ -447,6 +447,9 @@ def build(icon_bytes):
          "Dopisz ją w ustawieniach i uruchom wtyczkę ponownie (rozdział 3)"],
         ["„podano galaktykę X, a aktywna jest Y”", "Zgoda dotyczyła innej galaktyki", "Przełącz galaktykę albo potwierdź właściwą"],
         ["Błąd CheckOut / obiekt pobrany", "Obiekt otwarty w IDE", "Zamknij edytor obiektu w IDE i powtórz zapis"],
+        ["Check-in w IDE nie działa dla obiektu zapisanego przez wtyczkę",
+         "Pobranie (CheckOut) przez wtyczkę nie zostało cofnięte – w GalaxyMcp.log jest „nie cofnięto pobrania”",
+         "W IDE cofnij pobranie (Undo Check-Out) i prześlij GalaxyMcp.log osobie utrzymującej projekt"],
         ["„istnieje, ale pochodzi z …”", "Instancja o tej nazwie ma inny szablon", "Zmień nazwę obiektu lub usuń go ręcznie w IDE"],
         ["Błąd przy tworzeniu obiektu lub atrybutu o długiej nazwie", "Galaktyka nie przyjęła nazwy dłuższej niż 32 znaki",
          "Zgłoś to osobie utrzymującej projekt; do tego czasu skróć nazwę w programie sterownika"],
