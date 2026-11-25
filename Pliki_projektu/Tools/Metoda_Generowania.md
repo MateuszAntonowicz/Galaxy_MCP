@@ -167,7 +167,7 @@ błędu – sprawdzenie adresów na żywym sterowniku wpisuj w „Do sprawdzenia
   `Control.Cmd_Start` → atrybut `Control_Cmd_Start`, adres `S7C_01.SG1.DB_X.Control.Cmd_Start`;
   `Sensors.Temp[1]` → atrybut `Sensors_Temp_1`, adres `S7C_01.SG1.DB_X.Sensors.Temp[1]`.
 
-## Tryb Auto – serwer GalaxyMCP 0.2.7 (rozszerzenie .mcpb, AVEVA System Platform 2026)
+## Tryb Auto – serwer GalaxyMCP 0.2.8 (rozszerzenie .mcpb, AVEVA System Platform 2026)
 - Pliki w projekcie (folder `Tools/`): `GalaxyMcp.cs`, `GalaxyMcp_README.md`, `GalaxyMcp_build.bat`, `GalaxyMcp_pack_mcpb.bat`,
   `GalaxyMcp_manifest.json` (→ `manifest.json`), `GalaxyMcp_icon.png.b64` (ikona: `certutil -decode`),
   `GalaxyMcp_instrukcja_pdf.py` (źródło instrukcji użytkownika PDF). Kopia instrukcji projektu: `Tools/Instrukcja_projektu.md`.
@@ -180,7 +180,7 @@ błędu – sprawdzenie adresów na żywym sterowniku wpisuj w „Do sprawdzenia
   wywołania przez interfejsy interop (wiązanie wczesne, klasa `Com`).
 - Narzędzia: `galaxy_status`, `list_galaxies`, `select_galaxy`, `list_objects`, `get_object`, `export_csv`, `apply_spec`
   (`dry_run` domyślnie true, `scope` all/template/instances, `galaxy` obowiązkowe przy każdym zapisie), `import_csv`, `deploy` (wymaga `GALAXY_ALLOW_DEPLOY=1`).
-- `apply_spec`: tworzy brakujący szablon i dopisuje brakujące UDA (+ `inputextension`/`inputoutputextension`); tworzy brakujące instancje; zmienia tylko różniące się `InputSource`. Niczego nie usuwa. CheckOut → Save → CheckIn, przy błędzie UndoCheckOut. Log zapisów: `GalaxyMcp.log`.
+- `apply_spec`: tworzy brakujący szablon i dopisuje brakujące UDA (+ `inputextension`/`inputoutputextension`); tworzy brakujące instancje; zmienia tylko różniące się `InputSource`. Niczego nie usuwa. CheckOut → Save → CheckIn, przy błędzie UndoCheckOut; potem zwalnia obiekty (Unload) i wylogowuje się z galaktyki, więc Check-in w IDE działa przy włączonej wtyczce. Log zapisów: `GalaxyMcp.log`.
   Kierunku Output (`outputextension`, `OutputDest`) serwer nie obsługuje – specyfikację z `io=Output` odrzuca w `Spec.Parse`.
 - Serwer nie sprawdza długości nazw (szablon, instancja, atrybut) – tylko dozwolone znaki
   (`[A-Za-z_][A-Za-z0-9_]*`, szablon z `$`). Ewentualne ograniczenie galaktyki zgłosi GRAccess przy zapisie.

@@ -164,7 +164,7 @@ Auto: zakończ pytaniem o zgodę na zapis. Manual: dopisz skrótem import w IDE:
 
 ---
 
-## 5. Tryb Auto – GalaxyMCP 0.2.7
+## 5. Tryb Auto – GalaxyMCP 0.2.8
 
 GalaxyMCP to rozszerzenie Claude Desktop (`GalaxyMcp.mcpb`, instalacja: `Tools/GalaxyMcp_README.md`, sekcja 4) na komputerze użytkownika z AVEVA System Platform 2026. Narzędzia w wątku: `mcp__remote-devices__GalaxyMCP__*` – szukaj przez ToolSearch „galaxy_status”. Wątek widzi je, gdy jest połączony z tym komputerem, a Claude Desktop działa. Gdy ich brak – poproś o połączenie wątku z komputerem (karta połączenia urządzenia, np. `connect_device`) i szukaj ponownie.
 

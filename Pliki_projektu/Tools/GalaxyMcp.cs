@@ -11,6 +11,9 @@
 //  * C# 5, .NET Framework 4.x, bez NuGet. GRAccess ładowany w czasie działania (Assembly.LoadFrom),
 //    wywołania przez interfejsy interop (wiązanie wczesne, klasa Com) - różnice między wersjami GRAccess
 //    wychodzą jako czytelne błędy. GalaxyMcp.exe --dump-api zapisuje opis API biblioteki do GRAccess_API.txt.
+//  * Sesja GRAccess nie trzyma obiektów: po zapisie obiekt jest zwalniany (Unload), a po narzędziu zapisującym
+//    (apply_spec z dry_run=false, import_csv, deploy) serwer wylogowuje się z galaktyki - inaczej Check-in
+//    tego obiektu w ArchestrA IDE kończy się błędem (obiekt edytowany w innej sesji tego samego użytkownika).
 //  * stdout = wyłącznie JSON-RPC. Logi -> stderr + GalaxyMcp.log obok .exe.
 //
 // Konfiguracja (zmienne środowiskowe):
@@ -39,7 +42,7 @@ namespace GalaxyMcp
     // ======================================================================= protokół MCP
     static class Program
     {
-        public const string Version = "0.2.7";
+        public const string Version = "0.2.8";
         public static readonly JavaScriptSerializer Json = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
         static readonly string[] Protocols = { "2025-06-18", "2025-03-26", "2024-11-05" };
         static TextWriter Out;
@@ -354,9 +357,21 @@ namespace GalaxyMcp
                 text = "BŁĄD: " + inner.Message;
                 isError = true;
             }
+            finally
+            {
+                // Po zapisie sesja GRAccess jest zamykana, żeby nie blokowała Check-in w ArchestrA IDE.
+                // Następne wywołanie zaloguje się ponownie.
+                if (WritesGalaxy(name, args)) Program.G.EndSession(name);
+            }
             return new Dictionary<string, object> {
                 { "content", new object[] { new Dictionary<string, object> { { "type", "text" }, { "text", text } } } },
                 { "isError", isError } };
+        }
+
+        static bool WritesGalaxy(string name, Dictionary<string, object> args)
+        {
+            if (name == "import_csv" || name == "deploy") return true;
+            return name == "apply_spec" && !J.Bool(args, "dry_run", true);
         }
 
         public static string Status()
@@ -436,7 +451,7 @@ namespace GalaxyMcp
             if (o == null) throw new GrException("Nie znaleziono obiektu " + name + ".");
             var sb = new StringBuilder();
             sb.AppendLine(name + (template ? " (szablon)" : " (instancja)"));
-            foreach (var p in new[] { "DerivedFrom", "Area", "Host", "SecurityGroup", "CheckoutStatus", "DeploymentStatus" })
+            foreach (var p in new[] { "DerivedFrom", "Area", "Host", "SecurityGroup", "CheckoutStatus", "checkedOutBy", "EditStatus", "DeploymentStatus" })
                 sb.AppendLine("  " + p + ": " + Galaxy.Prop(o, p));
             sb.AppendLine("Atrybuty" + (filter == "" ? "" : " zawierające '" + filter + "'") + ":");
             int n = 0;
@@ -628,6 +643,7 @@ namespace GalaxyMcp
         readonly Galaxy g;
         readonly Spec s;
         readonly StringBuilder r = new StringBuilder();
+        readonly List<object> written = new List<object>();   // obiekty pobrane (CheckOut) - zwalniane na końcu Run
 
         public SpecApplier(Galaxy galaxy, Spec spec) { g = galaxy; s = spec; }
 
@@ -644,6 +660,16 @@ namespace GalaxyMcp
         }
 
         public string Run(bool dryRun, string scope)
+        {
+            try { return RunCore(dryRun, scope); }
+            finally
+            {
+                foreach (var o in written) Galaxy.Release(o);
+                written.Clear();
+            }
+        }
+
+        string RunCore(bool dryRun, string scope)
         {
             bool doTpl = scope == "all" || scope == "template";
             bool doInst = scope == "all" || scope == "instances";
@@ -742,6 +768,7 @@ namespace GalaxyMcp
             }
 
             Galaxy.CheckOut(tpl, s.Template);
+            written.Add(tpl);
             try
             {
                 if (s.SecurityGroup != "") SoftGroup(tpl, s.SecurityGroup);
@@ -753,7 +780,7 @@ namespace GalaxyMcp
             }
             catch
             {
-                try { Com.Call(tpl, "UndoCheckOut"); } catch { }
+                Galaxy.UndoCheckOut(tpl, s.Template);
                 throw;
             }
             return tpl;
@@ -813,6 +840,7 @@ namespace GalaxyMcp
                     Log.Audit("utworzono instancję " + si.Name + " z " + s.Template);
                 }
                 Galaxy.CheckOut(inst, si.Name);
+                written.Add(inst);
                 try
                 {
                     if (si.Area != "") Soft(inst, "Area", si.Area);
@@ -831,7 +859,7 @@ namespace GalaxyMcp
                 }
                 catch
                 {
-                    try { Com.Call(inst, "UndoCheckOut"); } catch { }
+                    Galaxy.UndoCheckOut(inst, si.Name);
                     throw;
                 }
                 r.AppendLine("    OK");
@@ -1258,8 +1286,21 @@ namespace GalaxyMcp
         public void Dispose()
         {
             if (galaxy == null) return;
-            try { Com.Call(galaxy, "Logout"); } catch { }
+            try { Com.Call(galaxy, "Logout"); }
+            catch (Exception ex) { Log.Info("Logout(" + Name + "): " + ex.Message); }
+            try { Marshal.FinalReleaseComObject(galaxy); } catch { }
             galaxy = null;
+            // Zwolnienie pozostałych referencji COM do obiektów galaktyki (RCW czekające na finalizację).
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        // Zamknięcie sesji po narzędziu zapisującym: wylogowanie, następne wywołanie zaloguje się od nowa.
+        public void EndSession(string what)
+        {
+            if (galaxy == null) return;
+            Dispose();
+            Log.Info("sesja zamknięta po " + what + " (wylogowano z " + Name + ")");
         }
 
         // ---------------------------------------------------------- zapytania
@@ -1560,6 +1601,36 @@ namespace GalaxyMcp
         {
             try { return Com.Get(obj, "CommandResult"); }
             catch { return null; }
+        }
+
+        // Zwolnienie obiektu z sesji GRAccess po zapisie (CheckIn albo UndoCheckOut). Błąd tylko do logu.
+        public static void Release(object obj)
+        {
+            if (obj == null) return;
+            string name = Prop(obj, "Tagname");
+            if (Prop(obj, "CheckoutStatus") == "checkedOutToMe")
+            {
+                Log.Error(name + ": po zapisie nadal pobrany (CheckOut) przez GalaxyMCP - cofam pobranie");
+                UndoCheckOut(obj, name);
+            }
+            try { Com.Call(obj, "Unload"); }
+            catch (Exception ex) { Log.Info("Unload(" + name + "): " + ex.Message); }
+            try { Marshal.FinalReleaseComObject(obj); } catch { }
+        }
+
+        public static void UndoCheckOut(object obj, string name)
+        {
+            try
+            {
+                Com.Call(obj, "UndoCheckOut");
+                Check(obj, "UndoCheckOut(" + name + ")");
+            }
+            catch (Exception ex)
+            {
+                var inner = ex is TargetInvocationException && ex.InnerException != null ? ex.InnerException : ex;
+                Log.Error(name + ": nie cofnięto pobrania (UndoCheckOut): " + inner.Message +
+                          " - obiekt może zostać pobrany; cofnij pobranie w ArchestrA IDE (Undo Check-Out)");
+            }
         }
 
         // CheckOut; jeśli obiekt jest już pobrany przez nas (np. zaraz po utworzeniu) - kontynuuj.

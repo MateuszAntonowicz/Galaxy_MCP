@@ -22,7 +22,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 DOC_YEAR = "2026"
 AUTHOR = "Mateusz Antonowicz"
 AUTHOR_NOTE = "z pomocą Claude AI"
-PLUGIN_VERSION = "0.2.7"
+PLUGIN_VERSION = "0.2.8"
 
 # ------------------------------------------------------------------ czcionki
 FONT_SETS = [
@@ -533,6 +533,9 @@ def build():
          "Dopisz galaktykę do „Galaktyki z prawem zapisu”, odznacz „Tylko odczyt”, potem uruchom wtyczkę ponownie "
          "(wyłącz Enabled, odczekaj kilka sekund, włącz Enabled)."],
         ["Zapis odrzucony – obiekt wyewidencjonowany", "Zamknij edytor obiektu w IDE (check in) i powtórz."],
+        ["Check-in w IDE nie działa dla obiektu zapisanego przez wtyczkę",
+         "Wtyczka po zapisie zwalnia obiekt i wylogowuje się z galaktyki. Jeśli Check-in nadal się nie udaje, cofnij w IDE "
+         "pobranie (Undo Check-Out) i prześlij w wątku GalaxyMcp.log."],
         ["Serwer znika bez komunikatu", "Securden zablokował GalaxyMcp.exe – zatwierdź aplikację albo poproś IT o regułę."],
         ["Plan pokazuje „POMINIĘTE atrybuty Write”", "Reguły zawierają Output – tryb Auto ich nie tworzy; dodaj je w IDE albo użyj trybu Manual."],
     ], [W * 0.36, W * 0.64]))
