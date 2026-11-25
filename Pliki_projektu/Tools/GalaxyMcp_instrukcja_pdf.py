@@ -203,25 +203,19 @@ def on_page(c, doc):
 
 
 # Ponowne uruchomienie wtyczki po zmianie ustawień - jedno miejsce, używane w rozdz. 3, 4 i 8.
-# Samo przełączenie Enabled nie zamyka procesu GalaxyMcp.exe, który czyta ustawienia tylko przy starcie.
-RESTART_SHORT = ("wyłącz Enabled, zrestartuj komputer (albo zakończ wszystkie procesy GalaxyMcp.exe "
-                 "w Menedżerze zadań) i włącz Enabled")
+# GalaxyMcp.exe czyta ustawienia przy starcie, a po wyłączeniu Enabled kończy się sam (najpóźniej po ok. 5 s).
+RESTART_SHORT = "wyłącz Enabled, odczekaj kilka sekund i włącz Enabled"
 
 
 def restart_box():
     return box([
-        P("Wtyczka czyta ustawienia <b>tylko przy starcie</b> procesu GalaxyMcp.exe. Samo wyłączenie i włączenie "
-          "przełącznika Enabled <b>nie wystarcza</b> – stary proces może dalej działać w tle ze starymi ustawieniami."),
-        P("<b>Sposób 1 – restart komputera (zalecany):</b>"),
-        *steps(["Wyłącz przełącznik <b>Enabled</b> (wpisane ustawienia zostają).",
-                "<b>Zrestartuj komputer.</b>",
-                "Włącz <b>Enabled</b>."]),
-        P("<b>Sposób 2 – bez restartu, ręczne zamknięcie procesów:</b>"),
-        *steps(["Wyłącz przełącznik <b>Enabled</b>.",
-                "Otwórz Menedżer zadań (<b>Ctrl+Shift+Esc</b>) → karta <b>Szczegóły</b>.",
-                f"Zaznacz każdy proces {code('GalaxyMcp.exe')} → <b>Zakończ zadanie</b>. "
-                "Na liście nie może zostać żaden.",
-                "Włącz <b>Enabled</b>."]),
+        P("Wtyczka czyta ustawienia <b>przy starcie</b> procesu GalaxyMcp.exe. Po wyłączeniu przełącznika "
+          "Enabled proces wylogowuje się z galaktyki i kończy sam – nie trzeba restartować komputera ani "
+          "zamykać procesów w Menedżerze zadań."),
+        *steps(["Zapisz zmienione ustawienia.",
+                "Wyłącz przełącznik <b>Enabled</b> (wpisane ustawienia zostają).",
+                "Odczekaj kilka sekund – tyle trwa wylogowanie i zakończenie procesu.",
+                "Włącz <b>Enabled</b>. Wtyczka startuje z nowymi ustawieniami."]),
         P("Na koniec sprawdź status (rozdział 4): listy galaktyk muszą pokazywać nowe wartości."),
     ], "warn", "Po każdej zmianie ustawień – ponowne uruchomienie wtyczki")
 
@@ -258,8 +252,8 @@ def build(icon_bytes):
         "Przenosi <b>wartości początkowe</b> ze sterownika (np. := TRUE, := 12.5, := 'abc', := T#5s) do szablonu.",
         "Zawsze najpierw pokazuje <b>plan</b>. Zapis następuje dopiero po Twoim wyraźnym „tak”, tylko w galaktykach, "
         "które dopuścisz w ustawieniach. Wtyczka <b>niczego nie usuwa</b>.",
-        "Zmiana ustawień wtyczki wymaga <b>restartu komputera</b> albo <b>ręcznego zamknięcia procesów GalaxyMcp.exe</b> "
-        "(rozdział 3).",
+        "Po zmianie ustawień wtyczki wystarczy <b>wyłączyć i włączyć przełącznik Enabled</b> – proces kończy się "
+        "sam, bez restartu komputera (rozdział 3).",
     ])
     s.append(PageBreak())
 
@@ -368,7 +362,7 @@ def build(icon_bytes):
     ], [70 * mm, 100 * mm]))
     s.append(Spacer(1, 6))
     s.append(box("Jeśli status pokazuje stare wartości (np. „nie wybrano”, „tylko odczyt” albo stare listy galaktyk "
-                 "mimo zmiany w formularzu), nadal działa stary proces wtyczki. Samo przełączenie Enabled nie pomoże: "
+                 "mimo zmiany w formularzu), wtyczka nie została uruchomiona ponownie po zapisaniu ustawień: "
                  f"{RESTART_SHORT} – szczegóły w rozdziale 3.", "info"))
 
     # ---- 5. Przykładowe polecenia
@@ -408,8 +402,8 @@ def build(icon_bytes):
         "odmawia i nic nie zapisuje.",
         "Jeden proces wtyczki obsługuje <b>wszystkie wątki</b> połączone z tym komputerem. Galaktyka przełączona "
         "w jednym wątku jest aktywna także w innych – dlatego przed zapisem Claude zawsze sprawdza aktywną galaktykę.",
-        "Stałą zmianę list galaktyk robisz w ustawieniach wtyczki. Nowe listy zaczną działać dopiero po restarcie "
-        "komputera albo ręcznym zamknięciu procesów GalaxyMcp.exe (rozdział 3).",
+        "Stałą zmianę list galaktyk robisz w ustawieniach wtyczki. Nowe listy zaczną działać po ponownym "
+        "uruchomieniu wtyczki: wyłącz Enabled, odczekaj kilka sekund i włącz Enabled (rozdział 3).",
     ])
 
     # ---- 7. Bezpieczeństwo
@@ -443,11 +437,9 @@ def build(icon_bytes):
          "u osoby z dostępem"],
         ["Wtyczka znika bez komunikatu", "Oprogramowanie ochronne zablokowało GalaxyMcp.exe",
          "Poproś dział IT o zgodę na uruchomienie pliku"],
-        ["Status pokazuje stare ustawienia mimo przełączenia Enabled",
-         "Stary proces GalaxyMcp.exe nadal działa – samo przełączenie Enabled go nie zamyka",
-         f"{RESTART_SHORT[0].upper()}{RESTART_SHORT[1:]} (rozdział 3)"],
-        ["GalaxyMcp.exe działa w tle po wyłączeniu wtyczki", "Proces nie zakończył się sam",
-         "Menedżer zadań → Szczegóły → zakończ każdy GalaxyMcp.exe albo zrestartuj komputer"],
+        ["Status pokazuje stare ustawienia",
+         "Ustawienia niezapisane albo wtyczka nie została uruchomiona ponownie",
+         f"Zapisz ustawienia, {RESTART_SHORT} (rozdział 3)"],
         ["„Nie wybrano galaktyki”", "Puste pole „Galaktyka na start”", "Wpisz galaktykę w ustawieniach albo poproś o przełączenie"],
         ["„Zapis … zablokowany”", "Tylko odczyt lub galaktyka spoza listy zapisu",
          "Popraw ustawienia i uruchom wtyczkę ponownie (rozdział 3) – decyzja użytkownika"],

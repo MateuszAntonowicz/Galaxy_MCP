@@ -390,3 +390,8 @@ i poprosić o wyniki kroków 1, 3 i 5:
   tablice i literały D#/TOD#/DTL# – ostrzeżenie, zostaje domyślna typu. Test `WartosciPoczatkowe` (tests/dane/wartosci_poczatkowe.udt).
 - Serwer: atrybuty `io=Output` pomijane (linia „POMINIĘTE atrybuty Write” w planie/raporcie), reszta specyfikacji zapisywana.
 - Decyzja: plan nie pokazuje różnic typu/kierunku w istniejących szablonach.
+
+## 2026-11-25 – instrukcje: ponowne uruchomienie wtyczki bez restartu komputera
+- Użytkownik potwierdził: po wyłączeniu wtyczki proces `GalaxyMcp.exe` znika sam (koniec stdin → `Shutdown` z limitem 5 s,
+  `ParentWatch`). Z instrukcji (PDF użytkownika, Instrukcja_UDT_CSV, README, instrukcja projektu) usunięte restart komputera
+  i zamykanie procesów w Menedżerze zadań; procedura: zapisz ustawienia → Enabled wył. → kilka sekund → Enabled wł.
